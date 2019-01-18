@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Creating an item</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-label position="floating">Name</ion-label>
+    <ion-input required type="text" name="name" [(ngModel)]="todoItem.name"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Description</ion-label>
+    <ion-textarea name="description" [(ngModel)]="todoItem.desc"></ion-textarea>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Completed</ion-label>
+    <ion-checkbox name="completed" [(ngModel)]="todoItem.complete"></ion-checkbox>
+  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="!data">
+          <ion-button color="primary" (click)="sendItemData()">Create</ion-button>
+        </div>
+        <div *ngIf="data">
+          <ion-button color="primary" (click)="sendItemData()">Modify</ion-button>
+        </div>
+      </ion-col>
+      <ion-col>
+        <ion-button color="danger"  (click)="cancelCreation()">Cancel</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

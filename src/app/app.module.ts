@@ -8,15 +8,22 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import {TodoServiceProvider} from './providers/todo-service.provider';
+import {CreateItemPage} from './todo-item/create-item/create-item.page';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  declarations: [
+      AppComponent,
+      CreateItemPage
+  ],
+  entryComponents: [CreateItemPage],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule],
   providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+      StatusBar,
+      SplashScreen,
+      { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+      TodoServiceProvider,
   ],
   bootstrap: [AppComponent]
 })
