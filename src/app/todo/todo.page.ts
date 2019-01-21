@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {TodoList} from '../models/todoList';
 import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Router} from '@angular/router';
-import {AlertController, IonList} from '@ionic/angular';
+import {AlertController, IonList, ToastController} from '@ionic/angular';
 
 @Component({
   selector: 'app-todo',
@@ -13,7 +13,12 @@ export class TodoPage implements OnInit {
   todoLists: TodoList[];
   @ViewChild('slidingList') slidingList: IonList;
 
-  constructor(public todoListService: TodoServiceProvider, private router: Router, private alertCtrl: AlertController) {}
+  constructor(
+      public todoListService: TodoServiceProvider,
+      private router: Router,
+      private alertCtrl: AlertController,
+      private toastCtrl: ToastController
+  ) {}
 
   ngOnInit() {
     this.todoListService.getList().subscribe( data => this.todoLists = data);
@@ -57,12 +62,12 @@ export class TodoPage implements OnInit {
 
     async createList() {
         const alert = await this.alertCtrl.create({
-            header: 'Confirm!',
+            header: 'Creating a to-do list',
             inputs: [
                 {
                     name: 'name',
                     type: 'text',
-                    placeholder: 'To do item'
+                    placeholder: 'To-do list name'
                 }
             ],
             buttons: [
@@ -76,15 +81,65 @@ export class TodoPage implements OnInit {
                 }, {
                     text: 'Create',
                     handler: data => {
-                        this.todoLists.push({
-                            uuid : this.todoListService.makeId(),
-                            name : data.name,
-                            items : []
-                        });
+                        if (data !== '') {
+                            this.todoListService.addList({
+                                uuid : this.todoListService.makeId(),
+                                name : data.name,
+                                items : []
+                            });
+                        } else {
+                            this.showErrorToast('The name shouldn\'t be empty');
+                        }
                     }
                 }
             ]
         });
         await alert.present();
+    }
+
+    async modifyList(list: TodoList) {
+        const alert = await this.alertCtrl.create({
+            header: 'Modifying a to-do list',
+            inputs: [
+                {
+                    name: 'name',
+                    type: 'text',
+                    value: list.name
+                }
+            ],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                        console.log('cancel');
+                    }
+                }, {
+                    text: 'Modify',
+                    handler: data => {
+                        if (data !== '') {
+                            this.todoListService.editList({
+                                uuid : list.uuid,
+                                name : data.name,
+                                items : list.items
+                            });
+                        } else {
+                            this.showErrorToast('The name shouldn\'t be empty');
+                        }
+                    }
+                }
+            ]
+        });
+        await alert.present();
+    }
+
+    async showErrorToast(data: any) {
+        const toast = await this.toastCtrl.create({
+            message: data,
+            duration: 2000,
+            position: 'top'
+        });
+        toast.present();
     }
 }

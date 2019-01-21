@@ -66,7 +66,8 @@ export class TodoItemPage implements OnInit, OnDestroy {
   /** CREATING AN ITEM **/
   async createItem() {
     const modal = await this.modalController.create({
-        component: CreateItemPage
+        component: CreateItemPage,
+        componentProps: {title: 'Creating an item'}
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
@@ -92,7 +93,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
     async modifyItem(item: TodoItem) {
         const modal = await this.modalController.create({
             component: CreateItemPage,
-            componentProps: {data: item}
+            componentProps: {title: 'Modifying an item', data: item}
         });
         await modal.present();
         const { data } = await modal.onDidDismiss();

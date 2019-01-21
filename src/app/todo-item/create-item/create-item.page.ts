@@ -11,6 +11,7 @@ import {TodoServiceProvider} from '../../providers/todo-service.provider';
 export class CreateItemPage implements OnInit {
   todoItem: TodoItem;
   @Input() data: TodoItem;
+  @Input() title: string;
   constructor(public todoListService: TodoServiceProvider, private modalCtrl: ModalController) {
     this.todoItem = {
         uuid : todoListService.makeId(),

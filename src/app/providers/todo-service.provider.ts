@@ -84,6 +84,14 @@ export class TodoServiceProvider {
     }
   }
 
+  public addList(list: TodoList) {
+    this.data.push(list);
+  }
+  public editList(editedList: TodoList) {
+    const index = this.data.findIndex(value => value.uuid === editedList.uuid);
+    this.data[index] = editedList;
+  }
+
   public deleteList(listUuid: String) {
       const index = this.data.findIndex(value => value.uuid === listUuid);
       if (index !== -1) {
