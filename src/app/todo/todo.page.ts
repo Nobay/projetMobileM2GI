@@ -81,7 +81,7 @@ export class TodoPage implements OnInit {
                 }, {
                     text: 'Create',
                     handler: data => {
-                        if (data !== '') {
+                        if (data.name !== '') {
                             this.todoListService.addList({
                                 uuid : this.todoListService.makeId(),
                                 name : data.name,
@@ -118,7 +118,7 @@ export class TodoPage implements OnInit {
                 }, {
                     text: 'Modify',
                     handler: data => {
-                        if (data !== '') {
+                        if (data.name !== '') {
                             this.todoListService.editList({
                                 uuid : list.uuid,
                                 name : data.name,
