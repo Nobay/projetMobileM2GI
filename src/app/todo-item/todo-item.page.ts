@@ -89,7 +89,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
     }
   }
 
-    /** CREATING AN ITEM **/
+    /** MODIFYING AN ITEM **/
     async modifyItem(item: TodoItem) {
         const modal = await this.modalController.create({
             component: CreateItemPage,
@@ -97,6 +97,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
         });
         await modal.present();
         const { data } = await modal.onDidDismiss();
+        console.log(item.name);
         if (data) {
             const alert = await this.alertCtrl.create({
                 header: 'Item \'' + data.uuid + '\' was successfully modified !',

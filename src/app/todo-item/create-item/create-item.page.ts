@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
-import {ModalController} from '@ionic/angular';
+import {ModalController, ToastController} from '@ionic/angular';
 import {TodoItem} from '../../models/todoItem';
 import {TodoServiceProvider} from '../../providers/todo-service.provider';
 
@@ -12,7 +12,11 @@ export class CreateItemPage implements OnInit {
   todoItem: TodoItem;
   @Input() data: TodoItem;
   @Input() title: string;
-  constructor(public todoListService: TodoServiceProvider, private modalCtrl: ModalController) {
+  constructor(
+      public todoListService: TodoServiceProvider,
+      private modalCtrl: ModalController,
+      public toastCtrl: ToastController
+  ) {
     this.todoItem = {
         uuid : todoListService.makeId(),
         name : '',
@@ -22,12 +26,26 @@ export class CreateItemPage implements OnInit {
   }
   ngOnInit() {
     if (this.data) {
-      this.todoItem = this.data;
+      this.todoItem = {
+          uuid : this.data.uuid,
+          name : this.data.name,
+          complete : this.data.complete,
+          desc: this.data.desc
+      };
     }
   }
 
-  public sendItemData() {
-    this.modalCtrl.dismiss(this.todoItem);
+  public async sendItemData() {
+      if (this.todoItem.name !== '') {
+          this.modalCtrl.dismiss(this.todoItem);
+      } else {
+          const toast = await this.toastCtrl.create({
+              message: 'The name fields shouldn\'t be empty',
+              duration: 2000,
+              position: 'top'
+          });
+          toast.present();
+      }
   }
   public cancelCreation() {
       this.modalCtrl.dismiss();
