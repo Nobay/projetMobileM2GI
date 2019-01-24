@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import {Observable} from 'rxjs';
 import { of } from 'rxjs';
+import {map} from 'rxjs/operators';
 import {TodoItem} from '../models/todoItem';
 import {TodoList} from '../models/todoList';
 
 
 @Injectable()
 export class TodoServiceProvider {
-
-  data: TodoList[] = [
+    private todoListsCollection: AngularFirestoreCollection<TodoList>;
+    private data: Observable<TodoList[]>;
+  /*data: TodoList[] = [
     {
       uuid : 'a351e558-29ce-4689-943c-c3e97be0df8b',
       name : 'List 1',
@@ -51,52 +53,67 @@ export class TodoServiceProvider {
         }
       ]
     }
-  ];
+  ];*/
 
-  constructor() {
+  constructor(db: AngularFirestore) {
     console.log('Hello TodoServiceProvider Provider');
+    this.todoListsCollection = db.collection<TodoList>('todoLists');
+    this.data = this.todoListsCollection.snapshotChanges().pipe(
+        map(actions => {
+            return actions.map(a => {
+                const data = a.payload.doc.data();
+                const id = a.payload.doc.id;
+                return { id, ...data};
+            });
+        })
+    );
   }
 
   public getList(): Observable<TodoList[]> {
-    return of(this.data);
+    return this.data;
   }
 
-  public getTodos(uuid: String): Observable<TodoItem[]> {
-    return of(this.data.find(d => d.uuid === uuid).items);
+  public getTodos(uuid: string): Observable<TodoList> {
+    return this.todoListsCollection.doc<TodoList>(uuid).valueChanges();
   }
 
-  public addTodo(listUuid: String, item: TodoItem) {
-    const items = this.data.find(d => d.uuid === listUuid).items;
-    items.push(item);
+  public addTodo(listUuid: string, item: TodoItem) {
+      const list = this.getTodos(listUuid);
+      list.subscribe( data => {
+          data.items.push(item);
+          this.todoListsCollection.doc<TodoList>(listUuid).update(data);
+      });
   }
 
-  public editTodo(listUuid: String, editedItem: TodoItem) {
-    const items = this.data.find(d => d.uuid === listUuid).items;
-    const index = items.findIndex(value => value.uuid === editedItem.uuid);
-    items[index] = editedItem;
+  public editTodo(listUuid: string, editedItem: TodoItem) {
+      const list = this.getTodos(listUuid);
+      list.subscribe( data => {
+          const index = data.items.findIndex(value => value.uuid === editedItem.uuid);
+          data.items[index] = editedItem;
+          this.todoListsCollection.doc<TodoList>(listUuid).update(data);
+      });
   }
 
-  public deleteTodo(listUuid: String, uuid: String) {
-    const items = this.data.find(d => d.uuid === listUuid).items;
-    const index = items.findIndex(value => value.uuid === uuid);
-    if (index !== -1) {
-      items.splice(index, 1);
-    }
+  public deleteTodo(listUuid: string, uuid: String) {
+      const list = this.getTodos(listUuid);
+      list.subscribe( data => {
+          const index = data.items.findIndex(value => value.uuid === uuid);
+          if (index !== -1) {
+              data.items.splice(index, 1);
+          }
+          this.todoListsCollection.doc<TodoList>(listUuid).update(data);
+      });
   }
 
   public addList(list: TodoList) {
-    this.data.push(list);
+      this.todoListsCollection.add(list);
   }
   public editList(editedList: TodoList) {
-    const index = this.data.findIndex(value => value.uuid === editedList.uuid);
-    this.data[index] = editedList;
+    this.todoListsCollection.doc<TodoList>(editedList.uuid).update(editedList);
   }
 
-  public deleteList(listUuid: String) {
-      const index = this.data.findIndex(value => value.uuid === listUuid);
-      if (index !== -1) {
-          this.data.splice(index, 1);
-      }
+  public deleteList(listUuid: string) {
+      this.todoListsCollection.doc<TodoList>(listUuid).delete();
   }
 
   public makeId(): string {

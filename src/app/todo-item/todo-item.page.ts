@@ -30,7 +30,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
   }
   fetchItems() {
     if (this.listId) {
-        this.todoListService.getTodos(this.listId).subscribe(items => this.todoItems = items);
+        this.todoListService.getTodos(this.listId).subscribe(data => this.todoItems = data.items);
     }
   }
   getState(item: TodoItem): string {
