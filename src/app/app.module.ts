@@ -12,13 +12,22 @@ import {TodoServiceProvider} from './providers/todo-service.provider';
 import {CreateItemPage} from './todo-item/create-item/create-item.page';
 import {FormsModule} from '@angular/forms';
 
+import { AngularFireModule } from 'angularfire2';
+import { environment } from '../environments/environment';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+
 @NgModule({
   declarations: [
       AppComponent,
       CreateItemPage
   ],
   entryComponents: [CreateItemPage],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, FormsModule],
+  imports: [
+      BrowserModule, IonicModule.forRoot(), AppRoutingModule,
+      FormsModule,
+      AngularFireModule.initializeApp(environment.firebase),
+      AngularFirestoreModule,
+  ],
   providers: [
       StatusBar,
       SplashScreen,
