@@ -1,16 +1,19 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TodoList} from '../models/todoList';
 import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Router} from '@angular/router';
 import {AlertController, IonList, ToastController} from '@ionic/angular';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-todo',
   templateUrl: 'todo.page.html',
   styleUrls: ['todo.page.scss']
 })
-export class TodoPage implements OnInit {
+export class TodoPage implements OnInit, OnDestroy {
   todoLists: TodoList[];
+  todoListReady = false;
+  subscription: Subscription;
   @ViewChild('slidingList') slidingList: IonList;
 
   constructor(
@@ -21,7 +24,10 @@ export class TodoPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.todoListService.getList().subscribe( data => this.todoLists = data);
+    this.subscription = this.todoListService.getList().subscribe( data => {
+        this.todoLists = data;
+        this.todoListReady = true;
+    });
   }
   completedItemsSize(list: TodoList) {
     let size = 0;
@@ -141,5 +147,8 @@ export class TodoPage implements OnInit {
             position: 'top'
         });
         toast.present();
+    }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 }

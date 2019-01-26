@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar *ngIf='userReady'>
+    <ion-title>{{user.name}}'s Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf='userReady'>
+  <ion-card>
+    <ion-img [src]="user.picture"></ion-img>
+    <ion-card-header>
+      <ion-card-title>{{user.name}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{user.email}}</p>
+    </ion-card-content>
+    <ion-button expand="block" color="warning" (click)="viewTodos()">
+      <ion-icon name="create" style="margin-right:20px;"></ion-icon> Check to-dos
+    </ion-button>
+    <ion-button expand="block" (click)="doGoogleLogout()">
+      <ion-icon name="log-out" style="margin-right:20px;"></ion-icon> Log Out
+    </ion-button>
+  </ion-card>
+</ion-content>

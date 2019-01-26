@@ -15,6 +15,8 @@ import {FormsModule} from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule, FirestoreSettingsToken } from 'angularfire2/firestore';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { AngularFirestoreModule, FirestoreSettingsToken } from 'angularfire2/fir
       SplashScreen,
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       TodoServiceProvider,
-      { provide: FirestoreSettingsToken, useValue: {} }
+      { provide: FirestoreSettingsToken, useValue: {} },
+      GooglePlus,
+      NativeStorage
   ],
   bootstrap: [AppComponent]
 })
