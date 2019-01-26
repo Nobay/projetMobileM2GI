@@ -14,7 +14,7 @@ import {FormsModule} from '@angular/forms';
 
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFirestoreModule, FirestoreSettingsToken } from 'angularfire2/firestore';
 
 @NgModule({
   declarations: [
@@ -33,6 +33,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
       SplashScreen,
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       TodoServiceProvider,
+      { provide: FirestoreSettingsToken, useValue: {} }
   ],
   bootstrap: [AppComponent]
 })
