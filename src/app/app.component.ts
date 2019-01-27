@@ -25,12 +25,13 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.nativeStorage.getItem('google_user')
           .then( data => {
+              console.log('user is already connected');
               this.router.navigate(['/profile']);
               this.splashScreen.hide();
           }, err => {
               this.router.navigate(['/']);
               this.splashScreen.hide();
-          })
+          });
       this.statusBar.styleDefault();
     });
   }

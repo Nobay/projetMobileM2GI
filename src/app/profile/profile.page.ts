@@ -46,10 +46,24 @@ export class ProfilePage implements OnInit {
     doGoogleLogout() {
         this.googlePlus.logout()
             .then(res => {
+                console.error('Google logout success');
                 this.nativeStorage.remove('google_user');
                 this.router.navigate(['/']);
             }, err => {
-                console.log(err);
+                console.error('Error logging out from Google: ' + err);
+                this.googlePlus.trySilentLogin({}).then(res => {
+                    console.error('Google trySilentLogin success');
+                    this.googlePlus.logout().then( obj => {
+                        console.error('Google logout success');
+                        this.nativeStorage.remove('google_user');
+                        this.router.navigate(['/']);
+                        }, err2 => {
+                        console.error('Error logging out from Google for the 2nd time: ' + err);
+                        }
+                    );
+                }, err1 => {
+                    console.error('Google trySilentLogin error: ' + err);
+                });
             });
     }
 
