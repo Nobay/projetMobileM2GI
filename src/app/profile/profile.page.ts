@@ -51,7 +51,7 @@ export class ProfilePage implements OnInit {
                 this.router.navigate(['/']);
             }, err => {
                 console.error('Error logging out from Google: ' + err);
-                this.googlePlus.trySilentLogin({}).then(res => {
+                this.googlePlus.trySilentLogin({'webClientId': '39902291526-ue6a0t28dniimm132gj8vt26v9ej1236.apps.googleusercontent.com'}).then(res => {
                     console.error('Google trySilentLogin success');
                     this.googlePlus.logout().then( obj => {
                         console.error('Google logout success');
