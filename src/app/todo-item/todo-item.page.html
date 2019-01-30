@@ -15,15 +15,26 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let item of todoItems">
+<ion-card *ngFor="let item of todoItems">   
     <ion-card-header>
         <ion-card-title>{{item.name}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-        <h4>State: {{getState(item)}}</h4>
-        <p>{{item.desc}}</p>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="8"> 
+                <h4>State: {{getState(item)}}</h4>
+                <p>{{item.desc}}</p>
+            </ion-col>
+            <ion-col size="4"> 
+                <ion-item>
+                    <ion-img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Red_X.svg/100px-Red_X.svg.png"></ion-img>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
         <ion-button color="warning" slot="end" (click)="modifyItem(item)"><ion-icon name="create"></ion-icon></ion-button>
         <ion-button color="danger" slot="end" (click)="removeItem(item)"><ion-icon name="trash"></ion-icon></ion-button>
-    </ion-card-content>
-  </ion-card>
+    </ion-card-content>   
+</ion-card>
 </ion-content>
