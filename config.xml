@@ -88,4 +88,5 @@
     </plugin>
     <plugin name="cordova-plugin-nativestorage" spec="2.3.2" />
     <engine name="android" spec="7.1.4" />
+    <plugin name="cordova-plugin-telerik-imagepicker" spec="2.2.3" />
 </widget>
