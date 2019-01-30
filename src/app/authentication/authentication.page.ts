@@ -23,7 +23,7 @@ export class AuthenticationPage {
         });
         this.presentLoading(loading);
 
-        this.googlePlus.login({'webClientId': '39902291526-ue6a0t28dniimm132gj8vt26v9ej1236.apps.googleusercontent.com'})
+        this.googlePlus.login({'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'})
             .then(user => {
                 loading.dismiss();
 

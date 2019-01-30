@@ -63,7 +63,7 @@ export class ProfilePage implements OnInit, OnDestroy {
             }, err => {
                 console.error('Error logging out from Google: ' + err);
                 this.googlePlus.trySilentLogin({
-                    'webClientId': '39902291526-ue6a0t28dniimm132gj8vt26v9ej1236.apps.googleusercontent.com'
+                    'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'
                 }).then(res => {
                     console.error('Google trySilentLogin success');
                     this.googlePlus.disconnect().then( obj => {
