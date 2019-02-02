@@ -18,6 +18,10 @@ import { AngularFirestoreModule, FirestoreSettingsToken } from 'angularfire2/fir
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
+import { FileChooser } from '@ionic-native/file-chooser/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { FilePath } from '@ionic-native/File-Path/ngx';
+
 @NgModule({
   declarations: [
       AppComponent,
@@ -32,7 +36,10 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
   ],
   providers: [
       StatusBar,
-      SplashScreen,
+      FileChooser,
+      FilePath,
+      File,
+      SplashScreen, 
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       TodoServiceProvider,
       { provide: FirestoreSettingsToken, useValue: {} },

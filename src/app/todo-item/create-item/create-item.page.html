@@ -17,6 +17,10 @@
     <ion-label position="floating">Completed</ion-label>
     <ion-checkbox name="completed" [(ngModel)]="todoItem.complete"></ion-checkbox>
   </ion-item>
+  <ion-item>
+    <ion-button ion-button (click)="choose()">Upload</ion-button>
+    <ion-img height='50' width='50' src="{{imgsource}}" [hidden]="!imgsource"> </ion-img>
+  </ion-item>
   <ion-grid>
     <ion-row>
       <ion-col>
