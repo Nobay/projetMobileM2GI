@@ -13,6 +13,7 @@ import {CreateItemPage} from './create-item/create-item.page';
 })
 export class TodoItemPage implements OnInit, OnDestroy {
   listId: string;
+  listName: string;
   todoItems: TodoItem[] = [];
   subscription: Subscription;
 
@@ -25,6 +26,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
   ngOnInit() {
       this.subscription = this.route.queryParams.subscribe(params => {
             this.listId = params['id'];
+            this.listName = params['name'];
             this.fetchItems();
         });
   }

@@ -39,7 +39,7 @@ export class TodoPage implements OnInit, OnDestroy {
     return size;
   }
   viewItems(list: TodoList) {
-      this.router.navigate(['/todo-item'], {queryParams: {id: list.uuid}});
+      this.router.navigate(['/todo-item'], {queryParams: {id: list.uuid, name:list.name}});
   }
 
   async removeList(list: TodoList) {
