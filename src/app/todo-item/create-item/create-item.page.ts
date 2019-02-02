@@ -32,7 +32,8 @@ export class CreateItemPage implements OnInit {
         uuid : todoListService.makeId(),
         name : '',
         complete : false,
-        desc: ''
+        desc: '',
+        image: ''
     };
   }
   ngOnInit() {
@@ -41,7 +42,8 @@ export class CreateItemPage implements OnInit {
           uuid : this.data.uuid,
           name : this.data.name,
           complete : this.data.complete,
-          desc: this.data.desc
+          desc: this.data.desc,
+          image: this.data.image
       };
     }
   }
@@ -91,6 +93,7 @@ export class CreateItemPage implements OnInit {
         alert("Image Imported");
         storage.ref('images/' + name).getDownloadURL().then((url) => {
             this.imgsource = url;
+            this.todoItem.image = url;
           })
 
     }).catch((error)=>{
