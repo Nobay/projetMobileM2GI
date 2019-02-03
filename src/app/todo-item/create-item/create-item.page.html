@@ -18,9 +18,10 @@
     <ion-checkbox name="completed" [(ngModel)]="todoItem.complete"></ion-checkbox>
   </ion-item>
   <ion-item>
-    <ion-button ion-button (click)="choose()">Upload</ion-button>
-    <ion-img height='50' width='50' src="{{imgsource}}" [hidden]="!imgsource"> </ion-img>
+    <ion-button color="warning" (click)="choose()">Upload<ion-icon name="images"></ion-icon></ion-button>
+    <ion-img height='60' width='60' src="{{imgsource}}" [hidden]="!imgsource"> </ion-img>
   </ion-item>
+
   <ion-grid>
     <ion-row>
       <ion-col>
