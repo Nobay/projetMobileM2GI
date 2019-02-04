@@ -4,6 +4,7 @@ import {LoadingController} from '@ionic/angular';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Subscription} from 'rxjs';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-profile',
@@ -58,19 +59,27 @@ export class ProfilePage implements OnInit, OnDestroy {
         this.googlePlus.logout()
             .then(res => {
                 console.error('Google logout success');
-                this.nativeStorage.remove('google_user');
-                this.router.navigate(['/']);
+                firebase.auth().signOut().then(result => {
+                    this.nativeStorage.remove('google_user');
+                    this.router.navigate(['/']);
+                }, error => {
+                    console.error('firebase logout error');
+                });
             }, err => {
                 console.error('Error logging out from Google: ' + err);
-                this.googlePlus.trySilentLogin({
-                    'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'
-                }).then(res => {
+                this.googlePlus.trySilentLogin(
+                    {'webClientID': '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'}
+                    ).then(res => {
                     console.error('Google trySilentLogin success');
                     this.googlePlus.disconnect().then( obj => {
                         console.error('Google logout success');
                         console.log(this.nativeStorage.getItem('google_user'));
-                        this.nativeStorage.remove('google_user');
-                        this.router.navigate(['/']);
+                        firebase.auth().signOut().then(result => {
+                            this.nativeStorage.remove('google_user');
+                            this.router.navigate(['/']);
+                        }, error => {
+                            console.error('firebase logout error');
+                        });
                         }, err2 => {
                         console.error('Error logging out from Google for the 2nd time: ' + err);
                         }

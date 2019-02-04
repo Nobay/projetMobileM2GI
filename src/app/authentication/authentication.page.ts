@@ -3,6 +3,7 @@ import {LoadingController} from '@ionic/angular';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {Router} from '@angular/router';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-authentication',
@@ -22,25 +23,33 @@ export class AuthenticationPage {
             message: 'Please wait...'
         });
         this.presentLoading(loading);
-
-        this.googlePlus.login({'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'})
+        console.log('before google plus login');
+        this.googlePlus.login({
+            'webClientId': '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'
+        })
             .then(user => {
                 loading.dismiss();
-
-                this.nativeStorage.setItem('google_user', {
-                    name: user.displayName,
-                    email: user.email,
-                    picture: user.imageUrl
-                })
-                    .then(() => {
-                        console.log('teeeeest');
-                        this.router.navigate(['/profile']);
-                    }, error => {
-                        console.log(error);
-                    })
+                console.log('google plus login');
+                const googleCredential = firebase.auth.GoogleAuthProvider.credential(user.idToken);
+                firebase.auth().signInWithCredential(googleCredential)
+                    .then(connectedUser => {
+                        this.nativeStorage.setItem('google_user', {
+                            name: connectedUser.displayName,
+                            email: connectedUser.email,
+                            picture: connectedUser.photoURL
+                        })
+                            .then(() => {
+                                console.log('login and authentication successful');
+                                this.router.navigate( ['/profile']);
+                            }, error => {
+                                console.error(error);
+                            });
+                    }, err => {
+                    console.error(err);
+                });
                 loading.dismiss();
             }, err => {
-                console.log(err)
+                console.log(err);
                 loading.dismiss();
             });
     }
