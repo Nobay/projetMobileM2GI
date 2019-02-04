@@ -17,6 +17,9 @@ import { environment } from '../environments/environment';
 import { AngularFirestoreModule, FirestoreSettingsToken } from 'angularfire2/firestore';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import * as firebase from 'firebase';
+
+firebase.initializeApp(environment.firebase);
 
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
