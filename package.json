@@ -24,6 +24,7 @@
     "@ionic-native/file": "^5.0.0",
     "@ionic-native/file-chooser": "^5.0.0",
     "@ionic-native/file-path": "^5.0.0",
+    "@ionic-native/firebase": "^5.0.0",
     "@ionic-native/google-plus": "^5.0.0",
     "@ionic-native/image-picker": "^5.0.0",
     "@ionic-native/native-storage": "^5.0.0",
