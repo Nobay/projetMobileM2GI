@@ -6,7 +6,7 @@
 
 <ion-content *ngIf='userReady'>
   <ion-card>
-    <ion-img [src]="user.picture"></ion-img>
+    <ion-img *ngIf="user.picture" [src]="user.picture"></ion-img>
     <ion-card-header>
       <ion-card-title>{{user.name}}</ion-card-title>
     </ion-card-header>
@@ -16,7 +16,7 @@
     <ion-button expand="block" color="warning" (click)="viewTodos()">
       <ion-icon name="create" style="margin-right:20px;"></ion-icon> Check to-dos
     </ion-button>
-    <ion-button expand="block" (click)="doGoogleLogout()">
+    <ion-button expand="block" (click)="doLogout()">
       <ion-icon name="log-out" style="margin-right:20px;"></ion-icon> Log Out
     </ion-button>
   </ion-card>

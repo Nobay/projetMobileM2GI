@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {LoadingController} from '@ionic/angular';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Subscription} from 'rxjs';
+import {AuthServiceProvider} from '../providers/auth-service.provider';
 import * as firebase from 'firebase';
 
 @Component({
@@ -20,8 +21,9 @@ export class ProfilePage implements OnInit, OnDestroy {
     constructor(
         private googlePlus: GooglePlus,
         private nativeStorage: NativeStorage,
-        public loadingController: LoadingController,
-        private router: Router
+        private loadingController: LoadingController,
+        private router: Router,
+        private authService: AuthServiceProvider
     ) {
         this.subscription = this.router.events.subscribe((e: any) => {
             if (e instanceof NavigationEnd) {
@@ -37,57 +39,26 @@ export class ProfilePage implements OnInit, OnDestroy {
             message: 'Please wait...'
         });
         await loading.present();
-        console.log(this.nativeStorage.getItem('google_user'));
-        this.nativeStorage.getItem('google_user')
-            .then(data => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
                 this.user = {
-                    name: data.name,
-                    email: data.email,
-                    picture: data.picture,
+                    name:  user.displayName,
+                    email:  user.email,
+                    picture:  user.photoURL,
                 };
                 this.userReady = true;
                 loading.dismiss();
-            }, error => {
-                console.log(error);
+            } else {
+                console.log('User not connected, error');
                 loading.dismiss();
-            });
+            }
+        });
     }
     viewTodos() {
         this.router.navigate(['/todo']);
     }
-    doGoogleLogout() {
-        this.googlePlus.logout()
-            .then(res => {
-                console.error('Google logout success');
-                firebase.auth().signOut().then(result => {
-                    this.nativeStorage.remove('google_user');
-                    this.router.navigate(['/']);
-                }, error => {
-                    console.error('firebase logout error');
-                });
-            }, err => {
-                console.error('Error logging out from Google: ' + err);
-                this.googlePlus.trySilentLogin(
-                    {'webClientID': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'}
-                    ).then(res => {
-                    console.error('Google trySilentLogin success');
-                    this.googlePlus.disconnect().then( obj => {
-                        console.error('Google logout success');
-                        console.log(this.nativeStorage.getItem('google_user'));
-                        firebase.auth().signOut().then(result => {
-                            this.nativeStorage.remove('google_user');
-                            this.router.navigate(['/']);
-                        }, error => {
-                            console.error('firebase logout error');
-                        });
-                        }, err2 => {
-                        console.error('Error logging out from Google for the 2nd time: ' + err);
-                        }
-                    );
-                }, err1 => {
-                    console.error('Google trySilentLogin error: ' + err);
-                });
-            });
+    doLogout() {
+        this.authService.logout();
     }
 
     ngOnDestroy(): void {
