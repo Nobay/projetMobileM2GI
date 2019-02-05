@@ -21,6 +21,7 @@ export class SignupPage implements OnInit {
       private authService: AuthServiceProvider
   ) {
     this.user = { name: '', email: '', password: ''};
+    this.cpassword ='';
   }
 
   ngOnInit() {
