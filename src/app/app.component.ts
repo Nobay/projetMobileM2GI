@@ -12,12 +12,13 @@ import * as firebase from 'firebase';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private nativeStorage: NativeStorage,
-    private router: Router,
+    private router: Router
   ) {
     this.initializeApp();
   }
