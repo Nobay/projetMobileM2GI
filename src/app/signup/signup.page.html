@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Create your To-do list account
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form #createForm="ngForm" (ngSubmit)="createAccount()" autocomplete="off">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+          <ion-item>
+            <ion-input placeholder="Name" name="name" id="name"
+                       type="text" required [(ngModel)]="user.name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Email" name="email" id="loginField"
+                       type="text" required [(ngModel)]="user.email"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Password" name="password" id="passwordField"
+                       type="password" required [(ngModel)]="user.password"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Confirm password" name="cpassword" id="confirmPasswordField"
+                       type="password" required [(ngModel)]="cpassword"></ion-input>
+          </ion-item>
+          <ion-label *ngIf="(cpassword !== user.password) && (cpassword !== '' || user.password !== '')" style="color: red; font-weight: bold" text-center>
+            Password and confirmation password do not match.
+          </ion-label>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="error" style="color: red; font-weight: bold" text-center>{{error}}</div>
+        <ion-button class="submit-btn" color="success" expand="block" type="submit"
+                    [disabled]="!createForm.form.valid">Sign up
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

@@ -12,12 +12,13 @@ import * as firebase from 'firebase';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private nativeStorage: NativeStorage,
-    private router: Router,
+    private router: Router
   ) {
     this.initializeApp();
   }
@@ -25,7 +26,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
         firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
+            console.log(this.forceConnect);
+            if (user && this.forceConnect === true) {
                 console.log('user is already connected');
                 this.router.navigate(['/profile']);
                 this.splashScreen.hide();

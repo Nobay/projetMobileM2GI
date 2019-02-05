@@ -18,6 +18,7 @@ import { AngularFirestoreModule, FirestoreSettingsToken } from 'angularfire2/fir
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import * as firebase from 'firebase';
+import {AuthServiceProvider} from './providers/auth-service.provider';
 
 firebase.initializeApp(environment.firebase);
 
@@ -38,6 +39,7 @@ firebase.initializeApp(environment.firebase);
       SplashScreen,
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       TodoServiceProvider,
+      AuthServiceProvider,
       { provide: FirestoreSettingsToken, useValue: {} },
       GooglePlus,
       NativeStorage

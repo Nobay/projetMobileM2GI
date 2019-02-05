@@ -7,11 +7,40 @@
 </ion-header>
 
 <ion-content>
+  <form #loginForm="ngForm" (ngSubmit)="doNormalLogin()" autocomplete="off">
+    <ion-row>
+      <ion-col>
+        <ion-list inset>
+          <ion-item>
+            <ion-input placeholder="Email" name="email" id="loginField"
+                       type="text" required [(ngModel)]="user.email"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input placeholder="Password" name="password" id="passwordField"
+                       type="password" required [(ngModel)]="user.password"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div *ngIf="error" style="color: red; font-weight: bold" text-center>{{error}}</div>
+        <ion-button class="submit-btn" color="success" expand="block" type="submit"
+                [disabled]="!loginForm.form.valid">Login
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
   <ion-row>
     <ion-col>
       <ion-button class="log-in-button" color="danger" expand="block" (click)="doGoogleLogin()">
         <ion-icon style="margin-right:20px;" name="logo-googleplus"></ion-icon> Sign in with Google+
       </ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <a routerLink="/signup">No account? Click here to sign up !</a>
     </ion-col>
   </ion-row>
 </ion-content>
