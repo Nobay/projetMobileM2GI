@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -25,6 +25,7 @@ firebase.initializeApp(environment.firebase);
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FilePath } from '@ionic-native/File-Path/ngx';
+import { Dialogs } from '@ionic-native/dialogs/ngx';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,8 @@ import { FilePath } from '@ionic-native/File-Path/ngx';
       StatusBar,
       FileChooser,
       FilePath,
+      Dialogs,
+      AlertController,
       File,
       SplashScreen, 
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
