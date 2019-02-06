@@ -64,10 +64,6 @@ export class AuthServiceProvider {
                         displayName: name,
                         photoURL: ''
                     }).then( succ => {
-                        this.todoService.addUser({
-                            email: credential.email,
-                            username: name
-                        });
                         this.router.navigate( ['/profile']);
                     });
                 } else {
