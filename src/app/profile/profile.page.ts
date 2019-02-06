@@ -1,11 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
-import {LoadingController} from '@ionic/angular';
+import {LoadingController, ToastController} from '@ionic/angular';
 import {NavigationEnd, Router} from '@angular/router';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Subscription} from 'rxjs';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import * as firebase from 'firebase';
+import {TodoServiceProvider} from '../providers/todo-service.provider';
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +24,8 @@ export class ProfilePage implements OnInit, OnDestroy {
         private nativeStorage: NativeStorage,
         private loadingController: LoadingController,
         private router: Router,
-        private authService: AuthServiceProvider
+        private authService: AuthServiceProvider,
+        private todoService: TodoServiceProvider
     ) {
         this.subscription = this.router.events.subscribe((e: any) => {
             if (e instanceof NavigationEnd) {
@@ -55,7 +57,15 @@ export class ProfilePage implements OnInit, OnDestroy {
         });
     }
     viewTodos() {
-        this.router.navigate(['/todo']);
+        if (!firebase.auth().currentUser.emailVerified) {
+            this.authService.showToast('Verify your account in order to continue !');
+        } else {
+            this.todoService.addUser({
+                email: firebase.auth().currentUser.email,
+                username: firebase.auth().currentUser.displayName
+            });
+            this.router.navigate(['/todo']);
+        }
     }
     doLogout() {
         this.authService.logout();

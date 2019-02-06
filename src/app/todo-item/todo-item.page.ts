@@ -5,6 +5,7 @@ import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Subscription} from 'rxjs';
 import {AlertController, ModalController} from '@ionic/angular';
 import {CreateItemPage} from './create-item/create-item.page';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-todo-item',
@@ -32,7 +33,8 @@ export class TodoItemPage implements OnInit, OnDestroy {
   }
   fetchItems() {
     if (this.listId) {
-        this.todoListService.getTodos(this.listId).subscribe(data => this.todoItems = data.items);
+        this.todoListService.getTodos(firebase.auth().currentUser.email, this.listId)
+            .subscribe(data => this.todoItems = data.items);
     }
   }
   getState(item: TodoItem): string {
@@ -58,7 +60,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
             }, {
                 text: 'Delete',
                 handler: () => {
-                    this.todoListService.deleteTodo(this.listId, item.uuid);
+                    this.todoListService.deleteTodo(firebase.auth().currentUser.email, this.listId, item.uuid);
                 }
             }
         ]
@@ -87,7 +89,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
             ]
         });
         await alert.present();
-        this.todoListService.addTodo(this.listId, data);
+        this.todoListService.addTodo(firebase.auth().currentUser.email, this.listId, data);
     }
   }
 
@@ -114,7 +116,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
                 ]
             });
             await alert.present();
-            this.todoListService.editTodo(this.listId, data);
+            this.todoListService.editTodo(firebase.auth().currentUser.email, this.listId, data);
         }
     }
 

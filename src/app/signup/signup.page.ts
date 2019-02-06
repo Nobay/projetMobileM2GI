@@ -21,7 +21,7 @@ export class SignupPage implements OnInit {
       private authService: AuthServiceProvider
   ) {
     this.user = { name: '', email: '', password: ''};
-    this.cpassword ='';
+    this.cpassword = '';
   }
 
   ngOnInit() {
@@ -33,23 +33,15 @@ export class SignupPage implements OnInit {
     } else {
         firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.password)
             .then(user => {
-                this.showToast('Your account has been created');
+                this.authService.showToast('Your account has been created');
                 user.user.sendEmailVerification().then( () => {
                     this.authService.updateUser(this.user, this.user.name).then( succ => {
                     });
                 });
             }, err => {
-                this.error = 'Service unavailable.';
+                this.error = 'Service unavailable or account already exists';
             });
     }
-  }
-  async showToast(data: any) {
-      const toast = await this.toastCtrl.create({
-          message: data,
-          duration: 2000,
-          position: 'top'
-      });
-      toast.present();
   }
 
 }

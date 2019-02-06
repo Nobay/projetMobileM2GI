@@ -1,15 +1,18 @@
 import * as firebase from 'firebase';
 import {Injectable} from '@angular/core';
-import {LoadingController} from '@ionic/angular';
+import {LoadingController, ToastController} from '@ionic/angular';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Router} from '@angular/router';
+import {TodoServiceProvider} from './todo-service.provider';
 
 @Injectable()
 export class AuthServiceProvider {
     constructor(
         private loadingController: LoadingController,
         private googlePlus: GooglePlus,
-        private router: Router
+        private router: Router,
+        private toastCtrl: ToastController,
+        private todoService: TodoServiceProvider
     ) {}
 
     async googleLogin(error) {
@@ -27,6 +30,10 @@ export class AuthServiceProvider {
                 const googleCredential = firebase.auth.GoogleAuthProvider.credential(user.idToken);
                 firebase.auth().signInAndRetrieveDataWithCredential(googleCredential)
                     .then(connectedUser => {
+                        this.todoService.addUser({
+                            email: connectedUser.user.email,
+                            username: connectedUser.user.displayName
+                        });
                         this.router.navigate( ['/profile']);
                     }, err => {
                         error = 'User credentials are incorrect.';
@@ -142,6 +149,15 @@ export class AuthServiceProvider {
                     console.error('Google trySilentLogin error: ' + err);
                 });
             });
+    }
+
+    async showToast(data: any) {
+        const toast = await this.toastCtrl.create({
+            message: data,
+            duration: 2000,
+            position: 'top'
+        });
+        toast.present();
     }
 
     async presentLoading(loading) {

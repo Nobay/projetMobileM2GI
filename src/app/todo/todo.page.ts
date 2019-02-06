@@ -4,6 +4,8 @@ import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Router} from '@angular/router';
 import {AlertController, IonList, ToastController} from '@ionic/angular';
 import {Subscription} from 'rxjs';
+import {AuthServiceProvider} from '../providers/auth-service.provider';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-todo',
@@ -17,14 +19,15 @@ export class TodoPage implements OnInit, OnDestroy {
   @ViewChild('slidingList') slidingList: IonList;
 
   constructor(
-      public todoListService: TodoServiceProvider,
+      private todoListService: TodoServiceProvider,
+      private authService: AuthServiceProvider,
       private router: Router,
       private alertCtrl: AlertController,
       private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
-    this.subscription = this.todoListService.getList().subscribe( data => {
+    this.subscription = this.todoListService.getLists(firebase.auth().currentUser.email).subscribe( data => {
         this.todoLists = data;
         this.todoListReady = true;
     });
@@ -39,7 +42,7 @@ export class TodoPage implements OnInit, OnDestroy {
     return size;
   }
   viewItems(list: TodoList) {
-      this.router.navigate(['/todo-item'], {queryParams: {id: list.uuid, name:list.name}});
+      this.router.navigate(['/todo-item'], {queryParams: {id: list.uuid, name: list.name}});
   }
 
   async removeList(list: TodoList) {
@@ -57,7 +60,7 @@ export class TodoPage implements OnInit, OnDestroy {
               }, {
                   text: 'Delete',
                   handler: () => {
-                      this.todoListService.deleteList(list.uuid);
+                      this.todoListService.deleteList(firebase.auth().currentUser.email, list.uuid);
                   }
               }
           ]
@@ -88,13 +91,13 @@ export class TodoPage implements OnInit, OnDestroy {
                     text: 'Create',
                     handler: data => {
                         if (data.name !== '') {
-                            this.todoListService.addList({
+                            this.todoListService.addList(firebase.auth().currentUser.email, {
                                 uuid : this.todoListService.makeId(),
                                 name : data.name,
                                 items : []
                             });
                         } else {
-                            this.showErrorToast('The name shouldn\'t be empty');
+                            this.authService.showToast('The name shouldn\'t be empty');
                         }
                     }
                 }
@@ -125,13 +128,13 @@ export class TodoPage implements OnInit, OnDestroy {
                     text: 'Modify',
                     handler: data => {
                         if (data.name !== '') {
-                            this.todoListService.editList({
+                            this.todoListService.editList(firebase.auth().currentUser.email, {
                                 uuid : list.uuid,
                                 name : data.name,
                                 items : list.items
                             });
                         } else {
-                            this.showErrorToast('The name shouldn\'t be empty');
+                            this.authService.showToast('The name shouldn\'t be empty');
                         }
                     }
                 }
@@ -140,14 +143,6 @@ export class TodoPage implements OnInit, OnDestroy {
         await alert.present();
     }
 
-    async showErrorToast(data: any) {
-        const toast = await this.toastCtrl.create({
-            message: data,
-            duration: 2000,
-            position: 'top'
-        });
-        toast.present();
-    }
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }

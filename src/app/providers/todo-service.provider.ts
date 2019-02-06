@@ -4,17 +4,18 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {TodoItem} from '../models/todoItem';
 import {TodoList} from '../models/todoList';
+import {User} from '../models/user';
 
 
 @Injectable()
 export class TodoServiceProvider {
-    private todoListsCollection: AngularFirestoreCollection<TodoList>;
-    private data: Observable<TodoList[]>;
+    private usersCollection: AngularFirestoreCollection<User>;
+    private data: Observable<User[]>;
 
   constructor(db: AngularFirestore) {
     console.log('Hello TodoServiceProvider Provider');
-    this.todoListsCollection = db.collection<TodoList>('todoLists');
-    this.data = this.todoListsCollection.snapshotChanges().pipe(
+    this.usersCollection = db.collection<User>('users');
+    this.data = this.usersCollection.snapshotChanges().pipe(
         map(actions => {
             return actions.map(a => {
                 const data = a.payload.doc.data();
@@ -25,25 +26,39 @@ export class TodoServiceProvider {
     );
   }
 
-  public getList(): Observable<TodoList[]> {
+  public getUsers(): Observable<User[]> {
     return this.data;
   }
 
-  public getTodos(uuid: string): Observable<TodoList> {
-      console.log(uuid);
-    return this.todoListsCollection.doc<TodoList>(uuid).valueChanges();
+  public getLists(email: string): Observable<TodoList[]> {
+      const listCollection = this.usersCollection.doc<User>(email).collection<TodoList>('todoLists');
+      return listCollection.snapshotChanges().pipe(
+          map(actions => {
+              return actions.map(a => {
+                  const data = a.payload.doc.data();
+                  const id = a.payload.doc.id;
+                  return { id, ...data};
+              });
+          })
+      );
   }
 
-  public addTodo(listUuid: string, item: TodoItem) {
-      this.todoListsCollection.doc<TodoList>(listUuid).get().subscribe(doc => {
+  public getTodos(email: string, uuid: string): Observable<TodoList> {
+    return this.usersCollection.doc<User>(email).collection<TodoList>('todoLists').doc<TodoList>(uuid).valueChanges();
+  }
+
+  public addTodo(email: string, listUuid: string, item: TodoItem) {
+      this.usersCollection.doc<User>(email).collection<TodoList>('todoLists').doc<TodoList>(listUuid).get()
+          .subscribe(doc => {
           const editedItems = doc.data().items;
           editedItems.push(item);
           doc.ref.update({items: editedItems});
       });
   }
 
-  public editTodo(listUuid: string, editedItem: TodoItem) {
-      this.todoListsCollection.doc<TodoList>(listUuid).get().subscribe(doc => {
+  public editTodo(email: string, listUuid: string, editedItem: TodoItem) {
+      this.usersCollection.doc<User>(email).collection<TodoList>('todoLists').doc<TodoList>(listUuid).get()
+          .subscribe(doc => {
           const editedItems = doc.data().items;
           const index = editedItems.findIndex(value => value.uuid === editedItem.uuid);
           editedItems[index] = editedItem;
@@ -51,8 +66,9 @@ export class TodoServiceProvider {
       });
   }
 
-  public deleteTodo(listUuid: string, uuid: String) {
-      this.todoListsCollection.doc<TodoList>(listUuid).get().subscribe(doc => {
+  public deleteTodo(email: string, listUuid: string, uuid: String) {
+      this.usersCollection.doc<User>(email).collection<TodoList>('todoLists').doc<TodoList>(listUuid).get()
+          .subscribe(doc => {
           const editedItems = doc.data().items;
           const index = editedItems.findIndex(value => value.uuid === uuid);
           if (index !== -1) {
@@ -62,15 +78,25 @@ export class TodoServiceProvider {
       });
   }
 
-  public addList(list: TodoList) {
-      this.todoListsCollection.doc(list.uuid).set(list);
-  }
-  public editList(editedList: TodoList) {
-    this.todoListsCollection.doc<TodoList>(editedList.uuid).update(editedList);
+  public addList(email: string, list: TodoList) {
+      this.usersCollection.doc<User>(email).collection<TodoList>('todoLists').doc(list.uuid).set(list);
   }
 
-  public deleteList(listUuid: string) {
-      this.todoListsCollection.doc<TodoList>(listUuid).delete();
+  public editList(email: string, editedList: TodoList) {
+      this.usersCollection.doc<User>(email).collection<TodoList>('todoLists').doc<TodoList>(editedList.uuid)
+          .update(editedList);
+  }
+
+  public deleteList(email: string, listUuid: string) {
+      this.usersCollection.doc<User>(email).collection<TodoList>('todoLists').doc<TodoList>(listUuid).delete();
+  }
+
+  public addUser(user: User) {
+        this.usersCollection.doc(user.email).set(user);
+  }
+
+  public removeUser(email: string) {
+      this.usersCollection.doc(email).delete();
   }
 
   public makeId(): string {
