@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {LoadingController, ToastController} from '@ionic/angular';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Router} from '@angular/router';
+import {TodoServiceProvider} from './todo-service.provider';
 
 @Injectable()
 export class AuthServiceProvider {
@@ -10,7 +11,8 @@ export class AuthServiceProvider {
         private loadingController: LoadingController,
         private googlePlus: GooglePlus,
         private router: Router,
-        private toastCtrl: ToastController
+        private toastCtrl: ToastController,
+        private todoService: TodoServiceProvider
     ) {}
 
     async googleLogin(error) {
@@ -28,6 +30,10 @@ export class AuthServiceProvider {
                 const googleCredential = firebase.auth.GoogleAuthProvider.credential(user.idToken);
                 firebase.auth().signInAndRetrieveDataWithCredential(googleCredential)
                     .then(connectedUser => {
+                        this.todoService.addUser({
+                            email: connectedUser.user.email,
+                            username: connectedUser.user.displayName
+                        });
                         this.router.navigate( ['/profile']);
                     }, err => {
                         error = 'User credentials are incorrect.';
@@ -58,6 +64,10 @@ export class AuthServiceProvider {
                         displayName: name,
                         photoURL: ''
                     }).then( succ => {
+                        this.todoService.addUser({
+                            email: credential.email,
+                            username: name
+                        });
                         this.router.navigate( ['/profile']);
                     });
                 } else {

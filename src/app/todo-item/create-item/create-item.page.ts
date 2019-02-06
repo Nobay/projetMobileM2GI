@@ -69,16 +69,13 @@ export class CreateItemPage implements OnInit {
 
   choose() {
     this.fileChooser.open().then((uri) => {
-      //alert(uri);
 
       this.filePath.resolveNativePath(uri).then(filePath => {
-        //alert(filePath);
-        
-        let dirPathSegments = filePath.split('/');
-        let fileName = dirPathSegments[dirPathSegments.length-1];
+        const dirPathSegments = filePath.split('/');
+        const fileName = dirPathSegments[dirPathSegments.length - 1];
         dirPathSegments.pop();
-        let dirPath = dirPathSegments.join('/');
-        this.file.readAsArrayBuffer(dirPath, fileName).then(async (buffer) => {       
+        const dirPath = dirPathSegments.join('/');
+        this.file.readAsArrayBuffer(dirPath, fileName).then(async (buffer) => {
           await this.upload(buffer, fileName);
         }).catch((err) => {
           alert(err.toString());
@@ -87,23 +84,22 @@ export class CreateItemPage implements OnInit {
     });
   }
 
-  public async upload(buffer, name){
+  public async upload(buffer, name) {
     this.present();
-    let blob = new Blob([buffer], {type: "image/jpeg, image/png"});
+    const blob = new Blob([buffer], {type: 'image/jpeg, image/png'});
 
-    let storage = firebase.storage();
+    const storage = firebase.storage();
 
-    storage.ref('images/' + name).put(blob).then((d)=>{
+    storage.ref('images/' + name).put(blob).then((d) => {
         storage.ref('images/' + name).getDownloadURL().then((url) => {
             this.imgsource = url;
             this.todoItem.image = url;
-          })
+          });
           this.dismiss();
-          //alert("Image Imported");
 
-    }).catch((error)=>{
-        alert("not Done");
-    })  
+    }).catch((error) => {
+        alert('not Done');
+    });
   }
 
   async present() {
@@ -124,5 +120,4 @@ export class CreateItemPage implements OnInit {
     this.isLoading = false;
     return await this.loadingController.dismiss().then(() => console.log('dismissed'));
   }
-  
 }

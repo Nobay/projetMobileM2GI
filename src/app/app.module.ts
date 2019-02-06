@@ -19,12 +19,13 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import * as firebase from 'firebase';
 import {AuthServiceProvider} from './providers/auth-service.provider';
-
-firebase.initializeApp(environment.firebase);
-
 import { FileChooser } from '@ionic-native/file-chooser/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { FilePath } from '@ionic-native/File-Path/ngx';
+import {SpeechServiceProvider} from './providers/speech-service.provider';
+import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
+
+firebase.initializeApp(environment.firebase);
 
 @NgModule({
   declarations: [
@@ -43,13 +44,15 @@ import { FilePath } from '@ionic-native/File-Path/ngx';
       FileChooser,
       FilePath,
       File,
-      SplashScreen, 
+      SplashScreen,
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       TodoServiceProvider,
       AuthServiceProvider,
+      SpeechServiceProvider,
       { provide: FirestoreSettingsToken, useValue: {} },
       GooglePlus,
-      NativeStorage
+      NativeStorage,
+      SpeechRecognition
   ],
   bootstrap: [AppComponent]
 })

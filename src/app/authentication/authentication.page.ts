@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
+import {SpeechServiceProvider} from '../providers/speech-service.provider';
 
 @Component({
   selector: 'app-authentication',
@@ -12,7 +13,8 @@ export class AuthenticationPage {
     error: string;
 
   constructor(
-      private authService: AuthServiceProvider
+      private authService: AuthServiceProvider,
+      private speechService: SpeechServiceProvider
   ) {
       this.user = {
           email: '',
@@ -26,5 +28,14 @@ export class AuthenticationPage {
 
     async doNormalLogin() {
         this.authService.normalLogin(this.user, this.error, undefined);
+    }
+
+    activateSpeech() {
+      this.speechService.getPermission();
+      this.speechService.startListening();
+    }
+
+    stopSpeech() {
+        this.speechService.stopListening();
     }
 }
