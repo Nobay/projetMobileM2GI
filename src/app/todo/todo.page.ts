@@ -4,6 +4,7 @@ import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Router} from '@angular/router';
 import {AlertController, IonList, ToastController} from '@ionic/angular';
 import {Subscription} from 'rxjs';
+import {AuthServiceProvider} from '../providers/auth-service.provider';
 
 @Component({
   selector: 'app-todo',
@@ -17,7 +18,8 @@ export class TodoPage implements OnInit, OnDestroy {
   @ViewChild('slidingList') slidingList: IonList;
 
   constructor(
-      public todoListService: TodoServiceProvider,
+      private todoListService: TodoServiceProvider,
+      private authService: AuthServiceProvider,
       private router: Router,
       private alertCtrl: AlertController,
       private toastCtrl: ToastController
@@ -94,7 +96,7 @@ export class TodoPage implements OnInit, OnDestroy {
                                 items : []
                             });
                         } else {
-                            this.showErrorToast('The name shouldn\'t be empty');
+                            this.authService.showToast('The name shouldn\'t be empty');
                         }
                     }
                 }
@@ -131,7 +133,7 @@ export class TodoPage implements OnInit, OnDestroy {
                                 items : list.items
                             });
                         } else {
-                            this.showErrorToast('The name shouldn\'t be empty');
+                            this.authService.showToast('The name shouldn\'t be empty');
                         }
                     }
                 }
@@ -140,14 +142,6 @@ export class TodoPage implements OnInit, OnDestroy {
         await alert.present();
     }
 
-    async showErrorToast(data: any) {
-        const toast = await this.toastCtrl.create({
-            message: data,
-            duration: 2000,
-            position: 'top'
-        });
-        toast.present();
-    }
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }

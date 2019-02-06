@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
-import {LoadingController} from '@ionic/angular';
+import {LoadingController, ToastController} from '@ionic/angular';
 import {NavigationEnd, Router} from '@angular/router';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Subscription} from 'rxjs';
@@ -23,7 +23,8 @@ export class ProfilePage implements OnInit, OnDestroy {
         private nativeStorage: NativeStorage,
         private loadingController: LoadingController,
         private router: Router,
-        private authService: AuthServiceProvider
+        private authService: AuthServiceProvider,
+        private toastCtrl: ToastController
     ) {
         this.subscription = this.router.events.subscribe((e: any) => {
             if (e instanceof NavigationEnd) {
@@ -55,7 +56,13 @@ export class ProfilePage implements OnInit, OnDestroy {
         });
     }
     viewTodos() {
-        this.router.navigate(['/todo']);
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user.emailVerified) {
+                this.authService.showToast('Verify your account in order to continue !');
+            } else {
+                this.router.navigate(['/todo']);
+            }
+        });
     }
     doLogout() {
         this.authService.logout();

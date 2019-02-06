@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 import {Injectable} from '@angular/core';
-import {LoadingController} from '@ionic/angular';
+import {LoadingController, ToastController} from '@ionic/angular';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Router} from '@angular/router';
 
@@ -9,7 +9,8 @@ export class AuthServiceProvider {
     constructor(
         private loadingController: LoadingController,
         private googlePlus: GooglePlus,
-        private router: Router
+        private router: Router,
+        private toastCtrl: ToastController
     ) {}
 
     async googleLogin(error) {
@@ -142,6 +143,15 @@ export class AuthServiceProvider {
                     console.error('Google trySilentLogin error: ' + err);
                 });
             });
+    }
+
+    async showToast(data: any) {
+        const toast = await this.toastCtrl.create({
+            message: data,
+            duration: 2000,
+            position: 'top'
+        });
+        toast.present();
     }
 
     async presentLoading(loading) {
