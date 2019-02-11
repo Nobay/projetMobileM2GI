@@ -46,9 +46,11 @@ export class AuthenticationPage {
       };
   }
 
-  @HostListener('document:ionBackButton', ['$event'])
+   @HostListener('document:ionBackButton', ['$event'])
     private overrideHardwareBackAction($event: any) {
-        $event.detail.register(100, async () => {
+    $event.detail.register(100, async () => {
+        console.log(this.router.url);
+        if(this.router.url === '/'){
             this.dialogs.confirm('Are you sure you want to exit?','',['OK', 'Cancel'])
             .then(e =>{
                 if (e==1) {
@@ -57,11 +59,10 @@ export class AuthenticationPage {
             }
             )
             .catch(e => console.log('Error displaying dialog', e));
-        });  
-
-        
-
-    }
+        }
+    });
+          
+    } 
 
     doGoogleLogin() {
         this.authService.googleLogin(this.error);
