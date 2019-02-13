@@ -34,7 +34,7 @@ export class AuthServiceProvider {
                             email: connectedUser.user.email,
                             username: connectedUser.user.displayName
                         });
-                        this.router.navigate( ['/profile']);
+                        this.router.navigate( ['/tabs']);
                     }, err => {
                         error = 'User credentials are incorrect.';
                     });
@@ -64,10 +64,10 @@ export class AuthServiceProvider {
                         displayName: name,
                         photoURL: ''
                     }).then( succ => {
-                        this.router.navigate( ['/profile']);
+                        this.router.navigate( ['/tabs']);
                     });
                 } else {
-                    this.router.navigate( ['/profile']);
+                    this.router.navigate( ['/tabs']);
                 }
             }, err => {
                 error = 'User credentials are incorrect.';
@@ -114,7 +114,7 @@ export class AuthServiceProvider {
                         loading.dismiss();
                     });
                 } else {
-                    this.router.navigate( ['/profile']);
+                    this.router.navigate( ['/tabs']);
                 }
             });
     }

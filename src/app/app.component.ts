@@ -28,7 +28,7 @@ export class AppComponent {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 console.log('user is already connected');
-                this.router.navigate(['/profile']);
+                this.router.navigate(['/tabs']);
                 this.splashScreen.hide();
             } else {
                 this.router.navigate(['/']);
