@@ -19,7 +19,9 @@
   </ion-item>
   <ion-item>
     <ion-button color="warning" (click)="choose()">Upload<ion-icon name="images"></ion-icon></ion-button>
-    <ion-img height='60' width='60' src="{{imgsource}}" [hidden]="!imgsource"> </ion-img>
+    <ion-avatar class="imageuploadFrame" [hidden]="!imgsource">
+      <ion-img  class="uploadImage" src="{{imgsource}}" [hidden]="!imgsource"> </ion-img>
+    </ion-avatar>
   </ion-item>
 
   <ion-grid>

@@ -1,0 +1,24 @@
+.profileImageFrame {
+    /* display: inline; */
+    /* display: inline; */
+    height: 100px;
+    width: 100px;
+    /* border: 2px solid #fff; */
+    border-radius: 50%;
+    box-shadow: 0 0 5px grey;
+    /* display: inline-block; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profileImage {
+    border-radius: 50% !important;
+    width:100px;
+    height:100px;
+    overflow: hidden;
+    display: block;
+}
+
+.centerItem{
+    text-align: center;
+}

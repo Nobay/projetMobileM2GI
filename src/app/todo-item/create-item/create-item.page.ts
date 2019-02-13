@@ -85,7 +85,7 @@ export class CreateItemPage implements OnInit {
   }
 
   public async upload(buffer, name) {
-    this.present();
+    await this.present();
     const blob = new Blob([buffer], {type: 'image/jpeg, image/png'});
 
     const storage = firebase.storage();

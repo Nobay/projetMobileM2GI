@@ -3,7 +3,7 @@
 <!--     <ion-title>{{user.name}}'s Profile</ion-title>
  -->    
     <ion-buttons slot="end">
-      <ion-button  (click)="doLogout()">
+      <ion-button  (click)="doLogout()">Logout
         <ion-icon name="log-out" ></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -12,12 +12,14 @@
 
 <ion-content *ngIf='userReady'>
   <ion-card>
-    <ion-img *ngIf="user.picture" [src]="user.picture"></ion-img>
+    <ion-avatar class='profileImageFrame'>
+      <ion-img *ngIf="user.picture" [src]="user.picture" class="profileImage" ></ion-img>
+    </ion-avatar>
     <ion-card-header>
-      <ion-card-title>{{user.name}}</ion-card-title>
+      <ion-card-title class='centerItem'>{{user.name}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <p>{{user.email}}</p>
+      <p class='centerItem'>{{user.email}}</p>
     </ion-card-content>
     <!-- <ion-button expand="block" color="warning" (click)="viewTodos()">
       <ion-icon name="create" style="margin-right:20px;"></ion-icon> Check to-dos
