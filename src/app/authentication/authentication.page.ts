@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
+import { HostListener } from '@angular/core';
+import { Platform , AlertController } from '@ionic/angular';
+import { Dialogs } from '@ionic-native/dialogs/ngx';
 import {SpeechServiceProvider} from '../providers/speech-service.provider';
 import {Router} from '@angular/router';
 
@@ -31,6 +34,9 @@ export class AuthenticationPage {
 
   constructor(
       private authService: AuthServiceProvider,
+      private platform: Platform,
+      private dialogs: Dialogs,
+      private alertCtrl: AlertController, 
       private speechService: SpeechServiceProvider,
       private router: Router
   ) {
@@ -39,6 +45,24 @@ export class AuthenticationPage {
           password: ''
       };
   }
+
+   @HostListener('document:ionBackButton', ['$event'])
+    private overrideHardwareBackAction($event: any) {
+    $event.detail.register(100, async () => {
+        console.log(this.router.url);
+        if(this.router.url === '/'){
+            this.dialogs.confirm('Are you sure you want to exit?','',['OK', 'Cancel'])
+            .then(e =>{
+                if (e==1) {
+                    navigator['app'].exitApp();
+                } else { }
+            }
+            )
+            .catch(e => console.log('Error displaying dialog', e));
+        }
+    });
+          
+    } 
 
     doGoogleLogin() {
         this.authService.googleLogin(this.error);
