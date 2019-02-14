@@ -36,7 +36,7 @@ export class AuthenticationPage {
       private authService: AuthServiceProvider,
       private platform: Platform,
       private dialogs: Dialogs,
-      private alertCtrl: AlertController, 
+      private alertCtrl: AlertController,
       private speechService: SpeechServiceProvider,
       private router: Router
   ) {
@@ -50,10 +50,10 @@ export class AuthenticationPage {
     private overrideHardwareBackAction($event: any) {
     $event.detail.register(100, async () => {
         console.log(this.router.url);
-        if(this.router.url === '/'){
-            this.dialogs.confirm('Are you sure you want to exit?','',['OK', 'Cancel'])
-            .then(e =>{
-                if (e==1) {
+        if (this.router.url === '/') {
+            this.dialogs.confirm('Are you sure you want to exit?', '', ['OK', 'Cancel'])
+            .then(e => {
+                if (e === 1) {
                     navigator['app'].exitApp();
                 } else { }
             }
@@ -61,8 +61,8 @@ export class AuthenticationPage {
             .catch(e => console.log('Error displaying dialog', e));
         }
     });
-          
-    } 
+
+    }
 
     doGoogleLogin() {
         this.authService.googleLogin(this.error);

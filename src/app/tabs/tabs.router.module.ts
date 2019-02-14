@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import {AuthGuard} from '../providers/auth-guard';
 
 const routes: Routes = [
   {
     path: '',
     component: TabsPage,
     children: [
-
       {
         path: 'todo',
         children: [
           {
             path: '',
-            loadChildren: '../todo/todo.module#TodoPageModule'
+            loadChildren: '../todo/todo.module#TodoPageModule',
+            canActivate: [AuthGuard],
           }
         ]
       },
@@ -22,7 +23,8 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../todo/todo.module#TodoPageModule'
+            loadChildren: '../todo/todo.module#TodoPageModule',
+            canActivate: [AuthGuard],
           }
         ]
       },
@@ -37,7 +39,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/todo',
+        redirectTo: '/tabs/profil',
         pathMatch: 'full'
       }
     ]
@@ -45,7 +47,7 @@ const routes: Routes = [
   ,
       {
         path: '',
-        redirectTo: '/tabs/todo',
+        redirectTo: '/tabs/profil',
         pathMatch: 'full'
       }
 ];

@@ -74,17 +74,6 @@ export class ProfilePage implements OnInit, OnDestroy {
             }
         });
     }
-    viewTodos() {
-        if (!firebase.auth().currentUser.emailVerified) {
-            this.authService.showToast('Verify your account in order to continue !');
-        } else {
-            this.todoService.addUser({
-                email: firebase.auth().currentUser.email,
-                username: firebase.auth().currentUser.displayName
-            });
-            this.router.navigate(['/todo']);
-        }
-    }
     doLogout() {
         this.authService.logout();
     }
@@ -102,7 +91,6 @@ export class ProfilePage implements OnInit, OnDestroy {
         for ( let i = 0; i < matches.length; i++) {
             for ( let j = 0; j < this.checkMatches.length; j++) {
                 if (matches[i].toLowerCase() === this.checkMatches[j]) {
-                    this.viewTodos();
                     return;
                 }
             }

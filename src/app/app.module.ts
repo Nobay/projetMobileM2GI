@@ -25,6 +25,7 @@ import { FilePath } from '@ionic-native/File-Path/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import {SpeechServiceProvider} from './providers/speech-service.provider';
 import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
+import {AuthGuard} from './providers/auth-guard';
 
 firebase.initializeApp(environment.firebase);
 
@@ -51,6 +52,7 @@ firebase.initializeApp(environment.firebase);
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       TodoServiceProvider,
       AuthServiceProvider,
+      AuthGuard,
       SpeechServiceProvider,
       { provide: FirestoreSettingsToken, useValue: {} },
       GooglePlus,
