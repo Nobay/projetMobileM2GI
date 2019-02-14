@@ -1,13 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
-import {LoadingController, ToastController} from '@ionic/angular';
+import {LoadingController} from '@ionic/angular';
 import {NavigationEnd, Router} from '@angular/router';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Subscription} from 'rxjs';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import * as firebase from 'firebase';
-import {TodoServiceProvider} from '../providers/todo-service.provider';
-import {SpeechServiceProvider} from '../providers/speech-service.provider';
 
 @Component({
   selector: 'app-profile',
@@ -19,31 +17,13 @@ export class ProfilePage implements OnInit, OnDestroy {
     user: any;
     userReady = false;
     subscription: Subscription;
-    checkMatches: string[] = [
-        'todo', 'to-do', 'to do', 'todos',
-        'to-dos', 'to dos', 'todo lists',
-        'to-do lists', 'to do lists', 'to-do lists',
-        'check', 'check todos', 'check to-dos',
-        'check to dos', 'check to do', 'check todo',
-        'check to-do', 'todo list', 'to-do list',
-        'to do list', 'check lists', 'check list',
-        'my list', 'lists', 'my lists', 'my to-do list',
-        'my todo list', 'my to do list', 'my todos',
-        'my to-dos', 'my to dos'
-    ];
-    logoutMatches: string[] = [
-        'logout', 'log out', 'disconnect',
-        'sign out', 'sign-out'
-    ];
 
     constructor(
         private googlePlus: GooglePlus,
         private nativeStorage: NativeStorage,
         private loadingController: LoadingController,
         private router: Router,
-        private authService: AuthServiceProvider,
-        private todoService: TodoServiceProvider,
-        private speechService: SpeechServiceProvider,
+        private authService: AuthServiceProvider
     ) {
         this.subscription = this.router.events.subscribe((e: any) => {
             if (e instanceof NavigationEnd) {
@@ -76,36 +56,6 @@ export class ProfilePage implements OnInit, OnDestroy {
     }
     doLogout() {
         this.authService.logout();
-    }
-
-    activateSpeech() {
-        this.speechService.getPermission();
-        this.speechService.startListening().subscribe( matches => {
-            console.log(matches);
-            this.checkBySpeech(matches);
-            this.logoutBySpeech(matches);
-        });
-    }
-
-    checkBySpeech(matches: string[]) {
-        for ( let i = 0; i < matches.length; i++) {
-            for ( let j = 0; j < this.checkMatches.length; j++) {
-                if (matches[i].toLowerCase() === this.checkMatches[j]) {
-                    return;
-                }
-            }
-        }
-    }
-
-    logoutBySpeech(matches: string[]) {
-        for ( let i = 0; i < matches.length; i++) {
-            for ( let j = 0; j < this.logoutMatches.length; j++) {
-                if (matches[i].toLowerCase() === this.logoutMatches[j]) {
-                    this.doLogout();
-                    return;
-                }
-            }
-        }
     }
 
     ngOnDestroy(): void {
