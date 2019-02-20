@@ -22,7 +22,7 @@ export class AuthServiceProvider {
         this.presentLoading(loading);
         console.log('before google plus login');
         this.googlePlus.login({
-            'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'
+            'webClientId': '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'
         })
             .then(user => {
                 loading.dismiss();
@@ -31,8 +31,10 @@ export class AuthServiceProvider {
                 firebase.auth().signInAndRetrieveDataWithCredential(googleCredential)
                     .then(connectedUser => {
                         this.todoService.addUser({
+                            uuid: connectedUser.user.uid,
                             email: connectedUser.user.email,
-                            username: connectedUser.user.displayName
+                            username: connectedUser.user.displayName,
+                            imageUrl: connectedUser.user.photoURL
                         });
                         this.router.navigate( ['/tabs']);
                     }, err => {
@@ -90,7 +92,7 @@ export class AuthServiceProvider {
         }
     }
 
-    async updateUser(user, name) {
+    async updateUser(user) {
         const loading = await this.loadingController.create({
             message: 'Please wait...'
         });
@@ -104,11 +106,10 @@ export class AuthServiceProvider {
         };
         firebase.auth().signInWithEmailAndPassword(credential.email, credential.password)
             .then(connectedUser => {
-                console.log('name : ' + name);
-                if (name) {
+                if (user.name) {
                     connectedUser.user.updateProfile( {
-                        displayName: name,
-                        photoURL: ''
+                        displayName: user.name,
+                        photoURL: user.imageUrl
                     }).then( succ => {
                         this.logout();
                         loading.dismiss();
@@ -131,7 +132,7 @@ export class AuthServiceProvider {
             }, err => {
                 console.error('Error logging out from Google: ' + err);
                 this.googlePlus.trySilentLogin(
-                    {'webClientID': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'}
+                    {'webClientID': '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'}
                 ).then(res => {
                     console.error('Google trySilentLogin success');
                     this.googlePlus.disconnect().then( obj => {

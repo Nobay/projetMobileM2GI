@@ -8,7 +8,10 @@ const routes: Routes = [
     { path: 'create-item', loadChildren: './todo-item/create-item/create-item.module#CreateItemPageModule' },
    /*  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' }, */
   { path: 'signup', loadChildren: './signup/signup.module#SignupPageModule' },
-  { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' }
+  { path: 'tabs', loadChildren: './tabs/tabs.module#TabsPageModule' },
+  { path: 'groups', loadChildren: './groups/groups.module#GroupsPageModule' },  { path: 'group', loadChildren: './group/group.module#GroupPageModule' }
+
+
 
 
 ];

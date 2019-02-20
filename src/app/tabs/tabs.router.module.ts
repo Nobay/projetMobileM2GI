@@ -23,7 +23,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../todo/todo.module#TodoPageModule',
+            loadChildren: '../groups/groups.module#GroupsPageModule',
             canActivate: [AuthGuard],
           }
         ]

@@ -26,6 +26,7 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
 import {SpeechServiceProvider} from './providers/speech-service.provider';
 import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 import {AuthGuard} from './providers/auth-guard';
+import {MembershipServiceProvider} from './providers/membership-service.provider';
 
 firebase.initializeApp(environment.firebase);
 
@@ -52,6 +53,7 @@ firebase.initializeApp(environment.firebase);
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       TodoServiceProvider,
       AuthServiceProvider,
+      MembershipServiceProvider,
       AuthGuard,
       SpeechServiceProvider,
       { provide: FirestoreSettingsToken, useValue: {} },

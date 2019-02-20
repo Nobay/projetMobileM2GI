@@ -33,7 +33,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
   }
   fetchItems() {
     if (this.listId) {
-        this.todoListService.getTodos(firebase.auth().currentUser.email, this.listId)
+        this.todoListService.getTodos(firebase.auth().currentUser.uid, this.listId)
             .subscribe(data => this.todoItems = data.items);
     }
   }
@@ -60,7 +60,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
             }, {
                 text: 'Delete',
                 handler: () => {
-                    this.todoListService.deleteTodo(firebase.auth().currentUser.email, this.listId, item.uuid);
+                    this.todoListService.deleteTodo(firebase.auth().currentUser.uid, this.listId, item.uuid);
                 }
             }
         ]
@@ -89,7 +89,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
             ]
         });
         await alert.present();
-        this.todoListService.addTodo(firebase.auth().currentUser.email, this.listId, data);
+        this.todoListService.addTodo(firebase.auth().currentUser.uid, this.listId, data);
     }
   }
 
@@ -116,7 +116,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
                 ]
             });
             await alert.present();
-            this.todoListService.editTodo(firebase.auth().currentUser.email, this.listId, data);
+            this.todoListService.editTodo(firebase.auth().currentUser.uid, this.listId, data);
         }
     }
 

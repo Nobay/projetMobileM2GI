@@ -31,9 +31,15 @@
       <ion-input name="cpassword" id="confirmPasswordField"
                  type="password" required [(ngModel)]="cpassword"></ion-input>
     </ion-item>
-    <ion-label *ngIf="(cpassword !== user.password) && (cpassword !== '' || user.password !== '')" style="color: red; font-weight: bold" text-center>
+    <ion-label *ngIf="(cpassword !== user.password) && (cpassword !== '' && user.password !== '')" style="color: red; font-weight: bold" text-center>
       Password and confirmation password do not match.
     </ion-label>
+    <ion-item>
+      <ion-button color="warning" (click)="choose()">Upload<ion-icon name="images"></ion-icon></ion-button>
+      <ion-avatar class="imageuploadFrame" [hidden]="!user.imageUrl">
+        <ion-img  class="uploadImage" src="{{user.imageUrl}}" [hidden]="!user.imageUrl"> </ion-img>
+      </ion-avatar>
+    </ion-item>
     <ion-row>
       <ion-col>
         <div *ngIf="error" style="color: red; font-weight: bold" text-center>{{error}}</div>

@@ -3,7 +3,6 @@ import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 @Injectable()
 export class SpeechServiceProvider {
     matches: string[];
-    isRecording = false;
     constructor(
         private speechRecognition: SpeechRecognition
     ) {}

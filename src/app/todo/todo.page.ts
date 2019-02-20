@@ -6,6 +6,7 @@ import {AlertController, IonList, ToastController} from '@ionic/angular';
 import {Subscription} from 'rxjs';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import * as firebase from 'firebase';
+import {MembershipServiceProvider} from '../providers/membership-service.provider';
 
 @Component({
   selector: 'app-todo',
@@ -14,7 +15,11 @@ import * as firebase from 'firebase';
 })
 export class TodoPage implements OnInit, OnDestroy {
   todoLists: TodoList[];
+  sharedLists: TodoList[] = [];
+  usersShared: string[];
+  groupsShared: string[];
   todoListReady = false;
+  sharedListReady = false;
   subscription: Subscription;
   @ViewChild('slidingList') slidingList: IonList;
 
@@ -23,13 +28,33 @@ export class TodoPage implements OnInit, OnDestroy {
       private authService: AuthServiceProvider,
       private router: Router,
       private alertCtrl: AlertController,
-      private toastCtrl: ToastController
+      private membershipService: MembershipServiceProvider
   ) {}
 
   ngOnInit() {
-    this.subscription = this.todoListService.getLists(firebase.auth().currentUser.email).subscribe( data => {
+    this.subscription = this.todoListService.getLists(firebase.auth().currentUser.uid).subscribe( data => {
         this.todoLists = data;
         this.todoListReady = true;
+    });
+    this.membershipService.getAllMyGroups(firebase.auth().currentUser.uid).subscribe( memberships => {
+        for (const membership of memberships) {
+            this.todoListService.getLists(membership.userId).subscribe( lists => {
+                for (const list of lists)  {
+                    for (const id of list.membershipIds) {
+                        if (id === (membership.userId + '_' + membership.groupId)) {
+                            this.sharedLists.push(list);
+                            this.todoListService.getUser(membership.userId).subscribe( user => {
+                                this.usersShared.push(user.username);
+                                this.membershipService.getGroup(membership.groupId).subscribe( group => {
+                                    this.groupsShared.push(group.name);
+                                    this.sharedListReady = true;
+                                });
+                            });
+                        }
+                    }
+                }
+            });
+        }
     });
   }
   completedItemsSize(list: TodoList) {
@@ -60,7 +85,7 @@ export class TodoPage implements OnInit, OnDestroy {
               }, {
                   text: 'Delete',
                   handler: () => {
-                      this.todoListService.deleteList(firebase.auth().currentUser.email, list.uuid);
+                      this.todoListService.deleteList(firebase.auth().currentUser.uid, list.uuid);
                   }
               }
           ]
@@ -91,10 +116,11 @@ export class TodoPage implements OnInit, OnDestroy {
                     text: 'Create',
                     handler: data => {
                         if (data.name !== '') {
-                            this.todoListService.addList(firebase.auth().currentUser.email, {
-                                uuid : this.todoListService.makeId(),
-                                name : data.name,
-                                items : []
+                            this.todoListService.addList(firebase.auth().currentUser.uid, {
+                                uuid: this.todoListService.makeId(),
+                                membershipIds: [],
+                                name: data.name,
+                                items: [],
                             });
                         } else {
                             this.authService.showToast('The name shouldn\'t be empty');
@@ -128,10 +154,11 @@ export class TodoPage implements OnInit, OnDestroy {
                     text: 'Modify',
                     handler: data => {
                         if (data.name !== '') {
-                            this.todoListService.editList(firebase.auth().currentUser.email, {
-                                uuid : list.uuid,
-                                name : data.name,
-                                items : list.items
+                            this.todoListService.editList(firebase.auth().currentUser.uid, {
+                                uuid: list.uuid,
+                                membershipIds: list.membershipIds,
+                                name: data.name,
+                                items: list.items,
                             });
                         } else {
                             this.authService.showToast('The name shouldn\'t be empty');

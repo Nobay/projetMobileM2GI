@@ -28,7 +28,6 @@ export class CreateItemPage implements OnInit {
       private fileChooser: FileChooser,
       private file: File,
       private filePath: FilePath,
-      public zone: NgZone,
       public loadingController: LoadingController
   ) {
     this.todoItem = {

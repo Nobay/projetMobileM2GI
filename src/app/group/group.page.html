@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary" *ngIf="currentUserLists">
+      <ion-select multiple = "true" (ionChange)="shareLists($event)" okText="Share" cancelText="Cancel">
+        <ion-select-option *ngFor="let list of currentUserLists" [value]="list.uuid">{{list.name}}</ion-select-option>
+      </ion-select>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="groupIsReady()">
+  <ion-list *ngIf="owner">
+    <ion-list-header>
+      <h2>Owner</h2>
+    </ion-list-header>
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="{{owner.imageUrl}}">
+        </ion-avatar>
+        <ion-label>
+          <p style="font-weight: bold">{{owner.username}}</p>
+        </ion-label>
+      </ion-item>
+  </ion-list>
+  <ion-list *ngIf="members.length > 0">
+    <ion-list-header>
+      <h2>Members</h2>
+    </ion-list-header>
+    <ion-item-sliding *ngFor="let member of members">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="{{member.imageUrl}}">
+        </ion-avatar>
+        <ion-label>
+          <p style="font-weight: bold">{{member.username}}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="removeMember(member)">
+          <ion-icon name="close"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-list *ngIf="owner && pendingMembers.length > 0">
+    <div *ngIf="owner.uuid === getCurrentUser().uid">
+    <ion-list-header>
+      <h2>Pending members</h2>
+    </ion-list-header>
+    <ion-item-sliding *ngFor="let member of pendingMembers">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="{{member.imageUrl}}">
+        </ion-avatar>
+        <ion-label>
+          <p style="font-weight: bold">{{member.username}}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="success" (click)="acceptMember(member)">
+          <ion-icon name="people"></ion-icon>
+        </ion-item-option>
+        <ion-item-option  color="danger" (click)="refuseMember(member)">
+          <ion-icon name="exit"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+    </div>
+  </ion-list>
+</ion-content>

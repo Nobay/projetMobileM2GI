@@ -20,9 +20,9 @@ export class TabsPage implements OnInit {
         'my to do list', 'my to dos'
     ];
     groupMatches: string[] = [
-        'group', 'groups', 'my groups', 'my group',
-        'check groups', 'check group', 'check my groups',
-        'check my group'
+        'group', 'groups', 'my groups', 'my groups',
+        'check groups', 'check groups', 'check my groups',
+        'check my groups'
     ];
     profileMatches: string[] = [
         'profile', 'my profile', 'check profile', 'todos',
@@ -118,8 +118,9 @@ export class TabsPage implements OnInit {
                               text: 'Create',
                               handler: data => {
                                   if (data.name !== '') {
-                                      this.todoService.addList(firebase.auth().currentUser.email, {
+                                      this.todoService.addList(firebase.auth().currentUser.uid, {
                                           uuid : this.todoService.makeId(),
+                                          membershipIds : [],
                                           name : data.name,
                                           items : []
                                       });

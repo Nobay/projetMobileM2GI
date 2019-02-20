@@ -14,7 +14,21 @@
 </ion-header>
 
 <ion-content *ngIf="todoListReady">
+  <ion-list *ngIf="sharedListReady">
+    <ion-list-header>
+      <h2>Shared with me</h2>
+    </ion-list-header>
+    <ion-item *ngFor="let list of sharedLists; let i = index">
+      <h2>{{list.name}}</h2>
+      <p>Unfinished tasks: {{completedItemsSize(list)}}</p>
+      <p text-center>User: <span style="font-weight: bold; font-style: italic">{{usersShared[i]}}</span></p>
+      <p text-center>Group: <span style="font-weight: bold; font-style: italic">{{groupsShared[i]}}</span></p>
+    </ion-item>
+  </ion-list>
   <ion-list #slidingList>
+    <ion-list-header>
+      <h2>My lists</h2>
+    </ion-list-header>
     <ion-item-sliding *ngFor="let list of todoLists">
       <ion-item (click)="viewItems(list)">
         <ion-label>

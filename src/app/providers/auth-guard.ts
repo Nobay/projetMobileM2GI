@@ -19,8 +19,10 @@ export class AuthGuard implements CanActivate {
                     resolve(false);
                 } else {
                     this.todoService.addUser({
-                        email: firebase.auth().currentUser.email,
-                        username: firebase.auth().currentUser.displayName
+                        uuid: user.uid,
+                        email: user.email,
+                        username: user.displayName,
+                        imageUrl: user.photoURL
                     });
                     resolve(true);
                 }
