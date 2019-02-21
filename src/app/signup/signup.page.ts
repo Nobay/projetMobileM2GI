@@ -80,7 +80,7 @@ export class SignupPage implements OnInit {
             });
             this.dismiss();
         }).catch((error) => {
-            alert('not Done' + error);
+            console.log(error);
         });
     }
 

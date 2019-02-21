@@ -8,6 +8,7 @@ import * as firebase from 'firebase';
 import {AlertController, IonList, LoadingController} from '@ionic/angular';
 import {TodoList} from '../models/todoList';
 import {Membership} from '../models/membership';
+import {Group} from '../models/group';
 
 @Component({
   selector: 'app-group',
@@ -18,6 +19,7 @@ export class GroupPage implements OnInit, OnDestroy {
 
   subscription: Subscription;
   groupId: string;
+  currentGroup: Group;
   owner: User;
   members: User[];
   pendingMembers: User[];
@@ -46,18 +48,21 @@ export class GroupPage implements OnInit, OnDestroy {
           this.members = [];
           this.pendingMembers = [];
           this.groupId = params['id'];
-          this.todoService.getLists(firebase.auth().currentUser.uid).subscribe( lists => {
-          if (lists.length === 0) {
-              this.currentUserLists = undefined;
-          } else {
-              this.currentUserLists = lists;
-          }
-            this.groupReady[0] = true;
-            this.membershipService.getMembership(this.getCurrentUser().uid, this.groupId).subscribe( membership => {
-              this.currentMembership = membership;
-              this.groupReady[1] = true;
-              this.fetchUsers();
-            });
+          this.membershipService.getGroup(this.groupId).subscribe( group => {
+              this.currentGroup = group;
+              this.todoService.getLists(firebase.auth().currentUser.uid).subscribe( lists => {
+                  if (lists.length === 0) {
+                      this.currentUserLists = undefined;
+                  } else {
+                      this.currentUserLists = lists;
+                  }
+                  this.groupReady[0] = true;
+                  this.membershipService.getMembership(this.getCurrentUser().uid, this.groupId).subscribe( membership => {
+                      this.currentMembership = membership;
+                      this.groupReady[1] = true;
+                      this.fetchUsers();
+                  });
+              });
           });
       });
   }
