@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
+      <span *ngIf="groupIsReady()">Group: {{currentGroup.name}}</span>
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
