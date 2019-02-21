@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, ElementRef, NgZone} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ModalController, ToastController} from '@ionic/angular';
 import {TodoItem} from '../../models/todoItem';
 import {TodoServiceProvider} from '../../providers/todo-service.provider';

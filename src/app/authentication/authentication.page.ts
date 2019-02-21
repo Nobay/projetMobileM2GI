@@ -78,7 +78,7 @@ export class AuthenticationPage {
           console.log(matches);
           this.loginBySpeech(matches);
           this.createBySpeech(matches);
-          });
+          }, (err) => console.log(err));
     }
 
     loginBySpeech(matches: string[]) {

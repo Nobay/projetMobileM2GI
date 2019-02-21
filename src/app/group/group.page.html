@@ -5,15 +5,15 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="primary" *ngIf="currentUserLists">
-      <ion-select multiple = "true" (ionChange)="shareLists($event)" okText="Share" cancelText="Cancel">
-        <ion-select-option *ngFor="let list of currentUserLists" [value]="list.uuid">{{list.name}}</ion-select-option>
-      </ion-select>
+    <ion-buttons slot="primary" *ngIf="currentUserLists && isMember() && !isPending()">
+      <ion-button (click)="presentMyLists()" color="primary">
+        <ion-icon slot="icon-only" name="share"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="groupIsReady()">
+<ion-content *ngIf="groupIsReady() && ownerReady && isMember(); else notMember">
   <ion-list *ngIf="owner">
     <ion-list-header>
       <h2>Owner</h2>
@@ -40,7 +40,7 @@
           <p style="font-weight: bold">{{member.username}}</p>
         </ion-label>
       </ion-item>
-      <ion-item-options side="end">
+      <ion-item-options side="end" *ngIf="getCurrentUser().uid === member.uuid || getCurrentUser().uid === owner.uuid">
         <ion-item-option color="danger" (click)="removeMember(member)">
           <ion-icon name="close"></ion-icon>
         </ion-item-option>
@@ -73,3 +73,9 @@
     </div>
   </ion-list>
 </ion-content>
+<ng-template #notMember>
+  <ion-content text-center>
+    <h2>You are not a member of this group.</h2>
+  </ion-content>
+</ng-template>
+

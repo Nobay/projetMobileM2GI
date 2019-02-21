@@ -7,7 +7,7 @@
           <ion-back-button ></ion-back-button>
       </ion-buttons>
       <ion-buttons slot="primary">
-          <ion-button (click)="createItem()" color="primary">
+          <ion-button (click)="createItem()" color="primary" *ngIf="!userId">
               <ion-icon slot="icon-only" name="add-circle"></ion-icon>
           </ion-button>
       </ion-buttons>
@@ -26,13 +26,19 @@
                 <h4>State: {{getState(item)}}</h4>
                 <p>{{item.desc}}</p>
             </ion-col>
-            <ion-col> 
-                <img class="imgCol" src="{{item.image}}"><img>
+            <ion-col>
+                <ion-avatar class="imageuploadFrame">
+                    <img class="uploadImage" src="{{item.image}}"><img>
+                </ion-avatar>
             </ion-col>
         </ion-row>
     </ion-grid>
-        <ion-button color="warning" slot="end" (click)="modifyItem(item)"><ion-icon name="create"></ion-icon></ion-button>
-        <ion-button color="danger" slot="end" (click)="removeItem(item)"><ion-icon name="trash"></ion-icon></ion-button>
+        <ion-button *ngIf="!userId" color="warning" slot="end" (click)="modifyItem(item)">
+            <ion-icon name="create"></ion-icon>
+        </ion-button>
+        <ion-button *ngIf="!userId" color="danger" slot="end" (click)="removeItem(item)">
+            <ion-icon name="trash"></ion-icon>
+        </ion-button>
     </ion-card-content>   
 </ion-card>
 </ion-content>

@@ -2,11 +2,12 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {TodoList} from '../models/todoList';
 import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Router} from '@angular/router';
-import {AlertController, IonList, ToastController} from '@ionic/angular';
+import {AlertController, IonList, LoadingController, ToastController} from '@ionic/angular';
 import {Subscription} from 'rxjs';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import * as firebase from 'firebase';
 import {MembershipServiceProvider} from '../providers/membership-service.provider';
+import {load} from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-todo',
@@ -15,9 +16,9 @@ import {MembershipServiceProvider} from '../providers/membership-service.provide
 })
 export class TodoPage implements OnInit, OnDestroy {
   todoLists: TodoList[];
-  sharedLists: TodoList[] = [];
-  usersShared: string[];
-  groupsShared: string[];
+  sharedLists;
+  usersShared;
+  groupsShared;
   todoListReady = false;
   sharedListReady = false;
   subscription: Subscription;
@@ -28,33 +29,62 @@ export class TodoPage implements OnInit, OnDestroy {
       private authService: AuthServiceProvider,
       private router: Router,
       private alertCtrl: AlertController,
-      private membershipService: MembershipServiceProvider
+      private membershipService: MembershipServiceProvider,
+      private loadingController: LoadingController
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+      const loading = await this.loadingController.create({
+          message: 'Fetching to-do lists...'
+      });
+      this.presentLoading(loading);
     this.subscription = this.todoListService.getLists(firebase.auth().currentUser.uid).subscribe( data => {
         this.todoLists = data;
         this.todoListReady = true;
-    });
-    this.membershipService.getAllMyGroups(firebase.auth().currentUser.uid).subscribe( memberships => {
-        for (const membership of memberships) {
-            this.todoListService.getLists(membership.userId).subscribe( lists => {
-                for (const list of lists)  {
-                    for (const id of list.membershipIds) {
-                        if (id === (membership.userId + '_' + membership.groupId)) {
-                            this.sharedLists.push(list);
-                            this.todoListService.getUser(membership.userId).subscribe( user => {
-                                this.usersShared.push(user.username);
-                                this.membershipService.getGroup(membership.groupId).subscribe( group => {
-                                    this.groupsShared.push(group.name);
-                                    this.sharedListReady = true;
-                                });
-                            });
-                        }
+        this.sharedLists = [];
+        this.usersShared = [];
+        this.groupsShared = [];
+        this.membershipService.getAllMyGroups(firebase.auth().currentUser.uid).subscribe( memberships => {
+            if (memberships.length === 0) {
+                loading.dismiss();
+            }
+            for (const membership of memberships) {
+                this.membershipService.getAllUsersInGroup(membership.groupId).subscribe(usersInGroup => {
+                    if (usersInGroup.length === 0) {
+                        loading.dismiss();
                     }
-                }
-            });
-        }
+                    for (const userMembership of usersInGroup) {
+                        this.todoListService.getLists(userMembership.userId).subscribe( lists => {
+                            if (lists.length === 0) {
+                                loading.dismiss();
+                            }
+                            for (const list of lists)  {
+                                if (list.membershipIds.length === 0) {
+                                    loading.dismiss();
+                                }
+                                for (const id of list.membershipIds) {
+                                    if (id === (userMembership.userId + '_' + userMembership.groupId)
+                                        && (userMembership.userId !== firebase.auth().currentUser.uid)) {
+                                        if (this.existsInShared(list.uuid, userMembership.userId, this.sharedLists) === false) {
+                                            this.sharedLists.push({item: list, user: userMembership.userId});
+                                            this.todoListService.getUser(userMembership.userId).subscribe( user => {
+                                                this.usersShared.push(user.username);
+                                                this.membershipService.getGroup(userMembership.groupId)
+                                                    .subscribe( group => {
+                                                    this.groupsShared.push(group.name);
+                                                }, () => loading.dismiss());
+                                            }, () => loading.dismiss());
+                                        }
+                                    }
+                                }
+                            }
+                            loading.dismiss();
+                            this.sharedListReady = true;
+                        }, () => loading.dismiss());
+                    }
+                }, () => loading.dismiss());
+            }
+        }, () => loading.dismiss());
     });
   }
   completedItemsSize(list: TodoList) {
@@ -67,7 +97,24 @@ export class TodoPage implements OnInit, OnDestroy {
     return size;
   }
   viewItems(list: TodoList) {
-      this.router.navigate(['/todo-item'], {queryParams: {id: list.uuid, name: list.name}});
+      if (this.sharedLists.length > 0) {
+          for (let i = 0; i < this.sharedLists.length; i++) {
+              if (this.sharedLists[i].item.uuid === list.uuid) {
+                  console.log(this.sharedLists[i].user);
+                  this.router.navigate(['/todo-item'],
+                      {queryParams: {
+                              id: this.sharedLists[i].item.uuid,
+                              name: this.sharedLists[i].item.name,
+                              userId: this.sharedLists[i].user
+                              }
+                      });
+                  return;
+              }
+          }
+          this.router.navigate(['/todo-item'], {queryParams: {id: list.uuid, name: list.name}});
+      } else {
+          this.router.navigate(['/todo-item'], {queryParams: {id: list.uuid, name: list.name}});
+      }
   }
 
   async removeList(list: TodoList) {
@@ -168,6 +215,20 @@ export class TodoPage implements OnInit, OnDestroy {
             ]
         });
         await alert.present();
+        await this.slidingList.closeSlidingItems();
+    }
+
+    existsInShared(listId, userId, lists) {
+        for ( let i = 0; i < lists.length; i++) {
+            if (lists[i].user === userId && lists[i].item.uuid === listId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async presentLoading(loading) {
+        return await loading.present();
     }
 
     ngOnDestroy() {

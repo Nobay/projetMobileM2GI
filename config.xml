@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.todolist" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>To-do list</name>
-    <description>To-do list with google+, facebook... authentication.</description>
+    <description>To-do list with google+ authentication.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
     <access origin="*" />
@@ -19,7 +19,6 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
-    <preference name="SplashScreenSpinnerColor" value="#ffffff" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -81,7 +80,7 @@
     <plugin name="cordova-plugin-statusbar" spec="2.4.2" />
     <plugin name="cordova-plugin-device" spec="2.0.2" />
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^3.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-googleplus" spec="7.0.0">
         <variable name="REVERSED_CLIENT_ID" value="376336795720-9to5n1du0c37jn232g4qn8frd4jfkf9p.apps.googleusercontent.com" />

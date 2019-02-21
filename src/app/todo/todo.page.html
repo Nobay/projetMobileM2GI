@@ -18,11 +18,13 @@
     <ion-list-header>
       <h2>Shared with me</h2>
     </ion-list-header>
-    <ion-item *ngFor="let list of sharedLists; let i = index">
-      <h2>{{list.name}}</h2>
-      <p>Unfinished tasks: {{completedItemsSize(list)}}</p>
-      <p text-center>User: <span style="font-weight: bold; font-style: italic">{{usersShared[i]}}</span></p>
-      <p text-center>Group: <span style="font-weight: bold; font-style: italic">{{groupsShared[i]}}</span></p>
+    <ion-item (click)="viewItems(list.item)" *ngFor="let list of sharedLists; let i = index">
+      <ion-label>
+        <h2>{{list.item.name}}</h2>
+        <p>Unfinished tasks: {{completedItemsSize(list.item)}}</p>
+        <p>User: <span style="font-weight: bold; font-style: italic">{{usersShared[i]}}</span></p>
+        <p>Group: <span style="font-weight: bold; font-style: italic">{{groupsShared[i]}}</span></p>
+      </ion-label>
     </ion-item>
   </ion-list>
   <ion-list #slidingList>

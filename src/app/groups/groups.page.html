@@ -1,4 +1,5 @@
 <ion-header>
+  <ion-item-divider>
   <ion-toolbar>
     <ion-title>
     </ion-title>
@@ -11,18 +12,19 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
-
-<ion-content *ngIf="groupsAreReady()">
-  <ion-item>
+  </ion-item-divider>
+  <ion-item *ngIf="groupsAreReady()">
     <ion-label>Filter</ion-label>
     <ion-select (ionChange)="onSelectFilter($event)" okText="Apply" cancelText="Cancel">
-      <ion-select-option value="joined" selected="true">Joined</ion-select-option>
+      <ion-select-option value="joined">Joined</ion-select-option>
       <ion-select-option value="owned">Created</ion-select-option>
       <ion-select-option value="pending">Pending</ion-select-option>
       <ion-select-option value="others">Other groups</ion-select-option>
     </ion-select>
   </ion-item>
+</ion-header>
+
+<ion-content *ngIf="groupsAreReady()">
   <ion-list #slidingList>
     <ion-item-sliding *ngFor="let group of groupsToDisplay">
       <ion-item (click)="viewGroup(group)">

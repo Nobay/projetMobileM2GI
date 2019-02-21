@@ -1,8 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {TodoList} from '../models/todoList';
 import {Subscription} from 'rxjs';
-import {AlertController, IonList, ToastController} from '@ionic/angular';
-import {TodoServiceProvider} from '../providers/todo-service.provider';
+import {AlertController, IonList, LoadingController} from '@ionic/angular';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase';
@@ -31,6 +29,7 @@ export class GroupsPage implements OnInit, OnDestroy {
     fullControl = false;
     someControl = false;
     smallControl = false;
+    noControl = false;
 
     @ViewChild('slidingList') slidingList: IonList;
 
@@ -38,46 +37,70 @@ export class GroupsPage implements OnInit, OnDestroy {
         private membershipService: MembershipServiceProvider,
         private authService: AuthServiceProvider,
         private router: Router,
-        private alertCtrl: AlertController
+        private alertCtrl: AlertController,
+        private loadingController: LoadingController,
     ) {}
 
-    ngOnInit() {
+    async ngOnInit() {
+        const loading = await this.loadingController.create({
+            message: 'Fetching groups...'
+        });
+        this.presentLoading(loading);
         this.subscriptions.push(this.membershipService.getAllGroups().subscribe( data => {
+            if (data.length === 0) {
+                loading.dismiss();
+            }
             this.groups = data;
             for (const group of this.groups) {
                 this.membershipService.getAllUsersInGroup(group.uuid).subscribe(memberships => {
                     this.numberOfUsers[group.uuid] = memberships.length;
                     this.groupsReady[0] = true;
+                }, () => {
+                    loading.dismiss();
                 });
             }
-        }));
-        this.subscriptions.push(this.membershipService
-            .getFirstHalf(firebase.auth().currentUser.uid).subscribe( memberships => {
-            this.firstHalfMemberships = memberships;
-            console.log(this.firstHalfMemberships);
-            this.groupsReady[1] = true;
-        }));
-        this.subscriptions.push(this.membershipService
-            .getSecondHalf(firebase.auth().currentUser.uid).subscribe( memberships => {
-                this.secondHalfMemberships = memberships;
-                console.log(this.secondHalfMemberships);
-                this.groupsReady[2] = true;
-            }));
-        this.subscriptions.push(this.membershipService
-            .getJoinedGroups(firebase.auth().currentUser.uid).subscribe( memberships => {
-            this.joinedMemberships = memberships;
-            this.groupsToDisplay = this.getJoinedGroups();
-            this.groupsReady[3] = true;
-        }));
-        this.subscriptions.push(this.membershipService
-            .getMyGroups(firebase.auth().currentUser.uid).subscribe( memberships => {
-            this.ownerships = memberships;
-            this.groupsReady[4] = true;
-        }));
-        this.subscriptions.push(this.membershipService
-            .getPendingGroups(firebase.auth().currentUser.uid).subscribe( memberships => {
-            this.pendingMemberships = memberships;
-            this.groupsReady[5] = true;
+            this.subscriptions.push(this.membershipService
+                .getFirstHalf(firebase.auth().currentUser.uid).subscribe( firstHalfMemberships => {
+                    this.firstHalfMemberships = firstHalfMemberships;
+                    this.groupsReady[1] = true;
+                    this.subscriptions.push(this.membershipService
+                        .getSecondHalf(firebase.auth().currentUser.uid).subscribe( secondHalfMemberships => {
+                            this.secondHalfMemberships = secondHalfMemberships;
+                            this.groupsReady[2] = true;
+                            this.subscriptions.push(this.membershipService
+                                .getJoinedGroups(firebase.auth().currentUser.uid)
+                                .subscribe(joinedMemberships => {
+                                    this.joinedMemberships = joinedMemberships;
+                                    this.groupsReady[3] = true;
+                                    this.subscriptions.push(this.membershipService
+                                        .getMyGroups(firebase.auth().currentUser.uid)
+                                        .subscribe( ownerships => {
+                                            this.ownerships = ownerships;
+                                            this.groupsToDisplay = this.getMyGroups();
+                                            this.groupsReady[4] = true;
+                                            this.subscriptions.push(this.membershipService
+                                                .getPendingGroups(firebase.auth().currentUser.uid)
+                                                .subscribe( pendingMemberships => {
+                                                    this.pendingMemberships = pendingMemberships;
+                                                    this.groupsReady[5] = true;
+                                                    loading.dismiss();
+                                                }, () => {
+                                                    loading.dismiss();
+                                                }));
+                                        }, () => {
+                                            loading.dismiss();
+                                        }));
+                                }, () => {
+                                    loading.dismiss();
+                                }));
+                        }, () => {
+                            loading.dismiss();
+                        }));
+                }, () => {
+                    loading.dismiss();
+                }));
+        }, () => {
+            loading.dismiss();
         }));
     }
 
@@ -211,11 +234,6 @@ export class GroupsPage implements OnInit, OnDestroy {
                                     isOwner: true,
                                     date: Date.now()
                                 });
-                                this.groupsToDisplay.push({
-                                    uuid : id,
-                                    name : data.name,
-                                    maxSize : data.size
-                                });
                             } else {
                                 this.authService.showToast('The size should be within the respected range [0-12]');
                             }
@@ -278,25 +296,29 @@ export class GroupsPage implements OnInit, OnDestroy {
     onSelectFilter(event) {
         console.log(event);
         if (event.detail.value === 'others') {
-            this.groupsToDisplay = this.getOtherGroups();
+            this.noControl = false;
             this.smallControl = true;
             this.someControl = false;
             this.fullControl = false;
-        } else if (event.detail.value === 'joined') {
-            this.groupsToDisplay = this.getJoinedGroups();
-            this.someControl = true;
-            this.smallControl = false;
-            this.fullControl = false;
+            this.groupsToDisplay = this.getOtherGroups();
         } else if (event.detail.value === 'owned') {
+            this.noControl = false;
             this.fullControl = true;
             this.someControl = false;
             this.smallControl = false;
             this.groupsToDisplay = this.getMyGroups();
-        } else {
+        } else if (event.detail.value === 'pending') {
+            this.noControl = true;
             this.fullControl = false;
             this.someControl = false;
             this.smallControl = false;
             this.groupsToDisplay = this.getPendingGroups();
+        } else if (event.detail.value === 'joined') {
+            this.noControl = false;
+            this.someControl = true;
+            this.smallControl = false;
+            this.fullControl = false;
+            this.groupsToDisplay = this.getJoinedGroups();
         }
     }
 
@@ -304,9 +326,9 @@ export class GroupsPage implements OnInit, OnDestroy {
         this.router.navigate(['/group'], {queryParams: {id: group.uuid}});
     }
 
-    async joinGroup(group: Group) {
+    joinGroup(group: Group) {
         this.membershipService.getMembership(firebase.auth().currentUser.uid, group.uuid).subscribe( async membership => {
-            if (!membership.isOwner && !membership.hasMembership) {
+            if (!membership) {
                 this.membershipService.addMembership({
                     userId: firebase.auth().currentUser.uid,
                     groupId: group.uuid,
@@ -341,6 +363,10 @@ export class GroupsPage implements OnInit, OnDestroy {
         });
         await alert.present();
         await this.slidingList.closeSlidingItems();
+    }
+
+    async presentLoading(loading) {
+        return await loading.present();
     }
 
     ngOnDestroy() {

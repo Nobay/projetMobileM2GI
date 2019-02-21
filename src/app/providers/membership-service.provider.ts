@@ -31,13 +31,14 @@ export class MembershipServiceProvider {
     }
 
     public async deleteMemberships(groupId: string) {
-        const qry = await this.db.collection<Membership>('memberships', ref => {
-            return ref.where('groupId', '==', groupId);
-        }).ref.get();
+        const qry = await this.db.collection<Membership>('memberships').ref.get();
         const batch = this.db.firestore.batch();
         qry.forEach(doc => {
-            console.log('deleting....', doc.id);
-            batch.delete(doc.ref);
+            const idSplit = doc.id.split('_', 2);
+            if (idSplit[1] === groupId) {
+                batch.delete(doc.ref);
+                console.log('deleting ' + doc.id);
+            }
         });
 
         batch.commit().then(res => console.log('committed batch.'))

@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {TodoItem} from '../models/todoItem';
 import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Subscription} from 'rxjs';
-import {AlertController, ModalController} from '@ionic/angular';
+import {AlertController, LoadingController, ModalController} from '@ionic/angular';
 import {CreateItemPage} from './create-item/create-item.page';
 import * as firebase from 'firebase';
 
@@ -15,26 +15,45 @@ import * as firebase from 'firebase';
 export class TodoItemPage implements OnInit, OnDestroy {
   listId: string;
   listName: string;
+  userId: string;
   todoItems: TodoItem[] = [];
   subscription: Subscription;
+  loading;
 
   constructor(
-      public todoListService: TodoServiceProvider,
+      private todoListService: TodoServiceProvider,
       private route: ActivatedRoute,
       private alertCtrl: AlertController,
-      public modalController: ModalController
+      private modalController: ModalController,
+      private loadingController: LoadingController
   ) {}
-  ngOnInit() {
+  async ngOnInit() {
+      this.loading = await this.loadingController.create({
+          message: 'Fetching items...'
+      });
+      this.presentLoading(this.loading);
       this.subscription = this.route.queryParams.subscribe(params => {
+          console.log(params);
             this.listId = params['id'];
             this.listName = params['name'];
-            this.fetchItems();
-        });
+            this.userId = params['userId'];
+            if (this.userId) {
+                this.fetchItems(this.userId);
+            } else {
+                this.fetchItems(firebase.auth().currentUser.uid);
+            }
+        }, () => this.loading.dismiss());
   }
-  fetchItems() {
+  fetchItems(userId) {
     if (this.listId) {
-        this.todoListService.getTodos(firebase.auth().currentUser.uid, this.listId)
-            .subscribe(data => this.todoItems = data.items);
+        console.log(userId + '         ' + this.listId);
+        this.todoListService.getTodos(userId, this.listId)
+            .subscribe(data => {
+                this.todoItems = data.items;
+                this.loading.dismiss();
+            }, () => this.loading.dismiss());
+    } else {
+        this.loading.dismiss();
     }
   }
   getState(item: TodoItem): string {
@@ -118,6 +137,14 @@ export class TodoItemPage implements OnInit, OnDestroy {
             await alert.present();
             this.todoListService.editTodo(firebase.auth().currentUser.uid, this.listId, data);
         }
+    }
+
+    async presentLoading(loading) {
+        return await loading.present();
+    }
+
+    getCurrentUser(): firebase.User {
+        return firebase.auth().currentUser;
     }
 
   ngOnDestroy() {
