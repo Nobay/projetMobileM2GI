@@ -49,41 +49,44 @@ export class TodoPage implements OnInit, OnDestroy {
                 loading.dismiss();
             }
             for (const membership of memberships) {
-                this.membershipService.getAllUsersInGroup(membership.groupId).subscribe(usersInGroup => {
-                    if (usersInGroup.length === 0) {
-                        loading.dismiss();
-                    }
-                    for (const userMembership of usersInGroup) {
-                        this.todoListService.getLists(userMembership.userId).subscribe( lists => {
-                            if (lists.length === 0) {
-                                loading.dismiss();
-                            }
-                            for (const list of lists)  {
-                                if (list.membershipIds.length === 0) {
+                if (membership.hasMembership === true) {
+                    this.membershipService.getAllUsersInGroup(membership.groupId).subscribe(usersInGroup => {
+                        if (usersInGroup.length === 0) {
+                            loading.dismiss();
+                        }
+                        for (const userMembership of usersInGroup) {
+                            this.todoListService.getLists(userMembership.userId).subscribe( lists => {
+                                if (lists.length === 0) {
                                     loading.dismiss();
                                 }
-                                for (const id of list.membershipIds) {
-                                    if (id === (userMembership.userId + '_' + userMembership.groupId)
-                                        && (userMembership.userId !== firebase.auth().currentUser.uid)) {
-                                        if (this.existsInShared(list.uuid, userMembership.userId, this.sharedLists) === false) {
-                                            this.sharedLists.push({item: list, user: userMembership.userId});
-                                            this.todoListService.getUser(userMembership.userId).subscribe( user => {
-                                                this.usersShared.push(user.username);
-                                                this.membershipService.getGroup(userMembership.groupId)
-                                                    .subscribe( group => {
-                                                    this.groupsShared.push(group.name);
+                                for (const list of lists)  {
+                                    if (list.membershipIds.length === 0) {
+                                        loading.dismiss();
+                                    }
+                                    for (const id of list.membershipIds) {
+                                        if (id === (userMembership.userId + '_' + userMembership.groupId)
+                                            && (userMembership.userId !== firebase.auth().currentUser.uid)) {
+                                            if (this.existsInShared(list.uuid, userMembership.userId, this.sharedLists) === false) {
+                                                this.sharedLists.push({item: list, user: userMembership.userId});
+                                                this.todoListService.getUser(userMembership.userId).subscribe( user => {
+                                                    this.usersShared.push(user.username);
+                                                    this.membershipService.getGroup(userMembership.groupId)
+                                                        .subscribe( group => {
+                                                            this.groupsShared.push(group.name);
+                                                        }, () => loading.dismiss());
                                                 }, () => loading.dismiss());
-                                            }, () => loading.dismiss());
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            loading.dismiss();
-                            this.sharedListReady = true;
-                        }, () => loading.dismiss());
-                    }
-                }, () => loading.dismiss());
+                                loading.dismiss();
+                                this.sharedListReady = true;
+                            }, () => loading.dismiss());
+                        }
+                    }, () => loading.dismiss());
+                }
             }
+            loading.dismiss();
         }, () => loading.dismiss());
     });
   }

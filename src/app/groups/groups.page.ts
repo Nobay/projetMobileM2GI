@@ -118,14 +118,18 @@ export class GroupsPage implements OnInit, OnDestroy {
         for (let i = 0; i < this.groups.length; i++) {
             for (const membership of this.firstHalfMemberships) {
                 if (this.groups[i].uuid === membership.groupId) {
-                    groups.push(this.groups[i]);
+                    if (this.existsAsGroup(groups, this.groups[i].uuid) === false) {
+                        groups.push(this.groups[i]);
+                    }
                 }
             }
         }
         for (let i = 0; i < this.groups.length; i++) {
             for (const membership of this.secondHalfMemberships) {
                 if (this.groups[i].uuid === membership.groupId) {
-                    groups.push(this.groups[i]);
+                    if (this.existsAsGroup(groups, this.groups[i].uuid) === false) {
+                        groups.push(this.groups[i]);
+                    }
                 }
             }
         }
@@ -137,7 +141,9 @@ export class GroupsPage implements OnInit, OnDestroy {
       for (let i = 0; i < this.groups.length; i++) {
         for (const membership of this.joinedMemberships) {
           if (this.groups[i].uuid === membership.groupId) {
-              groups.push(this.groups[i]);
+              if (this.existsAsGroup(groups, this.groups[i].uuid) === false) {
+                  groups.push(this.groups[i]);
+              }
           }
         }
       }
@@ -149,7 +155,9 @@ export class GroupsPage implements OnInit, OnDestroy {
         for (let i = 0; i < this.groups.length; i++) {
             for (const ownership of this.ownerships) {
                 if (this.groups[i].uuid === ownership.groupId) {
-                    groups.push(this.groups[i]);
+                    if (this.existsAsGroup(groups, this.groups[i].uuid) === false) {
+                        groups.push(this.groups[i]);
+                    }
                 }
             }
         }
@@ -161,7 +169,9 @@ export class GroupsPage implements OnInit, OnDestroy {
         for (let i = 0; i < this.groups.length; i++) {
             for (const membership of this.pendingMemberships) {
                 if (this.groups[i].uuid === membership.groupId) {
-                    groups.push(this.groups[i]);
+                    if (this.existsAsGroup(groups, this.groups[i].uuid) === false) {
+                        groups.push(this.groups[i]);
+                    }
                 }
             }
         }
@@ -294,7 +304,6 @@ export class GroupsPage implements OnInit, OnDestroy {
     }
 
     onSelectFilter(event) {
-        console.log(event);
         if (event.detail.value === 'others') {
             this.noControl = false;
             this.smallControl = true;
@@ -367,6 +376,15 @@ export class GroupsPage implements OnInit, OnDestroy {
 
     async presentLoading(loading) {
         return await loading.present();
+    }
+
+    existsAsGroup(groups, groupId) {
+        for ( let i = 0; i < groups.length; i++) {
+            if (groups[i].uuid === groupId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     ngOnDestroy() {

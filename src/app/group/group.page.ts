@@ -160,6 +160,7 @@ export class GroupPage implements OnInit, OnDestroy {
                       if (index !== -1) {
                           this.members.splice(index, 1);
                       }
+                      this.removeSharedList(user.uuid);
                   }
               }
           ]
@@ -326,6 +327,18 @@ export class GroupPage implements OnInit, OnDestroy {
             }
         }
         return false;
+    }
+
+    removeSharedList(userId) {
+      this.todoService.getLists(userId).subscribe( lists => {
+          for (const list of lists) {
+              const index = list.membershipIds
+                  .findIndex(id => id === this.currentMembership.userId + '_' + this.currentMembership.groupId);
+              if (index !== -1) {
+                  list.membershipIds.splice(index, 1);
+              }
+          }
+      });
     }
 
   async presentLoading(loading) {
