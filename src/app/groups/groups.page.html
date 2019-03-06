@@ -28,7 +28,7 @@
   <div *ngIf="groupsToDisplay; else undefinedGroups">
     <div *ngIf="groupsToDisplay.length === 0; else availableGroups"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
-      There are no groups at the moment.
+      There are no groups at the moment... try another filter.
     </div>
     <ng-template #availableGroups>
       <ion-list #slidingList>
@@ -60,7 +60,7 @@
   <ng-template #undefinedGroups>
     <div *ngIf="groupsToDisplay.length === 0; else undefinedGroups"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
-      There are no groups at the moment.
+        There are no groups at the moment... try another filter.
     </div>
   </ng-template>
 </ion-content>

@@ -286,19 +286,56 @@ export class GroupPage implements OnInit, OnDestroy {
                     text: 'Share',
                     handler: data => {
                         console.log(data);
-                        for (const value of data ) {
+                        const notShared = lists.filter(item => !data.includes(item.value));
+                        console.log(notShared);
+                        /* remove all options from shared lists */
+                        if (data.length === 0) {
                             for (const list of this.currentUserLists) {
-                                if (value === list.uuid) {
-                                    let occurrence = false;
-                                    for (const id of list.membershipIds) {
-                                        if (id === (this.currentMembership.userId + '_' + this.currentMembership.groupId)) {
-                                            occurrence = true;
+                                for (const id of list.membershipIds) {
+                                    if (id === (this.currentMembership.userId + '_' + this.currentMembership.groupId)) {
+                                        console.log('I am inside !');
+                                        const index = list.membershipIds.indexOf(id);
+                                        if (index !== -1) {
+                                            list.membershipIds.splice(index, 1);
+                                            console.log(list.membershipIds);
+                                            this.todoService.editList(this.getCurrentUser().uid, list);
                                         }
                                     }
-                                    if (occurrence === false) {
-                                        list.membershipIds.push(this.currentMembership.userId + '_'
-                                            + this.currentMembership.groupId);
-                                        this.todoService.editList(this.getCurrentUser().uid, list);
+                                }
+                            }
+                        } else {
+                            /* remove all unchecked options from shared lists */
+                            for (const item of notShared ) {
+                                for (const list of this.currentUserLists) {
+                                    if (item.value === list.uuid) {
+                                        for (const id of list.membershipIds) {
+                                            if (id === (this.currentMembership.userId + '_' + this.currentMembership.groupId)) {
+                                                const index = list.membershipIds.indexOf(id);
+                                                if (index !== -1) {
+                                                    list.membershipIds.splice(index, 1);
+                                                    console.log(list.membershipIds);
+                                                    this.todoService.editList(this.getCurrentUser().uid, list);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            /* add checked option to shared lists */
+                            for (const value of data ) {
+                                for (const list of this.currentUserLists) {
+                                    if (value === list.uuid) {
+                                        let occurrence = false;
+                                        for (const id of list.membershipIds) {
+                                            if (id === (this.currentMembership.userId + '_' + this.currentMembership.groupId)) {
+                                                occurrence = true;
+                                            }
+                                        }
+                                        if (occurrence === false) {
+                                            list.membershipIds.push(this.currentMembership.userId + '_'
+                                                + this.currentMembership.groupId);
+                                            this.todoService.editList(this.getCurrentUser().uid, list);
+                                        }
                                     }
                                 }
                             }
