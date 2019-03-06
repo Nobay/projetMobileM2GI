@@ -40,7 +40,7 @@ firebase.initializeApp(environment.firebase);
       BrowserModule, IonicModule.forRoot(), AppRoutingModule,
       FormsModule,
       AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule,
+      AngularFirestoreModule.enablePersistence(),
   ],
   providers: [
       StatusBar,

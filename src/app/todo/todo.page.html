@@ -18,30 +18,42 @@
     <ion-list-header>
       <h2>Shared with me</h2>
     </ion-list-header>
-    <ion-item (click)="viewItems(list.item)" *ngFor="let list of sharedLists; let i = index">
-      <ion-label>
-        <h2>{{list.item.name}}</h2>
-        <p>Unfinished tasks: {{completedItemsSize(list.item)}}</p>
-        <p>User: <span style="font-weight: bold; font-style: italic">{{usersShared[i]}}</span></p>
-        <p>Group: <span style="font-weight: bold; font-style: italic">{{groupsShared[i]}}</span></p>
-      </ion-label>
-    </ion-item>
+    <div *ngIf="sharedLists.length === 0; else availableShLists"
+         style="font-style:italic; color:gray; text-align: center; padding-top:10%">
+      No one has shared lists with you.
+    </div>
+    <ng-template #availableShLists>
+      <ion-item (click)="viewItems(list.item)" *ngFor="let list of sharedLists; let i = index">
+        <ion-label>
+          <h2>{{list.item.name}}</h2>
+          <p>Unfinished tasks: {{completedItemsSize(list.item)}}</p>
+          <p>User: <span style="font-weight: bold; font-style: italic">{{usersShared[i]}}</span></p>
+          <p>Group: <span style="font-weight: bold; font-style: italic">{{groupsShared[i]}}</span></p>
+        </ion-label>
+      </ion-item>
+    </ng-template>
   </ion-list>
   <ion-list #slidingList>
     <ion-list-header>
       <h2>My lists</h2>
     </ion-list-header>
-    <ion-item-sliding *ngFor="let list of todoLists">
-      <ion-item (click)="viewItems(list)">
-        <ion-label>
-          <h2>{{list.name}}</h2>
-          <p>Unfinished tasks: {{completedItemsSize(list)}}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="warning" (click)="modifyList(list)"><ion-icon name="create"></ion-icon></ion-item-option>
-        <ion-item-option color="danger" (click)="removeList(list)"><ion-icon name="trash"></ion-icon></ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+    <div *ngIf="todoLists.length === 0; else availableLists"
+         style="font-style:italic; color:gray; text-align: center; padding-top:10%">
+      There are no lists.
+    </div>
+    <ng-template #availableLists>
+      <ion-item-sliding *ngFor="let list of todoLists">
+        <ion-item (click)="viewItems(list)">
+          <ion-label>
+            <h2>{{list.name}}</h2>
+            <p>Unfinished tasks: {{completedItemsSize(list)}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="warning" (click)="modifyList(list)"><ion-icon name="create"></ion-icon></ion-item-option>
+          <ion-item-option color="danger" (click)="removeList(list)"><ion-icon name="trash"></ion-icon></ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ng-template>
   </ion-list>
 </ion-content>

@@ -25,28 +25,42 @@
 </ion-header>
 
 <ion-content *ngIf="groupsAreReady()">
-  <ion-list #slidingList>
-    <ion-item-sliding *ngFor="let group of groupsToDisplay">
-      <ion-item (click)="viewGroup(group)">
-        <ion-label>
-          <h2>{{group.name}}</h2>
-          <p>Number of users: {{numberOfUsers[group.uuid]}}</p>
-        </ion-label>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option *ngIf="fullControl" color="warning" (click)="modifyGroup(group)">
-          <ion-icon name="create"></ion-icon>
-        </ion-item-option>
-        <ion-item-option *ngIf="fullControl" color="danger" (click)="removeGroup(group)">
-          <ion-icon name="trash"></ion-icon>
-        </ion-item-option>
-        <ion-item-option *ngIf="smallControl" color="success" (click)="joinGroup(group)">
-          <ion-icon name="people"></ion-icon>
-        </ion-item-option>
-        <ion-item-option *ngIf="someControl" color="danger" (click)="quitGroup(group)">
-          <ion-icon name="exit"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+  <div *ngIf="groupsToDisplay; else undefinedGroups">
+    <div *ngIf="groupsToDisplay.length === 0; else availableGroups"
+         style="font-style:italic; color:gray; text-align: center; padding-top:10%">
+      There are no groups at the moment.
+    </div>
+    <ng-template #availableGroups>
+      <ion-list #slidingList>
+        <ion-item-sliding *ngFor="let group of groupsToDisplay">
+          <ion-item (click)="viewGroup(group)">
+            <ion-label>
+              <h2>{{group.name}}</h2>
+              <p>Number of users: {{numberOfUsers[group.uuid]}}</p>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option *ngIf="fullControl" color="warning" (click)="modifyGroup(group)">
+              <ion-icon name="create"></ion-icon>
+            </ion-item-option>
+            <ion-item-option *ngIf="fullControl" color="danger" (click)="removeGroup(group)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-item-option>
+            <ion-item-option *ngIf="smallControl" color="success" (click)="joinGroup(group)">
+              <ion-icon name="people"></ion-icon>
+            </ion-item-option>
+            <ion-item-option *ngIf="someControl" color="danger" (click)="quitGroup(group)">
+              <ion-icon name="exit"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </ng-template>
+  </div>
+  <ng-template #undefinedGroups>
+    <div *ngIf="groupsToDisplay.length === 0; else undefinedGroups"
+         style="font-style:italic; color:gray; text-align: center; padding-top:10%">
+      There are no groups at the moment.
+    </div>
+  </ng-template>
 </ion-content>

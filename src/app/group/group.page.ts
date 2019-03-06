@@ -127,7 +127,6 @@ export class GroupPage implements OnInit, OnDestroy {
           ]
       });
       await alert.present();
-      await this.slidingList.closeSlidingItems();
   }
 
   async removeMember(user: User) {
@@ -246,10 +245,6 @@ export class GroupPage implements OnInit, OnDestroy {
     async presentMyLists() {
         const lists = [];
         for (const list of this.currentUserLists) {
-            list.membershipIds = list.membershipIds.filter( id => {
-                const idSplit = id.split('_', 2);
-                return idSplit[0] !== this.getCurrentUser().uid;
-            });
             let occurrence = false;
             for (const id of list.membershipIds) {
                 if (id === (this.currentMembership.userId + '_' + this.currentMembership.groupId)) {
@@ -290,12 +285,9 @@ export class GroupPage implements OnInit, OnDestroy {
                 }, {
                     text: 'Share',
                     handler: data => {
+                        console.log(data);
                         for (const value of data ) {
                             for (const list of this.currentUserLists) {
-                                list.membershipIds = list.membershipIds.filter( id => {
-                                    const idSplit = id.split('_', 2);
-                                    return idSplit[0] !== this.getCurrentUser().uid;
-                                });
                                 if (value === list.uuid) {
                                     let occurrence = false;
                                     for (const id of list.membershipIds) {

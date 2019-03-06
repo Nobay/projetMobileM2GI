@@ -218,7 +218,6 @@ export class TodoPage implements OnInit, OnDestroy {
             ]
         });
         await alert.present();
-        await this.slidingList.closeSlidingItems();
     }
 
     existsInShared(listId, userId, lists) {

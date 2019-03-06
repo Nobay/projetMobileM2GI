@@ -15,30 +15,36 @@
 </ion-header>
 
 <ion-content>
-<ion-card *ngFor="let item of todoItems">   
-    <ion-card-header>
-        <ion-card-title>{{item.name}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-    <ion-grid>
-        <ion-row>
-            <ion-col> 
-                <h4>State: {{getState(item)}}</h4>
-                <p>{{item.desc}}</p>
-            </ion-col>
-            <ion-col>
-                <ion-avatar class="imageuploadFrame">
-                    <img class="uploadImage" src="{{item.image}}"><img>
-                </ion-avatar>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
-        <ion-button *ngIf="!userId" color="warning" slot="end" (click)="modifyItem(item)">
-            <ion-icon name="create"></ion-icon>
-        </ion-button>
-        <ion-button *ngIf="!userId" color="danger" slot="end" (click)="removeItem(item)">
-            <ion-icon name="trash"></ion-icon>
-        </ion-button>
-    </ion-card-content>   
-</ion-card>
+    <div *ngIf="todoItems.length === 0; else availableItems"
+         style="font-style:italic; color:gray; text-align: center; padding-top:10%">
+        No to-dos as of yet.
+    </div>
+    <ng-template #availableItems>
+        <ion-card *ngFor="let item of todoItems">
+            <ion-card-header>
+                <ion-card-title>{{item.name}}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <h4>State: {{getState(item)}}</h4>
+                            <p>{{item.desc}}</p>
+                        </ion-col>
+                        <ion-col>
+                            <ion-avatar class="imageuploadFrame">
+                                <img class="uploadImage" src="{{item.image}}"><img>
+                            </ion-avatar>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-button *ngIf="!userId" color="warning" slot="end" (click)="modifyItem(item)">
+                    <ion-icon name="create"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="!userId" color="danger" slot="end" (click)="removeItem(item)">
+                    <ion-icon name="trash"></ion-icon>
+                </ion-button>
+            </ion-card-content>
+        </ion-card>
+    </ng-template>
 </ion-content>

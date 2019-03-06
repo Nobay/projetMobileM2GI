@@ -211,11 +211,6 @@ export class GroupsPage implements OnInit, OnDestroy {
                     name: 'name',
                     type: 'text',
                     placeholder: 'Group name'
-                },
-                {
-                    name: 'size',
-                    type: 'number',
-                    placeholder: 'Max size'
                 }
             ],
             buttons: [
@@ -234,8 +229,7 @@ export class GroupsPage implements OnInit, OnDestroy {
                                 const id = this.membershipService.makeId();
                                 this.membershipService.addGroup({
                                     uuid : id,
-                                    name : data.name,
-                                    maxSize : data.size
+                                    name : data.name
                                 });
                                 this.membershipService.addMembership({
                                     userId: firebase.auth().currentUser.uid,
@@ -265,11 +259,6 @@ export class GroupsPage implements OnInit, OnDestroy {
                     name: 'name',
                     type: 'text',
                     value: group.name
-                },
-                {
-                    name: 'size',
-                    type: 'number',
-                    value: group.maxSize
                 }
             ],
             buttons: [
@@ -287,8 +276,7 @@ export class GroupsPage implements OnInit, OnDestroy {
                             if (data.size <= 12 && data.size > 0) {
                                 this.membershipService.editGroup({
                                     uuid : group.uuid,
-                                    name : data.name,
-                                    maxSize : data.size
+                                    name : data.name
                                 });
                             } else {
                                 this.authService.showToast('The size should be within the respected range [0-12]');
@@ -346,7 +334,6 @@ export class GroupsPage implements OnInit, OnDestroy {
                     date: Date.now()
                 });
             }
-            await this.slidingList.closeSlidingItems();
         });
     }
 
