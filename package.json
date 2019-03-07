@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~7.1.4",
     "@angular/platform-browser-dynamic": "~7.1.4",
     "@angular/router": "~7.1.4",
+    "@ionic-native/admob-pro": "^5.2.0",
     "@ionic-native/core": "5.0.0-beta.21",
     "@ionic-native/dialogs": "^5.0.0",
     "@ionic-native/file": "^5.0.0",
@@ -36,8 +37,11 @@
     "@ionic/pro": "2.0.4",
     "angularfire2": "^5.1.1",
     "cordova-android": "7.1.4",
+    "cordova-android-support-gradle-release": "2.0.1",
+    "cordova-plugin-admobpro": "2.37.2",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-dialogs": "^2.0.1",
+    "cordova-plugin-extension": "1.5.4",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-filechooser": "^1.2.0",
     "cordova-plugin-filepath": "^1.5.1",
@@ -63,7 +67,7 @@
     "@angular-devkit/schematics": "~7.1.4",
     "@angular/cli": "~7.1.4",
     "@angular/compiler": "~7.1.4",
-    "@angular/compiler-cli": "~7.1.4",
+    "@angular/compiler-cli": "^7.2.7",
     "@angular/language-service": "~7.1.4",
     "@ionic/angular-toolkit": "~1.2.0",
     "@ionic/lab": "1.0.18",
@@ -104,7 +108,13 @@
       "cordova-plugin-filepath": {},
       "cordova-plugin-dialogs": {},
       "cordova-plugin-speechrecognition": {},
-      "cordova-plugin-telerik-imagepicker": {}
+      "cordova-plugin-telerik-imagepicker": {},
+      "cordova-plugin-admobpro": {
+        "PLAY_SERVICES_VERSION": "16.0.0"
+      },
+      "cordova-android-support-gradle-release": {
+        "ANDROID_SUPPORT_VERSION": "26.1.0"
+      }
     },
     "platforms": [
       "android"

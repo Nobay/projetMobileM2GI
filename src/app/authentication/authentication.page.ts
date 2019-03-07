@@ -5,6 +5,7 @@ import { Platform , AlertController } from '@ionic/angular';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import {SpeechServiceProvider} from '../providers/speech-service.provider';
 import {Router} from '@angular/router';
+import { AdMobPro } from '@ionic-native/admob-pro/ngx';
 
 @Component({
   selector: 'app-authentication',
@@ -38,13 +39,39 @@ export class AuthenticationPage {
       private dialogs: Dialogs,
       private alertCtrl: AlertController,
       private speechService: SpeechServiceProvider,
-      private router: Router
+      private router: Router,
+      private admob: AdMobPro
   ) {
       this.user = {
           email: '',
           password: ''
       };
+      platform.ready().then(() => {
+        const admobid = {
+            banner: 'ca-app-pub-4235590516679342/1292352790',
+            interstitial: 'ca-app-pub-4235590516679342/4784875248'
+        };
+
+        this.admob.createBanner({
+            adId: admobid.banner,
+            isTesting: true,
+            autoShow: true,
+            position: this.admob.AD_POSITION.BOTTOM_CENTER
+        });
+
+        this.admob.prepareInterstitial({
+            adId: admobid.interstitial,
+            isTesting: true,
+            autoShow: false
+        });
+    });
   }
+
+    showInterstitialAd() {
+        if (AdMobPro) {
+            this.admob.showInterstitial();
+        }
+    }
 
    @HostListener('document:ionBackButton', ['$event'])
     private overrideHardwareBackAction($event: any) {
