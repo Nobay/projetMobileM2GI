@@ -225,7 +225,6 @@ export class GroupsPage implements OnInit, OnDestroy {
                     text: 'Create',
                     handler: data => {
                         if (data.name !== '') {
-                            if (data.size <= 12 && data.size > 0) {
                                 const id = this.membershipService.makeId();
                                 this.membershipService.addGroup({
                                     uuid : id,
@@ -238,9 +237,6 @@ export class GroupsPage implements OnInit, OnDestroy {
                                     isOwner: true,
                                     date: Date.now()
                                 });
-                            } else {
-                                this.authService.showToast('The size should be within the respected range [0-12]');
-                            }
                         } else {
                             this.authService.showToast('The name shouldn\'t be empty');
                         }
@@ -273,14 +269,10 @@ export class GroupsPage implements OnInit, OnDestroy {
                     text: 'Modify',
                     handler: data => {
                         if (data.name !== '') {
-                            if (data.size <= 12 && data.size > 0) {
                                 this.membershipService.editGroup({
                                     uuid : group.uuid,
                                     name : data.name
                                 });
-                            } else {
-                                this.authService.showToast('The size should be within the respected range [0-12]');
-                            }
                         } else {
                             this.authService.showToast('The name shouldn\'t be empty');
                         }
