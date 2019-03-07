@@ -27,6 +27,7 @@ import {SpeechServiceProvider} from './providers/speech-service.provider';
 import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 import {AuthGuard} from './providers/auth-guard';
 import {MembershipServiceProvider} from './providers/membership-service.provider';
+import { AdMobPro } from '@ionic-native/admob-pro/ngx';
 
 firebase.initializeApp(environment.firebase);
 
@@ -47,6 +48,7 @@ firebase.initializeApp(environment.firebase);
       FileChooser,
       FilePath,
       Dialogs,
+      AdMobPro,
       AlertController,
       File,
       SplashScreen,
