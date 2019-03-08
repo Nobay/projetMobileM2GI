@@ -1,32 +1,36 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Authentication
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+
+  <ion-row class="flourish">
+      <ion-avatar class='profileImageFrame'>
+          <ion-img src="../assets/login.png" class="profileImage" ></ion-img>
+      </ion-avatar>
+  </ion-row>
   <form #loginForm="ngForm" (ngSubmit)="doNormalLogin()" autocomplete="off">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input name="email" id="loginField"
-                 type="text" required [(ngModel)]="user.email"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="floating">Password</ion-label>
-      <ion-input name="password" id="passwordField"
-                 type="password" required [(ngModel)]="user.password"></ion-input>
-    </ion-item>
+    <div class="container">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input name="email" id="loginField"
+                  type="text" required [(ngModel)]="user.email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Password</ion-label>
+        <ion-input name="password" id="passwordField"
+                  type="password" required [(ngModel)]="user.password"></ion-input>
+      </ion-item>
+    </div>
     <ion-row>
       <ion-col>
         <div *ngIf="error" style="color: red; font-weight: bold" text-center>{{error}}</div>
-        <ion-button class="submit-btn" color="success" expand="block" type="submit"
+        <ion-button class="submit-btn login_btn" color="success" expand="block" type="submit"
                 [disabled]="!loginForm.form.valid">Login
         </ion-button>
       </ion-col>
     </ion-row>
   </form>
+
+  <h1>
+    <span>Or</span>
+  </h1>
   <ion-row>
     <ion-col>
       <ion-button class="log-in-button" color="danger" expand="block" (click)="doGoogleLogin()">
@@ -35,8 +39,8 @@
     </ion-col>
   </ion-row>
   <ion-row>
-    <ion-col>
-      <a routerLink="/signup" text-center>No account? Click here to sign up !</a>
+    <ion-col class="newhere">
+      <a class="newhere" routerLink="/signup" text-center>New here? Sign up</a>
     </ion-col>
   </ion-row>
   <ion-fab vertical="bottom" horizontal="end">
