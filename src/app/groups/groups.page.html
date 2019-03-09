@@ -7,13 +7,13 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="primary">
-      <ion-button (click)="createGroup()" color="primary">
+      <ion-button style="color:white" (click)="createGroup()">
         <ion-icon slot="icon-only" name="add-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
   </ion-item-divider>
-  <ion-item *ngIf="groupsAreReady()">
+  <ion-item *ngIf="groupsAreReady()" style="color:white">
     <ion-label>Filter</ion-label>
     <ion-select (ionChange)="onSelectFilter($event)" okText="Apply" cancelText="Cancel">
       <ion-select-option value="joined">Joined</ion-select-option>
@@ -28,12 +28,12 @@
   <div *ngIf="groupsToDisplay; else undefinedGroups">
     <div *ngIf="groupsToDisplay.length === 0; else availableGroups"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
-      There are no groups at the moment... try another filter.
+      There are no groups... try another filter.
     </div>
     <ng-template #availableGroups>
       <ion-list #slidingList>
         <ion-item-sliding *ngFor="let group of groupsToDisplay">
-          <ion-item (click)="viewGroup(group)">
+          <ion-item (click)="viewGroup(group)" class="divgroup">
             <ion-label>
               <h2>{{group.name}}</h2>
               <p>Number of users: {{numberOfUsers[group.uuid]}}</p>
@@ -60,7 +60,7 @@
   <ng-template #undefinedGroups>
     <div *ngIf="groupsToDisplay.length === 0; else undefinedGroups"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
-        There are no groups at the moment... try another filter.
+        There are no groups... try another filter.
     </div>
   </ng-template>
 </ion-content>

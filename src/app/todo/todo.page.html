@@ -6,7 +6,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="primary">
-      <ion-button (click)="createList()" color="primary">
+      <ion-button style="color:white" (click)="createList()">
         <ion-icon slot="icon-only" name="add-circle"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -15,15 +15,13 @@
 
 <ion-content *ngIf="todoListReady">
   <ion-list *ngIf="sharedListReady">
-    <ion-list-header>
-      <h2>Shared with me</h2>
-    </ion-list-header>
+    <h1 class="background"><span>Shared with me</span></h1>
     <div *ngIf="sharedLists.length === 0; else availableShLists"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
-      No one has shared lists with you.
+      No shared lists with you.
     </div>
     <ng-template #availableShLists>
-      <ion-item (click)="viewItems(list.item)" *ngFor="let list of sharedLists; let i = index">
+      <ion-item class="divgroup" (click)="viewItems(list.item)" *ngFor="let list of sharedLists; let i = index">
         <ion-label>
           <h2>{{list.item.name}}</h2>
           <p>Unfinished tasks: {{completedItemsSize(list.item)}}</p>
@@ -34,16 +32,14 @@
     </ng-template>
   </ion-list>
   <ion-list #slidingList>
-    <ion-list-header>
-      <h2>My lists</h2>
-    </ion-list-header>
+    <h1 class="background"><span>My lists</span></h1>
     <div *ngIf="todoLists.length === 0; else availableLists"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
       There are no lists.
     </div>
     <ng-template #availableLists>
       <ion-item-sliding *ngFor="let list of todoLists">
-        <ion-item (click)="viewItems(list)">
+        <ion-item class="divgroup" (click)="viewItems(list)">
           <ion-label>
             <h2>{{list.name}}</h2>
             <p>Unfinished tasks: {{completedItemsSize(list)}}</p>

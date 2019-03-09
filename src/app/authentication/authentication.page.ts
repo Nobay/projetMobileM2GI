@@ -54,14 +54,14 @@ export class AuthenticationPage {
 
         this.admob.createBanner({
             adId: admobid.banner,
-            isTesting: true,
+            /* isTesting: true, */
             autoShow: true,
             position: this.admob.AD_POSITION.BOTTOM_CENTER
         });
 
         this.admob.prepareInterstitial({
             adId: admobid.interstitial,
-            isTesting: true,
+            /* isTesting: true, */
             autoShow: false
         });
     });

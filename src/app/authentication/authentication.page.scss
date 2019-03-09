@@ -1,1 +1,66 @@
+.profileImageFrame {
+    /* display: inline; */
+    /* display: inline; */
+    height: 100px;
+    width: 100px;
+    /* border: 2px solid #fff; */
+    border-radius: 50%;
+    box-shadow: 0 0 5px grey;
+    /* display: inline-block; */
+    margin-left: auto;
+    margin-right: auto;
+}
 
+.profileImage {
+    border-radius: 50% !important;
+    width:100px;
+    height:100px;
+    overflow: hidden;
+    display: block;
+}
+
+h1 span {
+    background: #ffffff;
+    padding: 0 20px;
+    text-align : center; 
+    font-family: cursive;
+}
+
+h1+* {
+    border-top: solid 2px #a1a1a1;
+    padding-top: 28px;
+    margin-top: -28px;
+    text-align : center; 
+}
+
+h1 {
+    text-align: center;
+    font-size: 26px;
+}
+
+.newhere {
+    text-align : center !important; 
+}
+
+.flourish {
+    margin-top: 10%;
+}
+
+.container {
+    margin: 20px;
+    -webkit-box-shadow: 2px 17px 16px 0px rgba(212,212,212,1);
+    -moz-box-shadow: 2px 17px 16px 0px rgba(212,212,212,1);
+    box-shadow: 2px 17px 16px 0px rgba(212,212,212,1);
+}
+
+ion-item {
+    border: 1px solid #666;
+    background: #fff;
+}
+
+.login_btn {
+    width: 50%;
+    margin-right: 0;
+    margin-left: 0;
+    margin: auto;
+}
