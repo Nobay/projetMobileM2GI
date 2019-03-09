@@ -6,13 +6,16 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {NativeStorage} from '@ionic-native/native-storage/ngx';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
+  styleUrls: ['./app-component.scss']
 })
 export class AppComponent {
 
+  showSplash = true;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -29,12 +32,12 @@ export class AppComponent {
             if (user) {
                 console.log('user is already connected');
                 this.router.navigate(['/tabs']);
-                this.splashScreen.hide();
             } else {
                 this.router.navigate(['/']);
-                this.splashScreen.hide();
             }
         });
+        this.splashScreen.hide();
+        timer(5000).subscribe(() => this.showSplash = false);
         this.statusBar.styleDefault();
     });
   }
