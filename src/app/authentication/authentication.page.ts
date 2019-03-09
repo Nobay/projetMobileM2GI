@@ -61,7 +61,7 @@ export class AuthenticationPage {
 
         this.admob.prepareInterstitial({
             adId: admobid.interstitial,
-            isTesting: true,
+            /* isTesting: true, */
             autoShow: false
         });
     });

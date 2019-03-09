@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar style="color:white">
     <ion-title>
       <span *ngIf="groupIsReady()">Group: {{currentGroup.name}}</span>
     </ion-title>
@@ -16,10 +16,8 @@
 
 <ion-content *ngIf="groupIsReady() && ownerReady && isMember(); else notMember">
   <ion-list *ngIf="owner">
-    <ion-list-header>
-      <h2>Owner</h2>
-    </ion-list-header>
-      <ion-item>
+    <h1 class="background"><span>Owner</span></h1>
+      <ion-item class="divgroup">
         <ion-avatar slot="start">
           <img src="{{owner.imageUrl}}">
         </ion-avatar>
@@ -29,11 +27,9 @@
       </ion-item>
   </ion-list>
   <ion-list *ngIf="members.length > 0">
-    <ion-list-header>
-      <h2>Members</h2>
-    </ion-list-header>
+    <h1 class="background"><span>Members</span></h1>
     <ion-item-sliding *ngFor="let member of members">
-      <ion-item>
+      <ion-item class="divgroup">
         <ion-avatar slot="start">
           <img src="{{member.imageUrl}}">
         </ion-avatar>
@@ -51,9 +47,7 @@
   </ion-list>
   <ion-list *ngIf="owner && pendingMembers.length > 0">
     <div *ngIf="owner.uuid === getCurrentUser().uid">
-    <ion-list-header>
-      <h2>Pending members</h2>
-    </ion-list-header>
+      <h1 class="background"><span>Pending Members</span></h1>
     <ion-item-sliding *ngFor="let member of pendingMembers">
       <ion-item>
         <ion-avatar slot="start">
