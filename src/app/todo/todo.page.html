@@ -12,10 +12,9 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
+<h1 class="background"><span>Shared with me</span></h1>
 <ion-content *ngIf="todoListReady">
   <ion-list *ngIf="sharedListReady">
-    <h1 class="background"><span>Shared with me</span></h1>
     <div *ngIf="sharedLists.length === 0; else availableShLists"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
       No shared lists with you.
@@ -31,8 +30,10 @@
       </ion-item>
     </ng-template>
   </ion-list>
+</ion-content>
+<h1 class="background"><span>My lists</span></h1>
+<ion-content>
   <ion-list #slidingList>
-    <h1 class="background"><span>My lists</span></h1>
     <div *ngIf="todoLists.length === 0; else availableLists"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
       There are no lists.
