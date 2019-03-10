@@ -43,7 +43,9 @@ export class TabsPage implements OnInit {
       private authService: AuthServiceProvider,
       private router: Router,
       private alertCtrl: AlertController
-  ) {}
+  ) {
+    this.router.navigate(['/tabs/profil']);
+  }
 
   ngOnInit() {}
 

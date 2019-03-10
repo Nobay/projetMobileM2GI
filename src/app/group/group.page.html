@@ -4,10 +4,10 @@
       <span *ngIf="groupIsReady()">Group: {{currentGroup.name}}</span>
     </ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button ></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="primary" *ngIf="currentUserLists && isMember() && !isPending()">
-      <ion-button (click)="presentMyLists()" color="primary">
+      <ion-button (click)="presentMyLists()" style="color:white">
         <ion-icon slot="icon-only" name="share"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -71,7 +71,7 @@
 </ion-content>
 <ng-template #notMember>
   <ion-content text-center>
-    <h2>You are not a member of this group.</h2>
+    <h2 *ngIf="owner">You are not a member of this group.</h2>
   </ion-content>
 </ng-template>
 

@@ -36,20 +36,14 @@ const routes: Routes = [
             loadChildren: '../profile/profile.module#ProfilePageModule'
           }
         ]
-      },
+      }/* ,
       {
         path: '',
         redirectTo: '/tabs/profil',
         pathMatch: 'full'
-      }
+      } */
     ]
   }
-  ,
-      {
-        path: '',
-        redirectTo: '/tabs/profil',
-        pathMatch: 'full'
-      }
 ];
 
 @NgModule({
