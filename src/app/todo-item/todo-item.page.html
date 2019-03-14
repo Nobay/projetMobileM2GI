@@ -15,11 +15,11 @@
 </ion-header>
 
 <ion-content>
-    <div *ngIf="todoItems.length === 0; else availableItems"
+    <div *ngIf="todoItems.length === 0; else availableTodos"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
         Empty list.
     </div>
-    <ng-template #availableItems>
+    <ng-template #availableTodos>
         <ion-card *ngFor="let item of todoItems">
             <ion-card-header>
                 <ion-card-title style="text-align: center;font-family: cursive;">{{item.name}}</ion-card-title>
