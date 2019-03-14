@@ -37,6 +37,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
             this.listId = params['id'];
             this.listName = params['name'];
             this.userId = params['userId'];
+            /* if the parameter 'userId' exists, then, in this case, it's not our connected user's list */
             if (this.userId) {
                 this.fetchItems(this.userId);
             } else {
@@ -44,9 +45,13 @@ export class TodoItemPage implements OnInit, OnDestroy {
             }
         }, () => this.loading.dismiss());
   }
+
+    /**
+     * fetches for the items of the connected user, using a CRUD service.
+     * @param userId
+     */
   fetchItems(userId) {
     if (this.listId) {
-        console.log(userId + '         ' + this.listId);
         this.todoListService.getTodos(userId, this.listId)
             .subscribe(data => {
                 this.todoItems = data.items;
@@ -56,6 +61,11 @@ export class TodoItemPage implements OnInit, OnDestroy {
         this.loading.dismiss();
     }
   }
+
+    /**
+     * gets the state of an item
+     * @param item
+     */
   getState(item: TodoItem): string {
     if (item.complete) {
       return 'Finished';
@@ -64,6 +74,10 @@ export class TodoItemPage implements OnInit, OnDestroy {
     }
   }
 
+    /**
+     * shows an alert box confirming the deletion of an item, which would then be deleted using a CRUD service (based on firebase).
+     * @param item
+     */
   async removeItem(item: TodoItem) {
     const alert = await this.alertCtrl.create({
         header: 'Confirm!',
@@ -86,7 +100,11 @@ export class TodoItemPage implements OnInit, OnDestroy {
     });
     await alert.present();
   }
-  /** CREATING AN ITEM **/
+
+    /**
+     * shows an alert box with required fields for the creation of a new to-do item (while opening a new modal CreateItemPage),
+     * afterwards calls a CRUD service.
+     */
   async createItem() {
     const modal = await this.modalController.create({
         component: CreateItemPage,
@@ -113,7 +131,11 @@ export class TodoItemPage implements OnInit, OnDestroy {
     }
   }
 
-    /** MODIFYING AN ITEM **/
+    /**
+     * shows an alert box with required fields for the modification
+     * of an existing to-do item (while opening a new modal CreateItemPage),
+     * afterwards calls a CRUD service.
+     */
     async modifyItem(item: TodoItem) {
         const modal = await this.modalController.create({
             component: CreateItemPage,
@@ -142,10 +164,6 @@ export class TodoItemPage implements OnInit, OnDestroy {
 
     async presentLoading(loading) {
         return await loading.present();
-    }
-
-    getCurrentUser(): firebase.User {
-        return firebase.auth().currentUser;
     }
 
   ngOnDestroy() {

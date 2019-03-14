@@ -46,6 +46,7 @@ export class AuthenticationPage {
           email: '',
           password: ''
       };
+      /* using the AdMobPro plugin, we show the ads */
       platform.ready().then(() => {
         const admobid = {
             banner: 'ca-app-pub-4235590516679342/1292352790',
@@ -73,6 +74,10 @@ export class AuthenticationPage {
         }
     }
 
+    /**
+     * restricts the usage of the back button
+     * @param $event
+     */
    @HostListener('document:ionBackButton', ['$event'])
     private overrideHardwareBackAction($event: any) {
     $event.detail.register(100, async () => {
@@ -91,14 +96,23 @@ export class AuthenticationPage {
 
     }
 
+    /**
+     * google login using the authentication service.
+     */
     doGoogleLogin() {
         this.authService.googleLogin(this.error);
     }
 
+    /**
+     * normal login using the authentication service.
+     */
     doNormalLogin() {
         this.authService.normalLogin(this.user, this.error, undefined);
     }
 
+    /**
+     * activates google's speech recognition feature.
+     */
     activateSpeech() {
       this.speechService.getPermission();
       this.speechService.startListening().subscribe( matches => {
@@ -108,6 +122,11 @@ export class AuthenticationPage {
           }, (err) => console.log(err));
     }
 
+    /**
+     * using google's speech recognition, we loop through his possible matches
+     * and check whether they are correct to login using google.
+     * @param matches
+     */
     loginBySpeech(matches: string[]) {
         for ( let i = 0; i < matches.length; i++) {
             for ( let j = 0; j < this.loginMatches.length; j++) {
@@ -119,6 +138,11 @@ export class AuthenticationPage {
         }
     }
 
+    /**
+     * using google's speech recognition, we loop through his possible matches
+     * and check whether they are correct to redirect to the sign-up page.
+     * @param matches
+     */
     createBySpeech(matches: string[]) {
         for ( let i = 0; i < matches.length; i++) {
             for ( let j = 0; j < this.createMatches.length; j++) {

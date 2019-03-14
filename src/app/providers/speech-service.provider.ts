@@ -7,6 +7,9 @@ export class SpeechServiceProvider {
         private speechRecognition: SpeechRecognition
     ) {}
 
+    /**
+     * requests permission from the device's user to use speech recognition
+     */
     getPermission() {
         this.speechRecognition.hasPermission()
             .then((hasPermission: boolean) => {
@@ -19,6 +22,9 @@ export class SpeechServiceProvider {
             });
     }
 
+    /**
+     * starts the speech recognition feature in English
+     */
     startListening() {
         const options = {
             language: 'en-US'

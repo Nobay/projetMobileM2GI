@@ -4,6 +4,7 @@ import {LoadingController, ToastController} from '@ionic/angular';
 import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Router} from '@angular/router';
 import {TodoServiceProvider} from './todo-service.provider';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AuthServiceProvider {
@@ -15,6 +16,11 @@ export class AuthServiceProvider {
         private todoService: TodoServiceProvider
     ) {}
 
+    /**
+     * using firebase's authentication service and Google+ login, we connect the user using his Google account
+     * persisting his data in the process using a CRUD service.
+     * @param error
+     */
     async googleLogin(error) {
         const loading = await this.loadingController.create({
             message: 'Please wait...'
@@ -22,7 +28,7 @@ export class AuthServiceProvider {
         this.presentLoading(loading);
         console.log('before google plus login');
         this.googlePlus.login({
-            'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'
+            'webClientId': environment.googlePlus.webClientID
         })
             .then(user => {
                 loading.dismiss();
@@ -47,6 +53,11 @@ export class AuthServiceProvider {
             });
     }
 
+    /**
+     * using firebase's authentication service and native login, we connect the user using his native account and
+     * redirecting to the profile page if successful.
+     * @param error
+     */
     async normalLogin(user, error?, name?) {
         const loading = await this.loadingController.create({
             message: 'Please wait...'
@@ -77,6 +88,9 @@ export class AuthServiceProvider {
         loading.dismiss();
     }
 
+    /**
+     * logs out the user from the firebase's authentication service.
+     */
     logout() {
         const user = firebase.auth().currentUser;
         if (user.providerData[0]['providerId'] === 'google.com') {
@@ -92,6 +106,10 @@ export class AuthServiceProvider {
         }
     }
 
+    /**
+     * updates the users data after creating a native account.
+     * @param user
+     */
     async updateUser(user) {
         const loading = await this.loadingController.create({
             message: 'Please wait...'
@@ -120,6 +138,9 @@ export class AuthServiceProvider {
             });
     }
 
+    /**
+     * logs out from both Google+ and firebase's authentication service.
+     */
     googleLogout() {
         this.googlePlus.logout()
             .then(res => {
@@ -132,7 +153,7 @@ export class AuthServiceProvider {
             }, err => {
                 console.error('Error logging out from Google: ' + err);
                 this.googlePlus.trySilentLogin(
-                    {'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'}
+                    {'webClientId': environment.googlePlus.webClientID}
                 ).then(res => {
                     console.error('Google trySilentLogin success');
                     this.googlePlus.disconnect().then( obj => {

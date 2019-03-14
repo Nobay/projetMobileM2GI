@@ -12,6 +12,9 @@ export class FcmService {
               private afs: AngularFirestore,
               private platform: Platform) {}
 
+    /**
+     * gets the token used for push notification from the firebase native plugin
+     */
   async getToken() {
     let token: any;
 
@@ -28,6 +31,10 @@ export class FcmService {
     this.saveToken(token);
   }
 
+    /**
+     * saves the token as a document, containing the connected user's ID and the token, in a collection of devices.
+     * @param token
+     */
   private saveToken(token) {
     if (!token) { return; }
 
@@ -41,6 +48,9 @@ export class FcmService {
     return devicesRef.doc(token).set(data);
   }
 
+    /**
+     * triggered when a notification is sent
+     */
   onNotifications() {
     return this.firebase.onNotificationOpen();
   }

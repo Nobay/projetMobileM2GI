@@ -36,6 +36,9 @@ export class SignupPage implements OnInit {
   ngOnInit() {
   }
 
+    /**
+     * creates a native account with email and password, using a CRUD service and the firebase authentication.
+     */
   createAccount() {
     if (this.cpassword !== this.user.password) {
         this.error = 'Passwords do not match';
@@ -53,6 +56,9 @@ export class SignupPage implements OnInit {
     }
   }
 
+    /**
+     * opens the native image chooser of the device and then calls the upload function
+     */
     choose() {
         this.fileChooser.open().then((uri) => {
             this.filePath.resolveNativePath(uri).then(filePath => {
@@ -69,6 +75,11 @@ export class SignupPage implements OnInit {
         });
     }
 
+    /**
+     * uploads the image into the firebase storage and awaits the image's url
+     * @param buffer
+     * @param name
+     */
     public async upload(buffer, name) {
         await this.present();
         const blob = new Blob([buffer], {type: 'image/jpeg, image/png'});

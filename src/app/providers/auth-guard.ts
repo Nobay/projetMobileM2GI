@@ -8,6 +8,11 @@ import {Observable} from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+    /**
+     * triggered when a user is not verified and tries to access a page other than his profile.
+     * @param next
+     * @param state
+     */
     canActivate(
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot

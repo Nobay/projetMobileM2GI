@@ -28,9 +28,9 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+        /* redirects the user to his profile if he's already connected */
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-                console.log('user is already connected');
                 this.router.navigate(['/tabs']);
             } else {
                 this.router.navigate(['/']);
