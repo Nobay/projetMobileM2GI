@@ -6,6 +6,8 @@ import {GooglePlus} from '@ionic-native/google-plus/ngx';
 import {Subscription} from 'rxjs';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import * as firebase from 'firebase';
+import {TodoList} from '../models/todoList';
+import {TodoServiceProvider} from '../providers/todo-service.provider';
 
 @Component({
   selector: 'app-profile',
@@ -17,17 +19,20 @@ export class ProfilePage implements OnInit, OnDestroy {
     user: any;
     userReady = false;
     subscription: Subscription;
+    todoLists: TodoList[];
 
     constructor(
         private googlePlus: GooglePlus,
         private nativeStorage: NativeStorage,
         private loadingController: LoadingController,
         private router: Router,
-        private authService: AuthServiceProvider
+        private authService: AuthServiceProvider,
+        private todoListService: TodoServiceProvider
     ) {
         this.subscription = this.router.events.subscribe((e: any) => {
             if (e instanceof NavigationEnd) {
                 this.fetchUser();
+                this.fetchLists();
             }
         });
     }
@@ -54,6 +59,13 @@ export class ProfilePage implements OnInit, OnDestroy {
             }
         });
     }
+
+    async fetchLists() {
+        this.subscription = this.todoListService.getLists(firebase.auth().currentUser.uid).subscribe( data => {
+            this.todoLists = data;
+        });
+    }
+
     doLogout() {
         this.authService.logout();
     }

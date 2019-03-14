@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TodoItemPage } from './todo-item.page';
+import {AgmCoreModule} from '@agm/core';
 
 @NgModule({
   imports: [

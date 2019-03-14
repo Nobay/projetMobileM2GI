@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ModalController, ToastController} from '@ionic/angular';
+import {ModalController, Platform, ToastController} from '@ionic/angular';
 import {TodoItem} from '../../models/todoItem';
 import {TodoServiceProvider} from '../../providers/todo-service.provider';
 
@@ -39,17 +39,10 @@ export class CreateItemPage implements OnInit {
     };
   }
   ngOnInit() {
-    if (this.data) {
-      this.todoItem = {
-          uuid : this.data.uuid,
-          name : this.data.name,
-          complete : this.data.complete,
-          desc: this.data.desc,
-          image: this.data.image
-      };
-    }
+      if (this.data) {
+          this.todoItem = this.data;
+      }
   }
-
   public async sendItemData() {
       if (this.todoItem.name !== '') {
           this.modalCtrl.dismiss(this.todoItem);
@@ -99,6 +92,15 @@ export class CreateItemPage implements OnInit {
     }).catch((error) => {
         alert('not Done');
     });
+  }
+
+  geolocation() {
+      navigator.geolocation.getCurrentPosition(position => {
+          this.todoItem.latitude = position.coords.latitude.toString();
+          this.todoItem.longitude = position.coords.longitude.toString();
+      }, () => {
+          alert('Geolocation is not activated within your device.');
+      });
   }
 
   async present() {

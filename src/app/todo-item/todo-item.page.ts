@@ -95,6 +95,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data) {
+        console.log(data);
         const alert = await this.alertCtrl.create({
             header: 'Item \'' + data.uuid + ' \' was successfully created !',
             buttons: [
@@ -148,7 +149,9 @@ export class TodoItemPage implements OnInit, OnDestroy {
     }
 
   ngOnDestroy() {
-      this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
   }
 
 }

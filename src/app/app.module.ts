@@ -28,6 +28,7 @@ import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 import {AuthGuard} from './providers/auth-guard';
 import {MembershipServiceProvider} from './providers/membership-service.provider';
 import { AdMobPro } from '@ionic-native/admob-pro/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 
 firebase.initializeApp(environment.firebase);
 
@@ -41,7 +42,7 @@ firebase.initializeApp(environment.firebase);
       BrowserModule, IonicModule.forRoot(), AppRoutingModule,
       FormsModule,
       AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule.enablePersistence(),
+      AngularFirestoreModule.enablePersistence()
   ],
   providers: [
       StatusBar,
@@ -60,6 +61,7 @@ firebase.initializeApp(environment.firebase);
       SpeechServiceProvider,
       { provide: FirestoreSettingsToken, useValue: {} },
       GooglePlus,
+      Geolocation,
       NativeStorage,
       SpeechRecognition
   ],
