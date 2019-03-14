@@ -32,7 +32,7 @@
     </div>
     <ng-template #availableGroups>
       <ion-list #slidingList>
-        <ion-item-sliding *ngFor="let group of groupsToDisplay" (ionDrag)="logDrag($event, group)">
+        <ion-item-sliding *ngFor="let group of groupsToDisplay" style="margin-top: 3px;">
           <ion-item (click)="viewGroup(group)" class="divgroup">
             <ion-label>
               <ion-row>
@@ -45,17 +45,17 @@
               </ion-row>
             </ion-label>
           </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option class="btnslide" *ngIf="fullControl" color="warning" (click)="modifyGroup(group)">
+          <ion-item-options side="end" class="btnslide">
+            <ion-item-option *ngIf="fullControl" color="warning" (click)="modifyGroup(group)">
               <ion-icon name="create"></ion-icon>
             </ion-item-option>
-            <ion-item-option class="btnslide" *ngIf="fullControl" color="danger" (click)="removeGroup(group)">
+            <ion-item-option *ngIf="fullControl" color="danger" (click)="removeGroup(group)">
               <ion-icon name="trash"></ion-icon>
             </ion-item-option>
-            <ion-item-option class="btnslide" *ngIf="smallControl" color="success" (click)="joinGroup(group)">
+            <ion-item-option *ngIf="smallControl" color="success" (click)="joinGroup(group)">
               <ion-icon name="people"></ion-icon>
             </ion-item-option>
-            <ion-item-option class="btnslide" *ngIf="someControl" color="danger" (click)="quitGroup(group)">
+            <ion-item-option *ngIf="someControl" color="danger" (click)="quitGroup(group)">
               <ion-icon name="exit"></ion-icon>
             </ion-item-option>
           </ion-item-options>

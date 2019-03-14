@@ -1,10 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-    </ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
+    <ion-searchbar #mySearchbar class="searchbar" [(ngModel)]="searchTerm" (ionChange)="searchChanged($event)"></ion-searchbar>
     <ion-buttons slot="primary">
       <ion-button style="color:white" (click)="createList()">
         <ion-icon slot="icon-only" name="add-circle"></ion-icon>
@@ -12,41 +8,18 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<h1 *ngIf="sharedLists.length !== 0" class="background"><span>Shared with me</span></h1>
-<ion-content *ngIf="sharedLists.length !== 0">
-  <ion-list *ngIf="sharedListReady">
-    <div *ngIf="sharedLists.length === 0; else availableShLists"
-         style="font-style:italic; color:gray; text-align: center; padding-top:10%">
-      No shared lists with you.
-    </div>
-    <ng-template #availableShLists>
-      <ion-item class="divgroup" (click)="viewItems(list.item)" *ngFor="let list of sharedLists; let i = index">
-        <ion-label>
-          <ion-row>
-            <ion-col><p>List name: <span class="spantyle">{{list.item.name}}</span></p></ion-col>
-          </ion-row>
-          <!-- <h2 class="h2style">{{list.item.name}}</h2> -->
-          <!-- <p>Unfinished tasks: <span style="font-weight: bold;">{{completedItemsSize(list.item)}}</span></p> -->
-          <ion-row>
-          <ion-col><p>Owner: <span class="spantyle">{{usersShared[i]}}</span></p></ion-col>
-          <ion-col><p>Group: <span class="spantyle">{{groupsShared[i]}}</span></p></ion-col>
-        </ion-row>
-        </ion-label>
-      </ion-item>
-    </ng-template>
-  </ion-list>
-</ion-content>
+
 <h1 *ngIf="todoLists.length !== 0;" class="background"><span>My lists</span></h1>
-<ion-content>
+<ion-content *ngIf="todoLists.length !== 0">
   <ion-list #slidingList>
     <div *ngIf="todoLists.length === 0; else availableLists"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
       There are no lists.
     </div>
     <ng-template #availableLists>
-      <ion-item-sliding *ngFor="let list of todoLists">
+      <ion-item-sliding *ngFor="let list of todoLists" style="margin-top: 3px;">
         <ion-item class="divgroup" (click)="viewItems(list)">
-          <ion-label>
+          <ion-label class="labelcontainer">
             <ion-row>
               <ion-col><p>List name: <span class="spantyle">{{list.name}}</span></p></ion-col>
             </ion-row>
@@ -60,14 +33,39 @@
             </ion-row>
           </ion-label>
         </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option class="btnslide" color="warning" (click)="modifyList(list)">
+        <ion-item-options side="end" class="btnslide">
+          <ion-item-option color="warning" (click)="modifyList(list)">
             <ion-icon name="create"></ion-icon>
           </ion-item-option>
-          <ion-item-option class="btnslide" color="danger" (click)="removeList(list)">
+          <ion-item-option color="danger" (click)="removeList(list)">
             <ion-icon name="trash"></ion-icon>
           </ion-item-option>
         </ion-item-options>
+      </ion-item-sliding>
+    </ng-template>
+  </ion-list>
+</ion-content>
+
+<h1 *ngIf="sharedLists.length !== 0" class="background"><span>Shared with me</span></h1>
+<ion-content *ngIf="sharedLists.length !== 0" >
+  <ion-list *ngIf="sharedListReady">
+    <div *ngIf="sharedLists.length === 0; else availableShLists"
+         style="font-style:italic; color:gray; text-align: center; padding-top:10%">
+      No shared lists with you.
+    </div>
+    <ng-template #availableShLists>
+      <ion-item-sliding *ngFor="let list of sharedLists; let i = index" style="margin-top: 3px;">
+      <ion-item class="divgroupshared" (click)="viewItems(list.item)">
+        <ion-label class="labelcontainer">
+          <ion-row>
+            <ion-col><p>List name: <span class="spantyle">{{list.item.name}}</span></p></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col><p>Owner: <span class="spantyle">{{usersShared[i]}}</span></p></ion-col>
+            <ion-col><p>Group: <span class="spantyle">{{groupsShared[i]}}</span></p></ion-col>
+          </ion-row>
+        </ion-label>
+      </ion-item>
       </ion-item-sliding>
     </ng-template>
   </ion-list>

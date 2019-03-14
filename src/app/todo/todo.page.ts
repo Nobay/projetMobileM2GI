@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
 import {TodoList} from '../models/todoList';
 import {TodoServiceProvider} from '../providers/todo-service.provider';
 import {Router} from '@angular/router';
@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import * as firebase from 'firebase';
 import {MembershipServiceProvider} from '../providers/membership-service.provider';
-import {load} from '@angular/core/src/render3';
+
 
 @Component({
   selector: 'app-todo',
@@ -22,6 +22,9 @@ export class TodoPage implements OnInit, OnDestroy {
   todoListReady = false;
   sharedListReady = false;
   subscription: Subscription;
+  initialList;
+  initialSharedList;
+
   @ViewChild('slidingList') slidingList: IonList;
 
   constructor(
@@ -30,7 +33,8 @@ export class TodoPage implements OnInit, OnDestroy {
       private router: Router,
       private alertCtrl: AlertController,
       private membershipService: MembershipServiceProvider,
-      private loadingController: LoadingController
+      private loadingController: LoadingController,
+      private cd: ChangeDetectorRef
   ) {}
 
   async ngOnInit() {
@@ -40,6 +44,7 @@ export class TodoPage implements OnInit, OnDestroy {
       this.presentLoading(loading);
     this.subscription = this.todoListService.getLists(firebase.auth().currentUser.uid).subscribe( data => {
         this.todoLists = data;
+        this.initialList = data;
         this.todoListReady = true;
         this.sharedLists = [];
         this.usersShared = [];
@@ -68,6 +73,7 @@ export class TodoPage implements OnInit, OnDestroy {
                                             && (userMembership.userId !== firebase.auth().currentUser.uid)) {
                                             if (this.existsInShared(list.uuid, userMembership.userId, this.sharedLists) === false) {
                                                 this.sharedLists.push({item: list, user: userMembership.userId});
+                                                this.initialSharedList = this.sharedLists;
                                                 this.todoListService.getUser(userMembership.userId).subscribe( user => {
                                                     this.usersShared.push(user.username);
                                                     this.membershipService.getGroup(userMembership.groupId)
@@ -249,4 +255,25 @@ export class TodoPage implements OnInit, OnDestroy {
             this.subscription.unsubscribe();
         }
     }
+
+    searchChanged(ev) {
+        // set val to the value of the ev target
+        const val = ev.target.value;
+
+        // if the value is an empty string don't filter the items
+        if (val && val.trim() !== '') {
+            this.todoLists = this.todoLists.filter((items) => {
+            return (items.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+            });
+            this.sharedLists = this.sharedLists.filter((items) => {
+                return (items.item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+                });
+
+        } else if (val.trim() === '') {
+            this.todoLists = this.initialList;
+            this.sharedLists = this.initialSharedList;
+        }
+        this.cd.detectChanges();
+    }
+
 }

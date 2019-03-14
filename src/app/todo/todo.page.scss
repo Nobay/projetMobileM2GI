@@ -5,7 +5,7 @@
 
 h1 {
   font-family: cursive;
-  margin-top: 15px !important;
+  margin-top: 5px !important;
   text-align: center;
   text-transform: uppercase;
 }
@@ -29,18 +29,33 @@ h1.background {
       /* to hide the lines from behind the text, you have to set the background color the same as the container */ 
       background: #fff; 
       padding: 0 15px; 
+      font-size: 20px;
+      color: orangered;
   }
 }
 
 .divgroup {
-  margin: 4px;
-  padding: 1px;
   border-radius: 4px;
   font-size: 14px;
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
-  /* --ion-background-color: #E6E6FA; */
   --ion-background-color: #f7f8fa;
   border-left: 5px solid #ff7f00;
+}
+
+.divgroupshared {
+  margin-top: 1px;
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  --ion-background-color: #f7f8fa;
+  border-left: 5px solid #ff7f00;
+}
+
+.btnslide {
+  border-radius: 4px;
+  font-size: 14px;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  --ion-background-color: #f7f8fa;
 }
 
 #myFixZone {
@@ -52,8 +67,12 @@ h1.background {
   font-weight: bold;
 }
 
-.btnslide {
-  height: 70%;
-  margin-top: auto;
-  margin-bottom: auto;
+.searchbar{
+  --ion-background-color: #f7f8fa;
+  margin-left: 50px;
+  width: 85%;
+}
+
+.labelcontainer{
+  margin: 0px;
 }
