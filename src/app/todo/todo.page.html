@@ -12,8 +12,8 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<h1 class="background"><span>Shared with me</span></h1>
-<ion-content *ngIf="todoListReady">
+<h1 *ngIf="sharedLists.length !== 0" class="background"><span>Shared with me</span></h1>
+<ion-content *ngIf="sharedLists.length !== 0">
   <ion-list *ngIf="sharedListReady">
     <div *ngIf="sharedLists.length === 0; else availableShLists"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
