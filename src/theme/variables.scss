@@ -75,8 +75,17 @@
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 
-  ion-header  {
-    --ion-background-color: #4285f4;
+  ion-header {
+    --ion-background-color: #ff7f00;
   }
 
+  ion-tab-button {
+    --ion-background-color: #ff7f00;
+  }
+
+  --ion-toolbar-color-activated:  #ff7f00;
+  --ion-tab-bar-color-activated: #ff7f00;
 }
+
+
+

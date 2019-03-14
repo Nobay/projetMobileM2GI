@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "256309942188",
+    "firebase_url": "https://projetmobile-414b5.firebaseio.com",
+    "project_id": "projetmobile-414b5",
+    "storage_bucket": "projetmobile-414b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256309942188:android:7b151383a3c96147",
+        "android_client_info": {
+          "package_name": "io.ionic.todolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256309942188-ch6r6m3d56gj0h28n4lkv6aqnhfcad2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9tO3QVxFTJMFjqFUTp6uwTi7-EMqja_U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
