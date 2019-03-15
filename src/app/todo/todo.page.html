@@ -22,16 +22,21 @@
     <ng-template #availableShLists>
       <ion-item class="divgroup" (click)="viewItems(list.item)" *ngFor="let list of sharedLists; let i = index">
         <ion-label>
-          <h2>{{list.item.name}}</h2>
-          <p>Unfinished tasks: {{completedItemsSize(list.item)}}</p>
-          <p>User: <span style="font-weight: bold; font-style: italic">{{usersShared[i]}}</span></p>
-          <p>Group: <span style="font-weight: bold; font-style: italic">{{groupsShared[i]}}</span></p>
+          <ion-row>
+            <ion-col><p>List name: <span class="spantyle">{{list.item.name}}</span></p></ion-col>
+          </ion-row>
+          <!-- <h2 class="h2style">{{list.item.name}}</h2> -->
+          <!-- <p>Unfinished tasks: <span style="font-weight: bold;">{{completedItemsSize(list.item)}}</span></p> -->
+          <ion-row>
+          <ion-col><p>Owner: <span class="spantyle">{{usersShared[i]}}</span></p></ion-col>
+          <ion-col><p>Group: <span class="spantyle">{{groupsShared[i]}}</span></p></ion-col>
+        </ion-row>
         </ion-label>
       </ion-item>
     </ng-template>
   </ion-list>
 </ion-content>
-<h1 class="background"><span>My lists</span></h1>
+<h1 *ngIf="todoLists.length !== 0;" class="background"><span>My lists</span></h1>
 <ion-content>
   <ion-list #slidingList>
     <div *ngIf="todoLists.length === 0; else availableLists"
@@ -42,13 +47,26 @@
       <ion-item-sliding *ngFor="let list of todoLists">
         <ion-item class="divgroup" (click)="viewItems(list)">
           <ion-label>
-            <h2>{{list.name}}</h2>
-            <p>Unfinished tasks: {{completedItemsSize(list)}}</p>
+            <ion-row>
+              <ion-col><p>List name: <span class="spantyle">{{list.name}}</span></p></ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <p>Unfinished tasks: <span class="spantyle">{{uncompletedItemsSize(list)}}</span></p>
+              </ion-col>
+              <ion-col>
+                <p>Finished tasks: <span class="spantyle">{{completedItemsSize(list)}}</span></p>
+              </ion-col>
+            </ion-row>
           </ion-label>
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option color="warning" (click)="modifyList(list)"><ion-icon name="create"></ion-icon></ion-item-option>
-          <ion-item-option color="danger" (click)="removeList(list)"><ion-icon name="trash"></ion-icon></ion-item-option>
+          <ion-item-option class="btnslide" color="warning" (click)="modifyList(list)">
+            <ion-icon name="create"></ion-icon>
+          </ion-item-option>
+          <ion-item-option class="btnslide" color="danger" (click)="removeList(list)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
     </ng-template>

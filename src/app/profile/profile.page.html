@@ -23,9 +23,8 @@
     </ion-card-content>
   </ion-card>
   <ion-card>
-    <ion-card-header>
-    </ion-card-header>
-    <ion-card-content>
+
+    <ion-card-content style="padding: 1px 1px;">
       <agm-map [latitude]="45.191621" [longitude]="5.767414" [zoom]="10">
         <div *ngFor="let list of todoLists">
           <div *ngFor="let todo of list.items">

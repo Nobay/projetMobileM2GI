@@ -17,17 +17,15 @@
 <ion-content>
     <div *ngIf="todoItems.length === 0; else availableTodos"
          style="font-style:italic; color:gray; text-align: center; padding-top:10%">
-        Empty list.
+         Empty list.
     </div>
     <ng-template #availableTodos>
         <ion-card *ngFor="let item of todoItems">
-            <ion-card-header>
-                <ion-card-title style="text-align: center;font-family: cursive; font-size: 27px;">{{item.name}}</ion-card-title>
-            </ion-card-header>
             <ion-card-content>
                 <ion-grid class="background">
                     <ion-row>
                         <ion-col>
+                            <p style="font-weight: bold; text-decoration: underline;">Task: </p><p>{{item.name}}</p>
                             <p style="font-weight: bold; text-decoration: underline;">State: </p><p>{{getState(item)}}</p>
                             <p style="font-weight: bold; text-decoration: underline;">Description: </p><p>{{item.desc}}</p>
                         </ion-col>

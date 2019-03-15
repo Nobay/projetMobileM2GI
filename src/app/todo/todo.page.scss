@@ -5,7 +5,7 @@
 
 h1 {
   font-family: cursive;
-  margin-top: 30px;
+  margin-top: 15px !important;
   text-align: center;
   text-transform: uppercase;
 }
@@ -13,6 +13,7 @@ h1 {
 h1.background {
   position: relative;
   z-index: 1;
+  margin-bottom: 0px;
   
   &:before {
       border-top: 2px solid #dfdfdf;
@@ -37,9 +38,22 @@ h1.background {
   border-radius: 4px;
   font-size: 14px;
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
-  --ion-background-color: #E6E6FA;
+  /* --ion-background-color: #E6E6FA; */
+  --ion-background-color: #f7f8fa;
+  border-left: 5px solid #ff7f00;
 }
 
 #myFixZone {
   height: 200px;
+}
+
+.spantyle{
+  color: #4b4d4e;
+  font-weight: bold;
+}
+
+.btnslide {
+  height: 70%;
+  margin-top: auto;
+  margin-bottom: auto;
 }

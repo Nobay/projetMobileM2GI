@@ -90,7 +90,7 @@ export class TodoPage implements OnInit, OnDestroy {
         }, () => loading.dismiss());
     });
   }
-  completedItemsSize(list: TodoList) {
+  uncompletedItemsSize(list: TodoList) {
     let size = 0;
     for (let i = 0; i < list.items.length; i++) {
       if (list.items[i].complete === false) {
@@ -99,6 +99,17 @@ export class TodoPage implements OnInit, OnDestroy {
     }
     return size;
   }
+
+  completedItemsSize(list: TodoList) {
+    let size = 0;
+    for (let i = 0; i < list.items.length; i++) {
+      if (list.items[i].complete === true) {
+        size++;
+      }
+    }
+    return size;
+  }
+
   viewItems(list: TodoList) {
       if (this.sharedLists.length > 0) {
           for (let i = 0; i < this.sharedLists.length; i++) {
@@ -173,7 +184,7 @@ export class TodoPage implements OnInit, OnDestroy {
                                 items: [],
                             });
                         } else {
-                            this.authService.showToast('The name shouldn\'t be empty');
+                            this.authService.showToast('The name is required!');
                         }
                     }
                 }
