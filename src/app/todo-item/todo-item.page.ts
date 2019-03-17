@@ -97,7 +97,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
     if (data) {
         console.log(data);
         const alert = await this.alertCtrl.create({
-            header: 'Item \'' + data.uuid + ' \' was successfully created !',
+            header: 'Item successfully created !',
             buttons: [
                 {
                     text: 'Continue',
@@ -124,7 +124,7 @@ export class TodoItemPage implements OnInit, OnDestroy {
         console.log(item.name);
         if (data) {
             const alert = await this.alertCtrl.create({
-                header: 'Item \'' + data.uuid + '\' was successfully modified !',
+                header: 'Item successfully modified !',
                 buttons: [
                     {
                         text: 'Continue',
