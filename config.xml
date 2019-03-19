@@ -103,5 +103,6 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
+    <plugin name="cordova-plugin-firebase" spec="2.0.5" />
     <engine name="android" spec="7.1.4" />
 </widget>

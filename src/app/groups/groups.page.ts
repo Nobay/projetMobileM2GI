@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AlertController, IonList, LoadingController} from '@ionic/angular';
+import {AlertController, IonList, LoadingController, Platform, ToastController} from '@ionic/angular';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase';
 import {Group} from '../models/group';
 import {MembershipServiceProvider} from '../providers/membership-service.provider';
 import {Membership} from '../models/membership';
+import { FcmService } from '../providers/fcm.service';
 
 @Component({
   selector: 'app-group',
@@ -39,6 +40,9 @@ export class GroupsPage implements OnInit, OnDestroy {
         private router: Router,
         private alertCtrl: AlertController,
         private loadingController: LoadingController,
+        private fcm: FcmService,
+        private platform: Platform,
+        public toastController: ToastController
     ) {}
 
     async ngOnInit() {
@@ -102,6 +106,9 @@ export class GroupsPage implements OnInit, OnDestroy {
         }, () => {
             loading.dismiss();
         }));
+
+        // Vérifier les push notifications
+        this.notificationSetup();
     }
 
     groupsAreReady(): boolean {
@@ -371,5 +378,26 @@ export class GroupsPage implements OnInit, OnDestroy {
           subscription.unsubscribe();
         }
     }
+
+    private async presentToast(message) {
+        const toast = await this.toastController.create({
+          message: 'test',
+          duration: 3000
+        });
+        toast.present();
+      }
+
+      private notificationSetup() {
+        this.fcm.getToken();
+        this.fcm.onNotifications().subscribe(
+          (msg) => {
+            if (this.platform.is('ios')) {
+              this.presentToast(msg.aps.alert);
+            } else {
+              console.log(msg.body);
+              this.presentToast(msg.body);
+            }
+          });
+      }
 
 }

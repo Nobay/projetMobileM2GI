@@ -29,6 +29,9 @@ import {AuthGuard} from './providers/auth-guard';
 import {MembershipServiceProvider} from './providers/membership-service.provider';
 import { AdMobPro } from '@ionic-native/admob-pro/ngx';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
+import { FcmService } from './providers/fcm.service';
+import { Firebase } from '@ionic-native/firebase/ngx';
+
 
 firebase.initializeApp(environment.firebase);
 
@@ -63,7 +66,9 @@ firebase.initializeApp(environment.firebase);
       GooglePlus,
       Geolocation,
       NativeStorage,
-      SpeechRecognition
+      SpeechRecognition,
+      FcmService,
+      Firebase
   ],
   bootstrap: [AppComponent]
 })
