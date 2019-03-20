@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar style="color:white">
+    <ion-buttons slot="start">
+      <ion-button style="color:white" icon-only (click)="cancelMap()">
+        <ion-icon name="arrow-back" large></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{title}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <agm-map [latitude]="45.191621" [longitude]="5.767414" [zoom]="10" (mapClick)="getPosition($event)">
+  </agm-map>
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button (click)="getOwnLocation()">
+      <ion-icon name="locate"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
