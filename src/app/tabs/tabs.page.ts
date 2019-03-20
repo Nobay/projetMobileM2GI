@@ -4,7 +4,8 @@ import {SpeechServiceProvider} from '../providers/speech-service.provider';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase';
-import {AlertController} from '@ionic/angular';
+import {AlertController, Platform, ToastController} from '@ionic/angular';
+import {FcmService} from '../providers/fcm.service';
 
 @Component({
   selector: 'app-tabs',
@@ -42,12 +43,18 @@ export class TabsPage implements OnInit {
       private speechService: SpeechServiceProvider,
       private authService: AuthServiceProvider,
       private router: Router,
-      private alertCtrl: AlertController
+      private alertCtrl: AlertController,
+      private fcm: FcmService,
+      private platform: Platform,
+      private toastController: ToastController
   ) {
     this.router.navigate(['/tabs/profil']);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+      // Vérifier les push notifications
+      this.notificationSetup();
+  }
 
   activateSpeech() {
       this.speechService.getPermission();
@@ -149,6 +156,27 @@ export class TabsPage implements OnInit {
               }
           }
       }
+  }
+
+    private async presentToast(message) {
+        const toast = await this.toastController.create({
+            message: 'test',
+            duration: 3000
+        });
+        toast.present();
+    }
+
+  private notificationSetup() {
+      this.fcm.getToken();
+      this.fcm.onNotifications().subscribe(
+        (msg) => {
+            if (this.platform.is('ios')) {
+                this.presentToast(msg.aps.alert);
+            } else {
+                console.log(msg.body);
+                this.presentToast(msg.body);
+            }
+        });
   }
 
 }
