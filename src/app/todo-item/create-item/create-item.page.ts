@@ -8,6 +8,7 @@ import { File } from '@ionic-native/file/ngx';
 import { FilePath } from '@ionic-native/File-Path/ngx';
 import * as firebase from 'firebase';
 import { LoadingController } from '@ionic/angular';
+import {MapItemPage} from './map-item/map-item.page';
 
 @Component({
   selector: 'app-create-item',
@@ -22,13 +23,14 @@ export class CreateItemPage implements OnInit {
   isLoading = false;
 
   constructor(
-      public todoListService: TodoServiceProvider,
+      private todoListService: TodoServiceProvider,
       private modalCtrl: ModalController,
-      public toastCtrl: ToastController,
+      private toastCtrl: ToastController,
       private fileChooser: FileChooser,
       private file: File,
       private filePath: FilePath,
-      public loadingController: LoadingController
+      private loadingController: LoadingController,
+      private modalController: ModalController
   ) {
     this.todoItem = {
         uuid : todoListService.makeId(),
@@ -94,13 +96,24 @@ export class CreateItemPage implements OnInit {
     });
   }
 
-  geolocation() {
+  async geolocation() {
+      const modal = await this.modalController.create({
+          component: MapItemPage,
+          componentProps: {title: 'Choose a position'}
+      });
+      await modal.present();
+      const { data } = await modal.onDidDismiss();
+      if (data) {
+          this.todoItem.latitude = data.coords.lat.toString();
+          this.todoItem.longitude = data.coords.lng.toString();
+      }
+      /*
       navigator.geolocation.getCurrentPosition(position => {
           this.todoItem.latitude = position.coords.latitude.toString();
           this.todoItem.longitude = position.coords.longitude.toString();
       }, () => {
           alert('Geolocation is not activated within your device.');
-      });
+      }); */
   }
 
   async present() {

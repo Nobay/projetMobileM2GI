@@ -5,13 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ProfilePage } from './profile.page';
+import { MapItemPage } from './map-item.page';
 import {AgmCoreModule} from '@agm/core';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfilePage
+    component: MapItemPage
   }
 ];
 
@@ -23,6 +23,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     AgmCoreModule
   ],
-  declarations: [ProfilePage]
+  declarations: [MapItemPage]
 })
-export class ProfilePageModule {}
+export class MapItemPageModule {}
