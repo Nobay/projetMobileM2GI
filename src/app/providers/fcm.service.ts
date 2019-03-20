@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import { Platform } from '@ionic/angular';
 import { AngularFirestore } from 'angularfire2/firestore';
+import * as app from 'firebase';
 
 
 @Injectable()
@@ -34,7 +35,7 @@ export class FcmService {
 
     const data = {
       token,
-      userEmail: 'testUserId'
+      uuid: app.auth().currentUser.uid
     };
 
     return devicesRef.doc(token).set(data);
