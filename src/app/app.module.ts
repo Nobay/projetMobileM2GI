@@ -31,6 +31,8 @@ import { AdMobPro } from '@ionic-native/admob-pro/ngx';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { FcmService } from './providers/fcm.service';
 import { Firebase } from '@ionic-native/firebase/ngx';
+import {MapItemPage} from './todo-item/create-item/map-item/map-item.page';
+import {AgmCoreModule} from '@agm/core';
 
 
 firebase.initializeApp(environment.firebase);
@@ -38,14 +40,18 @@ firebase.initializeApp(environment.firebase);
 @NgModule({
   declarations: [
       AppComponent,
-      CreateItemPage
+      CreateItemPage,
+      MapItemPage
   ],
-  entryComponents: [CreateItemPage],
+  entryComponents: [CreateItemPage, MapItemPage],
   imports: [
       BrowserModule, IonicModule.forRoot(), AppRoutingModule,
       FormsModule,
       AngularFireModule.initializeApp(environment.firebase),
-      AngularFirestoreModule.enablePersistence()
+      AngularFirestoreModule.enablePersistence(),
+      AgmCoreModule.forRoot({
+          apiKey: 'AIzaSyDdYquiVBMOS8006P2lOs_i1q0cHqpvqTE'
+      })
   ],
   providers: [
       StatusBar,

@@ -21,9 +21,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    AgmCoreModule.forRoot({
-        apiKey: 'AIzaSyDdYquiVBMOS8006P2lOs_i1q0cHqpvqTE'
-    })
+    AgmCoreModule
   ],
   declarations: [ProfilePage]
 })
