@@ -27,7 +27,7 @@ export class GroupsPage implements OnInit, OnDestroy {
     groupsReady = [false, false, false, false, false, false];
     numberOfUsers = {};
     subscriptions: Subscription[] = [];
-    fullControl = false;
+    fullControl = true;
     someControl = false;
     smallControl = false;
     noControl = false;
