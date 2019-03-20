@@ -26,7 +26,7 @@
         </ion-label>
       </ion-item>
   </ion-list>
-  <ion-list *ngIf="members.length > 0">
+  <ion-list *ngIf="members.length > 0" #currentList>
     <h1 class="background"><span>Members</span></h1>
     <ion-item-sliding *ngFor="let member of members">
       <ion-item class="divgroup">
@@ -45,7 +45,7 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-  <ion-list *ngIf="owner && pendingMembers.length > 0">
+  <ion-list *ngIf="owner && pendingMembers.length > 0" #pendingList>
     <div *ngIf="owner.uuid === getCurrentUser().uid">
       <h1 class="background"><span>Pending Members</span></h1>
     <ion-item-sliding *ngFor="let member of pendingMembers">

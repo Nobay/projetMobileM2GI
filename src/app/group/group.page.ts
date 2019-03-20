@@ -29,7 +29,8 @@ export class GroupPage implements OnInit, OnDestroy {
   currentUserLists: TodoList[];
   loading;
 
-  @ViewChild('slidingList') slidingList: IonList;
+  @ViewChild('pendingList') pendingList: IonList;
+  @ViewChild('currentList') currentList: IonList;
 
   constructor(
       private route: ActivatedRoute,
@@ -127,6 +128,7 @@ export class GroupPage implements OnInit, OnDestroy {
           ]
       });
       await alert.present();
+      await this.pendingList.closeSlidingItems();
   }
 
   async removeMember(user: User) {
@@ -165,7 +167,7 @@ export class GroupPage implements OnInit, OnDestroy {
           ]
       });
       await alert.present();
-      await this.slidingList.closeSlidingItems();
+      await this.currentList.closeSlidingItems();
   }
 
   async refuseMember(user: User) {
@@ -193,7 +195,7 @@ export class GroupPage implements OnInit, OnDestroy {
           ]
       });
       await alert.present();
-      await this.slidingList.closeSlidingItems();
+      await this.pendingList.closeSlidingItems();
   }
 
   isMember(): boolean {
