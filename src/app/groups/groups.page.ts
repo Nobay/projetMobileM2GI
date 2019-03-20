@@ -199,7 +199,7 @@ export class GroupsPage implements OnInit, OnDestroy {
             ]
         });
         await alert.present();
-        await this.slidingList.closeSlidingItems();
+        this.slidingList.closeSlidingItems();
     }
 
     async createGroup() {
@@ -283,6 +283,7 @@ export class GroupsPage implements OnInit, OnDestroy {
     }
 
     onSelectFilter(event) {
+        this.slidingList.closeSlidingItems();
         if (event.detail.value === 'others') {
             this.noControl = false;
             this.smallControl = true;
@@ -349,7 +350,7 @@ export class GroupsPage implements OnInit, OnDestroy {
             ]
         });
         await alert.present();
-        await this.slidingList.closeSlidingItems();
+        this.slidingList.closeSlidingItems();
     }
 
     async presentLoading(loading) {
@@ -368,6 +369,12 @@ export class GroupsPage implements OnInit, OnDestroy {
     ngOnDestroy() {
         for (const subscription of this.subscriptions) {
           subscription.unsubscribe();
+        }
+    }
+
+    logDrag(ev, item) {
+        if (!item.canSwipe) {
+          ev.close();
         }
     }
 

@@ -32,7 +32,7 @@
     </div>
     <ng-template #availableGroups>
       <ion-list #slidingList>
-        <ion-item-sliding *ngFor="let group of groupsToDisplay">
+        <ion-item-sliding *ngFor="let group of groupsToDisplay" (ionDrag)="logDrag($event, group)">
           <ion-item (click)="viewGroup(group)" class="divgroup">
             <ion-label>
               <ion-row>
