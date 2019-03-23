@@ -73,7 +73,7 @@ export class TodoPage implements OnInit, OnDestroy {
                                             && (userMembership.userId !== firebase.auth().currentUser.uid)) {
                                             if (this.existsInShared(list.uuid, userMembership.userId, this.sharedLists) === false) {
                                                 this.sharedLists.push({item: list, user: userMembership.userId});
-                                                this.initialSharedList = this.sharedLists;
+                                                this.initialSharedList.push({item: list, user: userMembership.userId});
                                                 this.todoListService.getUser(userMembership.userId).subscribe( user => {
                                                     this.usersShared.push(user.username);
                                                     this.membershipService.getGroup(userMembership.groupId)
@@ -269,7 +269,8 @@ export class TodoPage implements OnInit, OnDestroy {
                 return (items.item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
                 });
 
-        } else if (val.trim() === '') {
+        } else if (val.trim() === '' || !val) {
+            console.log('empty query');
             this.todoLists = this.initialList;
             this.sharedLists = this.initialSharedList;
         }

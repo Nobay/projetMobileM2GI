@@ -22,7 +22,7 @@ export class AuthServiceProvider {
         this.presentLoading(loading);
         console.log('before google plus login');
         this.googlePlus.login({
-            'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'
+            'webClientId': '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'
         })
             .then(user => {
                 loading.dismiss();
@@ -132,7 +132,7 @@ export class AuthServiceProvider {
             }, err => {
                 console.error('Error logging out from Google: ' + err);
                 this.googlePlus.trySilentLogin(
-                    {'webClientId': '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'}
+                    {'webClientId': '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'}
                 ).then(res => {
                     console.error('Google trySilentLogin success');
                     this.googlePlus.disconnect().then( obj => {

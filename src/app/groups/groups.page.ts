@@ -284,7 +284,9 @@ export class GroupsPage implements OnInit, OnDestroy {
     }
 
     onSelectFilter(event) {
-        this.slidingList.closeSlidingItems();
+        if (this.slidingList) {
+            this.slidingList.closeSlidingItems();
+        }
         if (event.detail.value === 'others') {
             this.noControl = false;
             this.smallControl = true;
