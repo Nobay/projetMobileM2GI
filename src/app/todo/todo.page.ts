@@ -15,8 +15,8 @@ import {MembershipServiceProvider} from '../providers/membership-service.provide
   styleUrls: ['todo.page.scss']
 })
 export class TodoPage implements OnInit, OnDestroy {
-  todoLists: TodoList[];
-  sharedLists;
+  todoLists: TodoList[] = [];
+  sharedLists = [];
   usersShared;
   groupsShared;
   todoListReady = false;
@@ -73,7 +73,7 @@ export class TodoPage implements OnInit, OnDestroy {
                                             && (userMembership.userId !== firebase.auth().currentUser.uid)) {
                                             if (this.existsInShared(list.uuid, userMembership.userId, this.sharedLists) === false) {
                                                 this.sharedLists.push({item: list, user: userMembership.userId});
-                                                this.initialSharedList.push({item: list, user: userMembership.userId});
+                                                this.initialSharedList = this.sharedLists;
                                                 this.todoListService.getUser(userMembership.userId).subscribe( user => {
                                                     this.usersShared.push(user.username);
                                                     this.membershipService.getGroup(userMembership.groupId)
@@ -270,9 +270,16 @@ export class TodoPage implements OnInit, OnDestroy {
                 });
 
         } else if (val.trim() === '' || !val) {
-            console.log('empty query');
+            console.log(this.initialList);
             this.todoLists = this.initialList;
             this.sharedLists = this.initialSharedList;
+        }
+
+        if (!this.todoLists) {
+            this.todoLists = [];
+        }
+        if (!this.sharedLists) {
+            this.sharedLists = [];
         }
         this.cd.detectChanges();
     }

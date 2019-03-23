@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<h1 *ngIf="todoLists.length !== 0;" class="background"><span>My lists</span></h1>
+<h1 *ngIf="todoLists.length" class="background"><span>My lists</span></h1>
 <ion-content *ngIf="todoLists.length !== 0">
   <ion-list #slidingList>
     <div *ngIf="todoLists.length === 0; else availableLists"
