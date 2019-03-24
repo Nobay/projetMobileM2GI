@@ -17,6 +17,10 @@ export class MapItemPage implements OnInit {
   ngOnInit() {
   }
 
+    /**
+     * after a click on the map, it dismisses this page (a modal) and sends the data (latitude and logitude) to CreateItemPage
+     * @param latLng
+     */
   public getPosition(latLng) {
     console.log(latLng);
     this.modalController.dismiss(latLng);
@@ -26,6 +30,9 @@ export class MapItemPage implements OnInit {
     this.modalController.dismiss();
   }
 
+    /**
+     * uses GPS or Wifi to get the device's location
+     */
   public getOwnLocation() {
       navigator.geolocation.getCurrentPosition(position => {
           const latLng = {

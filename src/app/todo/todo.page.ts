@@ -49,17 +49,21 @@ export class TodoPage implements OnInit, OnDestroy {
         this.sharedLists = [];
         this.usersShared = [];
         this.groupsShared = [];
+        /* get all the memberships of the connected user */
         this.membershipService.getAllMyGroups(firebase.auth().currentUser.uid).subscribe( memberships => {
             if (memberships.length === 0) {
                 loading.dismiss();
             }
+            /* loop through the connected user's memberships in which he is also a member (has a membership). */
             for (const membership of memberships) {
                 if (membership.hasMembership === true) {
+                    /* get all the users of the memberships in which he is also a member */
                     this.membershipService.getAllUsersInGroup(membership.groupId).subscribe(usersInGroup => {
                         if (usersInGroup.length === 0) {
                             loading.dismiss();
                         }
                         for (const userMembership of usersInGroup) {
+                            /* for each user, fetch all of his to-do lists */
                             this.todoListService.getLists(userMembership.userId).subscribe( lists => {
                                 if (lists.length === 0) {
                                     loading.dismiss();
@@ -68,6 +72,7 @@ export class TodoPage implements OnInit, OnDestroy {
                                     if (list.membershipIds.length === 0) {
                                         loading.dismiss();
                                     }
+                                    /* for each list, check whether it's shared with the current user's group (membership) */
                                     for (const id of list.membershipIds) {
                                         if (id === (userMembership.userId + '_' + userMembership.groupId)
                                             && (userMembership.userId !== firebase.auth().currentUser.uid)) {
@@ -96,7 +101,13 @@ export class TodoPage implements OnInit, OnDestroy {
         }, () => loading.dismiss());
     });
   }
-  uncompletedItemsSize(list: TodoList) {
+
+    /**
+     * takes a list as input and loops through it to return the number of uncompleted items.
+     * @param list
+     * @return number
+     */
+  uncompletedItemsSize(list: TodoList): number {
     let size = 0;
     for (let i = 0; i < list.items.length; i++) {
       if (list.items[i].complete === false) {
@@ -106,7 +117,12 @@ export class TodoPage implements OnInit, OnDestroy {
     return size;
   }
 
-  completedItemsSize(list: TodoList) {
+    /**
+     * takes a list as input and loops through it to return the number of completed items.
+     * @param list
+     * @return number
+     */
+  completedItemsSize(list: TodoList): number {
     let size = 0;
     for (let i = 0; i < list.items.length; i++) {
       if (list.items[i].complete === true) {
@@ -116,6 +132,10 @@ export class TodoPage implements OnInit, OnDestroy {
     return size;
   }
 
+    /**
+     * loops through an existing shared to-do list and views the clicked list's page, or views his own list.
+     * @param list
+     */
   viewItems(list: TodoList) {
       if (this.sharedLists.length > 0) {
           for (let i = 0; i < this.sharedLists.length; i++) {
@@ -137,6 +157,10 @@ export class TodoPage implements OnInit, OnDestroy {
       }
   }
 
+    /**
+     * shows an alert box confirming the deletion of a list, which would then be deleted using a CRUD service (based on firebase).
+     * @param list
+     */
   async removeList(list: TodoList) {
       const alert = await this.alertCtrl.create({
           header: 'Confirm!',
@@ -161,6 +185,9 @@ export class TodoPage implements OnInit, OnDestroy {
       await this.slidingList.closeSlidingItems();
   }
 
+    /**
+     * shows an alert box with required fields for the creation of a new list, afterwards calls a CRUD service (based on firebase).
+     */
     async createList() {
         const alert = await this.alertCtrl.create({
             header: 'Creating a to-do list',
@@ -199,6 +226,11 @@ export class TodoPage implements OnInit, OnDestroy {
         await alert.present();
     }
 
+    /**
+     * shows an alert box with required fields for the modification of an existing
+     * afterwards calls a CRUD service (based on firebase).
+     * @param list
+     */
     async modifyList(list: TodoList) {
         const alert = await this.alertCtrl.create({
             header: 'Modifying a to-do list',
@@ -237,6 +269,12 @@ export class TodoPage implements OnInit, OnDestroy {
         await alert.present();
     }
 
+    /**
+     * loops through a collection of shared lists and check whether there are duplicates.
+     * @param listId
+     * @param userId
+     * @param lists
+     */
     existsInShared(listId, userId, lists) {
         for ( let i = 0; i < lists.length; i++) {
             if (lists[i].user === userId && lists[i].item.uuid === listId) {
@@ -256,6 +294,11 @@ export class TodoPage implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * triggered when the search bar is being used,
+     * this function filters both the to-do lists and shared lists of the connected user.
+     * @param ev
+     */
     searchChanged(ev) {
         // set val to the value of the ev target
         const val = ev.target.value;

@@ -19,7 +19,7 @@ export class CreateItemPage implements OnInit {
   todoItem: TodoItem;
   @Input() data: TodoItem;
   @Input() title: string;
-  imgsource: any;
+  imgSource: any;
   isLoading = false;
 
   constructor(
@@ -45,6 +45,10 @@ export class CreateItemPage implements OnInit {
           this.todoItem = this.data;
       }
   }
+
+    /**
+     * whether it's a creation of modification, sends the item data to the main page TodoItemPage
+     */
   public async sendItemData() {
       if (this.todoItem.name !== '') {
           this.modalCtrl.dismiss(this.todoItem);
@@ -61,6 +65,9 @@ export class CreateItemPage implements OnInit {
       this.modalCtrl.dismiss();
   }
 
+    /**
+     * opens the native image chooser of the device and then calls the upload function
+     */
   choose() {
     this.fileChooser.open().then((uri) => {
 
@@ -78,6 +85,11 @@ export class CreateItemPage implements OnInit {
     });
   }
 
+    /**
+     * uploads the image into the firebase storage and awaits the image's url
+     * @param buffer
+     * @param name
+     */
   public async upload(buffer, name) {
     await this.present();
     const blob = new Blob([buffer], {type: 'image/jpeg, image/png'});
@@ -86,7 +98,7 @@ export class CreateItemPage implements OnInit {
 
     storage.ref('images/' + name).put(blob).then((d) => {
         storage.ref('images/' + name).getDownloadURL().then((url) => {
-            this.imgsource = url;
+            this.imgSource = url;
             this.todoItem.image = url;
           });
           this.dismiss();
@@ -96,6 +108,9 @@ export class CreateItemPage implements OnInit {
     });
   }
 
+    /**
+     * an on click function opening a new modal page MapItemPage in order to get some coordinates afterwards
+     */
   async geolocation() {
       const modal = await this.modalController.create({
           component: MapItemPage,
@@ -107,13 +122,6 @@ export class CreateItemPage implements OnInit {
           this.todoItem.latitude = data.coords.lat.toString();
           this.todoItem.longitude = data.coords.lng.toString();
       }
-      /*
-      navigator.geolocation.getCurrentPosition(position => {
-          this.todoItem.latitude = position.coords.latitude.toString();
-          this.todoItem.longitude = position.coords.longitude.toString();
-      }, () => {
-          alert('Geolocation is not activated within your device.');
-      }); */
   }
 
   async present() {

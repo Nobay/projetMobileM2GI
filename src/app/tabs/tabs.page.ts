@@ -13,6 +13,7 @@ import {FcmService} from '../providers/fcm.service';
   styleUrls: ['./tabs.page.scss'],
 })
 export class TabsPage implements OnInit {
+    /* the possible matches for each speech recognition feature */
     todoMatches: string[] = [
         'to do', 'to dos', 'to do lists',
         'check to dos', 'check to do',
@@ -32,7 +33,7 @@ export class TabsPage implements OnInit {
     createMatches: string[] = [
         'create to do', 'create to do list',
         'create list', 'new to do', 'new to dos',
-        'new to do list', 'new list'
+        'new to do list', 'new list', 'create a list'
     ];
     logoutMatches: string[] = [
         'logout', 'log out', 'disconnect',
@@ -52,7 +53,6 @@ export class TabsPage implements OnInit {
   }
 
   ngOnInit() {
-      // Vérifier les push notifications
       this.notificationSetup();
   }
 
@@ -68,6 +68,11 @@ export class TabsPage implements OnInit {
       });
   }
 
+    /**
+     * using google's speech recognition, we loop through his possible matches
+     * and check whether they are correct to view the to-do lists page
+     * @param matches
+     */
   todoBySpeech(matches: string[]) {
       for ( let i = 0; i < matches.length; i++) {
           for ( let j = 0; j < this.todoMatches.length; j++) {
@@ -79,6 +84,11 @@ export class TabsPage implements OnInit {
       }
   }
 
+    /**
+     * using google's speech recognition, we loop through his possible matches
+     * and check whether they are correct to view the groups page
+     * @param matches
+     */
   groupBySpeech(matches: string[]) {
       for ( let i = 0; i < matches.length; i++) {
           for ( let j = 0; j < this.groupMatches.length; j++) {
@@ -90,6 +100,11 @@ export class TabsPage implements OnInit {
       }
   }
 
+    /**
+     * using google's speech recognition, we loop through his possible matches
+     * and check whether they are correct to view the profile page
+     * @param matches
+     */
   profileBySpeech(matches: string[]) {
       for ( let i = 0; i < matches.length; i++) {
           for ( let j = 0; j < this.profileMatches.length; j++) {
@@ -101,6 +116,11 @@ export class TabsPage implements OnInit {
       }
   }
 
+    /**
+     * using google's speech recognition, we loop through his possible matches
+     * and check whether they are correct to create a to-do list
+     * @param matches
+     */
   async createListBySpeech(matches: string[]) {
       for ( let i = 0; i < matches.length; i++) {
           for ( let j = 0; j < this.createMatches.length; j++) {
@@ -147,6 +167,12 @@ export class TabsPage implements OnInit {
       }
   }
 
+    /**
+     * using google's speech recognition, we loop through his possible matches
+     * and check whether they are correct to logout
+     * @param matches
+     */
+
   logoutBySpeech(matches: string[]) {
       for ( let i = 0; i < matches.length; i++) {
           for ( let j = 0; j < this.logoutMatches.length; j++) {
@@ -166,7 +192,10 @@ export class TabsPage implements OnInit {
         toast.present();
     }
 
-  private notificationSetup() {
+    /**
+     * setting up the notification in the starting page
+     */
+    private notificationSetup() {
       this.fcm.getToken();
       this.fcm.onNotifications().subscribe(
         (msg) => {

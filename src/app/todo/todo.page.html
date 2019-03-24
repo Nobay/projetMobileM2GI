@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-searchbar #mySearchbar class="searchbar" [(ngModel)]="searchTerm" (ionChange)="searchChanged($event)"></ion-searchbar>
+    <ion-searchbar #mySearchbar class="searchbar" (ionChange)="searchChanged($event)"></ion-searchbar>
     <ion-buttons slot="primary">
       <ion-button style="color:white" (click)="createList()">
         <ion-icon slot="icon-only" name="add-circle"></ion-icon>
