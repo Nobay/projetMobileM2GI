@@ -186,7 +186,7 @@ export class TabsPage implements OnInit {
 
     private async presentToast(message) {
         const toast = await this.toastController.create({
-            message: 'test',
+            message: message,
             duration: 3000
         });
         toast.present();

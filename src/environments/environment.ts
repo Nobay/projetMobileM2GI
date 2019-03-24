@@ -11,6 +11,9 @@ export const environment = {
         projectId: 'projetmobile-414b5',
         storageBucket: 'projetmobile-414b5.appspot.com',
         messagingSenderId: '256309942188'
+    },
+    googlePlus: {
+        webClientID: '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'
     }
 };
 
