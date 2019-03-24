@@ -39,6 +39,10 @@ export class ProfilePage implements OnInit, OnDestroy {
 
     async ngOnInit() {
     }
+
+    /**
+     * gets the connected user's data using a CRUD service.
+     */
     async fetchUser() {
         const loading = await this.loadingController.create({
             message: 'Please wait...'
@@ -60,12 +64,18 @@ export class ProfilePage implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * gets the lists of the connected user using a CRUD service.
+     */
     async fetchLists() {
         this.subscription = this.todoListService.getLists(firebase.auth().currentUser.uid).subscribe( data => {
             this.todoLists = data;
         });
     }
 
+    /**
+     * logs out using the authentication service.
+     */
     doLogout() {
         this.authService.logout();
     }

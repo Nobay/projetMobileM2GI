@@ -68,6 +68,9 @@ export class GroupPage implements OnInit, OnDestroy {
       });
   }
 
+    /**
+     * retrieves all the members, pending members and the owner from a CRUD service.
+     */
   fetchUsers() {
       this.membershipService.getAllUsersInGroup(this.groupId).subscribe( memberships => {
           for (const membership of memberships) {
@@ -97,6 +100,11 @@ export class GroupPage implements OnInit, OnDestroy {
   getCurrentUser(): firebase.User {
     return firebase.auth().currentUser;
   }
+    /**
+     * shows an alert box confirming whether to accept a pending member into a group,
+     * and modifying the status of that member using a CRUD service (based on firebase).
+     * @param user
+     */
   async acceptMember(user: User) {
       const alert = await this.alertCtrl.create({
           header: 'Confirm!',
@@ -131,6 +139,11 @@ export class GroupPage implements OnInit, OnDestroy {
       await this.pendingList.closeSlidingItems();
   }
 
+    /**
+     * shows an alert box confirming kicking a member from a group, which would result in deleting a
+     * membership using a CRUD service (based on firebase).
+     * @param user
+     */
   async removeMember(user: User) {
       let message = '';
       let confirmation = '';
@@ -170,6 +183,11 @@ export class GroupPage implements OnInit, OnDestroy {
       await this.currentList.closeSlidingItems();
   }
 
+    /**
+     * shows an alert box confirming refusing a pending member, which would result in deleting a
+     * membership using a CRUD service (based on firebase).
+     * @param user
+     */
   async refuseMember(user: User) {
       const alert = await this.alertCtrl.create({
           header: 'Confirm!',
@@ -198,6 +216,10 @@ export class GroupPage implements OnInit, OnDestroy {
       await this.pendingList.closeSlidingItems();
   }
 
+    /**
+     * checks whether the connected user is a member
+     * @return boolean
+     */
   isMember(): boolean {
       if (this.groupIsReady() && this.ownerReady) {
           if (this.owner.uuid === this.getCurrentUser().uid) {
@@ -216,6 +238,11 @@ export class GroupPage implements OnInit, OnDestroy {
       }
       return false;
   }
+
+    /**
+     * checks whether the connected user is still waiting for a membership
+     * @return boolean
+     */
   isPending(): boolean {
       if (this.groupIsReady() && this.ownerReady) {
           if (this.owner.uuid === this.getCurrentUser().uid) {
@@ -235,6 +262,10 @@ export class GroupPage implements OnInit, OnDestroy {
       return false;
   }
 
+    /**
+     * checks whether the fetching process is finished
+     * @return boolean
+     */
   groupIsReady(): boolean {
       for (const isReady of this.groupReady) {
           if (isReady === false) {
@@ -244,6 +275,10 @@ export class GroupPage implements OnInit, OnDestroy {
       return true;
   }
 
+    /**
+     * shows the lists of the connected user's lists that can be shared,
+     * the user then chooses some to share with his current group.
+     */
     async presentMyLists() {
         const lists = [];
         for (const list of this.currentUserLists) {
@@ -351,6 +386,11 @@ export class GroupPage implements OnInit, OnDestroy {
     }
 
 
+    /**
+     * check whether there are duplicates within the members
+     * @param userId
+     * @param members
+     */
     existsAsMember(userId, members) {
         for ( let i = 0; i < members.length; i++) {
             if (members[i].uuid === userId) {
@@ -360,6 +400,10 @@ export class GroupPage implements OnInit, OnDestroy {
         return false;
     }
 
+    /**
+     * removes the lists of a user from being shared with a certain group.
+     * @param userId
+     */
     removeSharedList(userId) {
       this.todoService.getLists(userId).subscribe( lists => {
           for (const list of lists) {

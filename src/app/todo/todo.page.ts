@@ -227,7 +227,7 @@ export class TodoPage implements OnInit, OnDestroy {
     }
 
     /**
-     * shows an alert box with required fields for the modification of an existing
+     * shows an alert box with required fields for the modification of an existing list,
      * afterwards calls a CRUD service (based on firebase).
      * @param list
      */

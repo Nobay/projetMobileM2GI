@@ -21,7 +21,7 @@ export class MembershipServiceProvider {
      * using a user's ID, a group ID and Cloud Firestore, we return an observable of the memberships
      * @param userId
      * @param groupId
-     * return Observable<Membership>
+     * @return Observable<Membership>
      */
     public getMembership(userId: string, groupId: string): Observable<Membership> {
         return this.membershipCollection.doc<Membership>(userId + '_' + groupId).valueChanges();
@@ -74,7 +74,7 @@ export class MembershipServiceProvider {
 
     /**
      * using Cloud Firestore, we return an observable of the groups.
-     * return Observable<Group[]>
+     * @return Observable<Group[]>
      */
     public getAllGroups(): Observable<Group[]> {
         return this.groupCollection.snapshotChanges().pipe(
@@ -92,7 +92,7 @@ export class MembershipServiceProvider {
      * using Cloud Firestore and both the functions combined (getFirstHalf and getSecondHalf)
      * we return an observable of the memberships in which a user is not part of.
      * @param userId
-     * return Observable<Membership[]>
+     * @return Observable<Membership[]>
      */
     public getFirstHalf(userId: string): Observable<Membership[]> {
         return this.db.collection<Membership>('memberships', ref => {
@@ -126,7 +126,7 @@ export class MembershipServiceProvider {
     /**
      * using a user's ID and Cloud Firestore, we return an observable of the user's current memberships.
      * @param userId
-     * return Observable<Membership[]>
+     * @return Observable<Membership[]>
      */
     public getAllMyGroups(userId: string): Observable<Membership[]> {
         return this.db.collection<Membership>('memberships', ref => {
@@ -145,7 +145,7 @@ export class MembershipServiceProvider {
     /**
      * using a user's ID and Cloud Firestore, we return an observable of the user's joined memberships.
      * @param userId
-     * return Observable<Membership[]>
+     * @return Observable<Membership[]>
      */
     public getJoinedGroups(userId: string): Observable<Membership[]> {
         return this.db.collection<Membership>('memberships', ref => {
@@ -166,7 +166,7 @@ export class MembershipServiceProvider {
     /**
      * using a user's ID and Cloud Firestore, we return an observable of the user's own memberships.
      * @param userId
-     * return Observable<Membership[]>
+     * @return Observable<Membership[]>
      */
     public getMyGroups(userId: string): Observable<Membership[]> {
         return this.db.collection<Membership>('memberships', ref => {
@@ -187,7 +187,7 @@ export class MembershipServiceProvider {
     /**
      * using a user's ID and Cloud Firestore, we return an observable of the user's pending memberships.
      * @param userId
-     * return Observable<Membership[]>
+     * @return Observable<Membership[]>
      */
     public getPendingGroups(userId: string): Observable<Membership[]> {
         return this.db.collection<Membership>('memberships', ref => {
@@ -208,7 +208,7 @@ export class MembershipServiceProvider {
     /**
      * using a group's ID and Cloud Firestore, we return an observable of all the group's memberships.
      * @param groupId
-     * return Observable<Membership[]>
+     * @return Observable<Membership[]>
      */
     public getAllUsersInGroup(groupId: string): Observable<Membership[]> {
         return this.db.collection<Membership>('memberships', ref => {
@@ -227,7 +227,7 @@ export class MembershipServiceProvider {
     /**
      * using a group's ID and Cloud Firestore, we return an observable of the group.
      * @param groupId
-     * return Observable<Group>
+     * @return Observable<Group>
      */
     public getGroup(groupId: string): Observable<Group> {
         return this.groupCollection.doc<Group>(groupId).valueChanges();

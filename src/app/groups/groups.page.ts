@@ -45,11 +45,13 @@ export class GroupsPage implements OnInit, OnDestroy {
             message: 'Fetching groups...'
         });
         this.presentLoading(loading);
+        /* fetching all the groups */
         this.subscriptions.push(this.membershipService.getAllGroups().subscribe( data => {
             if (data.length === 0) {
                 loading.dismiss();
             }
             this.groups = data;
+            /* for each group, we retrieve the number of its users */
             for (const group of this.groups) {
                 this.membershipService.getAllUsersInGroup(group.uuid).subscribe(memberships => {
                     this.numberOfUsers[group.uuid] = memberships.length;
@@ -58,6 +60,7 @@ export class GroupsPage implements OnInit, OnDestroy {
                     loading.dismiss();
                 });
             }
+            /* we retrieve every type of groups: others, joined, owned and pending */
             this.subscriptions.push(this.membershipService
                 .getFirstHalf(firebase.auth().currentUser.uid).subscribe( firstHalfMemberships => {
                     this.firstHalfMemberships = firstHalfMemberships;
@@ -103,6 +106,10 @@ export class GroupsPage implements OnInit, OnDestroy {
         }));
     }
 
+    /**
+     * checks whether the fetching process is finished or not.
+     * @return boolean
+     */
     groupsAreReady(): boolean {
         for (const isReady of this.groupsReady) {
           if (isReady === false) {
@@ -112,6 +119,10 @@ export class GroupsPage implements OnInit, OnDestroy {
         return true;
     }
 
+    /**
+     * loops through the retrieved other memberships (which are in two parts) and returns the groups suitable for display.
+     * @return Group[]
+     */
     getOtherGroups(): Group[] {
         const groups = [];
         for (let i = 0; i < this.groups.length; i++) {
@@ -135,6 +146,10 @@ export class GroupsPage implements OnInit, OnDestroy {
         return groups;
     }
 
+    /**
+     * loops through the retrieved joined memberships and returns the groups suitable for display.
+     * @return Group[]
+     */
     getJoinedGroups(): Group[] {
       const groups = [];
       for (let i = 0; i < this.groups.length; i++) {
@@ -149,6 +164,10 @@ export class GroupsPage implements OnInit, OnDestroy {
       return groups;
     }
 
+    /**
+     * loops through the retrieved owned memberships and returns the groups suitable for display.
+     * @return Group[]
+     */
     getMyGroups(): Group[] {
         const groups = [];
         for (let i = 0; i < this.groups.length; i++) {
@@ -163,6 +182,10 @@ export class GroupsPage implements OnInit, OnDestroy {
         return groups;
     }
 
+    /**
+     * loops through the retrieved pending memberships and returns the groups suitable for display.
+     * @return Group[]
+     */
     getPendingGroups(): Group[] {
         const groups = [];
         for (let i = 0; i < this.groups.length; i++) {
@@ -177,6 +200,10 @@ export class GroupsPage implements OnInit, OnDestroy {
         return groups;
     }
 
+    /**
+     * shows an alert box confirming the deletion of a group, which would then be deleted using a CRUD service (based on firebase).
+     * @param group
+     */
     async removeGroup(group: Group) {
         const alert = await this.alertCtrl.create({
             header: 'Confirm!',
@@ -202,6 +229,9 @@ export class GroupsPage implements OnInit, OnDestroy {
         await this.slidingList.closeSlidingItems();
     }
 
+    /**
+     * shows an alert box with required fields for the creation of a new group, afterwards calls a CRUD service (based on firebase).
+     */
     async createGroup() {
         const alert = await this.alertCtrl.create({
             header: 'Creating a groups',
@@ -246,6 +276,11 @@ export class GroupsPage implements OnInit, OnDestroy {
         await alert.present();
     }
 
+    /**
+     * shows an alert box with required fields for the modification of an existing group,
+     * afterwards calls a CRUD service (based on firebase).
+     * @param group
+     */
     async modifyGroup(group: Group) {
         const alert = await this.alertCtrl.create({
             header: 'Modifying a groups',
@@ -283,6 +318,10 @@ export class GroupsPage implements OnInit, OnDestroy {
         await this.slidingList.closeSlidingItems();
     }
 
+    /**
+     * triggered when choosing a filter (others, owned, pending or joined) from the ion-select options
+     * @param event
+     */
     onSelectFilter(event) {
         if (this.slidingList) {
             this.slidingList.closeSlidingItems();
@@ -314,10 +353,18 @@ export class GroupsPage implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * navigates to a group's page
+     * @param group
+     */
     viewGroup(group: Group) {
         this.router.navigate(['/group'], {queryParams: {id: group.uuid}});
     }
 
+    /**
+     * using a CRUD service, this function sends a request to join a group, which would be received by the owner.
+     * @param group
+     */
     joinGroup(group: Group) {
         this.membershipService.getMembership(firebase.auth().currentUser.uid, group.uuid).subscribe( async membership => {
             if (!membership) {
@@ -333,6 +380,11 @@ export class GroupsPage implements OnInit, OnDestroy {
         this.slidingList.closeSlidingItems();
     }
 
+    /**
+     * shows an alert box confirming leaving a group, which would result in deleting a
+     * membership using a CRUD service (based on firebase).
+     * @param group
+     */
     async quitGroup(group: Group) {
         const alert = await this.alertCtrl.create({
             header: 'Confirm!',
@@ -361,6 +413,11 @@ export class GroupsPage implements OnInit, OnDestroy {
         return await loading.present();
     }
 
+    /**
+     * checks whether there are duplicates in the collection of groups
+     * @param groups
+     * @param groupId
+     */
     existsAsGroup(groups, groupId) {
         for ( let i = 0; i < groups.length; i++) {
             if (groups[i].uuid === groupId) {
