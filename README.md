@@ -7,6 +7,15 @@ se familiariser avec la programmation mobile intégrant plusieurs fonctionnalit�
 
 ## 1. Fonctionnalités réalisées
 
+Après avoir fini les fonctionnalités de bases exigées comme: 
+
+* le stockage des données dans _**Cloud Firestore**_;
+* l'authentification _**Google**_ et native;
+* la mobilité, en déployant l'application sur Android;
+* le Splash personnalisé avec une animation CSS.
+
+Nous avons entamé et terminé les extensions à ajouter.
+
 ### Partage des listes
 
 Pour ce point, nous avons choisi de procéder avec une conception de groupes. Ce qui est illustré par le fait qu'un utilisateur connecté peut avoir, 
@@ -55,6 +64,10 @@ Lorsqu'un utilisateur souhaite accéder rapidement une page à partir de la page
 ### Mode déconnecté
 
 En cas de problème internet, un utilisateur pourra continuer la manipulation de ses notes (à condition qu'il soit connecté). Dès que l'accès internet est rétabli, toutes les modifications seront sauvegardées dans _**Cloud Firestore**_.
+
+### Recherche dans les listes
+
+Une petite barre de recherche a été ajouté dans la page des listes to-do, pour faciliter la navigation.
 
 
 ## Prérequis
