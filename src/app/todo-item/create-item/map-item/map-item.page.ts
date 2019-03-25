@@ -50,4 +50,8 @@ export class MapItemPage implements OnInit {
       });
   }
 
+  public cancelCreation() {
+    this.modalController.dismiss();
+  }
+
 }

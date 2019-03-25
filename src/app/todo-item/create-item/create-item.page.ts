@@ -24,7 +24,6 @@ export class CreateItemPage implements OnInit {
 
   constructor(
       private todoListService: TodoServiceProvider,
-      private modalCtrl: ModalController,
       private toastCtrl: ToastController,
       private fileChooser: FileChooser,
       private file: File,
@@ -51,7 +50,7 @@ export class CreateItemPage implements OnInit {
      */
   public async sendItemData() {
       if (this.todoItem.name !== '') {
-          this.modalCtrl.dismiss(this.todoItem);
+          this.modalController.dismiss(this.todoItem);
       } else {
           const toast = await this.toastCtrl.create({
               message: 'The name fields shouldn\'t be empty',
@@ -62,7 +61,7 @@ export class CreateItemPage implements OnInit {
       }
   }
   public cancelCreation() {
-      this.modalCtrl.dismiss();
+      this.modalController.dismiss();
   }
 
     /**
