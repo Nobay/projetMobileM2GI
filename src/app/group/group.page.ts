@@ -424,6 +424,8 @@ export class GroupPage implements OnInit, OnDestroy {
       if (this.subscription) {
           this.subscription.unsubscribe();
       }
+      this.pendingList.closeSlidingItems();
+      this.currentList.closeSlidingItems();
   }
 
    ionViewWillLeave() {

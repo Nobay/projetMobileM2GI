@@ -86,7 +86,7 @@ export class GroupsPage implements OnInit, OnDestroy {
                                         .subscribe( ownerships => {
                                             this.ownerships = ownerships;
                                             if (this.filter.value === 'owned') {
-                                                this.groupsToDisplay = this.getJoinedGroups();
+                                                this.groupsToDisplay = this.getMyGroups();
                                             }
                                             this.groupsReady[4] = true;
                                             this.subscriptions.push(this.membershipService
