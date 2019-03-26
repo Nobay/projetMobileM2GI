@@ -9,6 +9,9 @@ import { FilePath } from '@ionic-native/File-Path/ngx';
 import * as firebase from 'firebase';
 import { LoadingController } from '@ionic/angular';
 import {MapItemPage} from './map-item/map-item.page';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder/ngx';
+import { resolve } from 'q';
+
 
 @Component({
   selector: 'app-create-item',
@@ -21,6 +24,12 @@ export class CreateItemPage implements OnInit {
   @Input() title: string;
   imgSource: any;
   isLoading = false;
+  geoAddress: string;
+  // Geocoder configuration
+  geoencoderOptions: NativeGeocoderOptions = {
+    useLocale: true,
+    maxResults: 5
+  };
 
   constructor(
       private todoListService: TodoServiceProvider,
@@ -29,7 +38,8 @@ export class CreateItemPage implements OnInit {
       private file: File,
       private filePath: FilePath,
       private loadingController: LoadingController,
-      private modalController: ModalController
+      private modalController: ModalController,
+      private nativeGeocoder: NativeGeocoder
   ) {
     this.todoItem = {
         uuid : todoListService.makeId(),
@@ -120,6 +130,7 @@ export class CreateItemPage implements OnInit {
       if (data) {
           this.todoItem.latitude = data.coords.lat.toString();
           this.todoItem.longitude = data.coords.lng.toString();
+          this.getGeoencoder(data.coords.lat, data.coords.lng);
       }
   }
 
@@ -141,4 +152,21 @@ export class CreateItemPage implements OnInit {
     this.isLoading = false;
     return await this.loadingController.dismiss().then(() => console.log('dismissed'));
   }
+
+  // geocoder method to fetch address from coordinates passed as arguments
+  getGeoencoder(latitude, longitude) {
+    this.nativeGeocoder.reverseGeocode(latitude, longitude, this.geoencoderOptions)
+    .then((result: NativeGeocoderReverseResult[]) => {
+      if (result) {
+        const str   = `${result[0].subThoroughfare}, ${result[0].thoroughfare} ${result[0].subLocality}
+        , ${result[0].locality}, ${result[0].postalCode}, ${result[0].countryName} `;
+        resolve(str);
+        this.todoItem.adresse = str;
+      }
+    })
+    .catch((error: any) => {
+      alert('Error getting location' + JSON.stringify(error));
+    });
+  }
+
 }

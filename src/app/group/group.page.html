@@ -49,7 +49,7 @@
     <div *ngIf="owner.uuid === getCurrentUser().uid">
       <h1 class="background"><span>Pending Members</span></h1>
     <ion-item-sliding *ngFor="let member of pendingMembers">
-      <ion-item>
+      <ion-item class="divgroup">
         <ion-avatar slot="start">
           <img src="{{member.imageUrl}}">
         </ion-avatar>

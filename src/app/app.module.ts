@@ -33,6 +33,7 @@ import { FcmService } from './providers/fcm.service';
 import { Firebase } from '@ionic-native/firebase/ngx';
 import {MapItemPage} from './todo-item/create-item/map-item/map-item.page';
 import {AgmCoreModule} from '@agm/core';
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 
 firebase.initializeApp(environment.firebase);
@@ -74,7 +75,8 @@ firebase.initializeApp(environment.firebase);
       NativeStorage,
       SpeechRecognition,
       FcmService,
-      Firebase
+      Firebase,
+      NativeGeocoder
   ],
   bootstrap: [AppComponent]
 })
