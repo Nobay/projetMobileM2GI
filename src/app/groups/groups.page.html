@@ -15,7 +15,7 @@
   </ion-item-divider>
   <ion-item style="color:white">
     <ion-label>Filter</ion-label>
-    <ion-select (ionChange)="onSelectFilter($event)" okText="Apply" cancelText="Cancel">
+    <ion-select (ionChange)="onSelectFilter($event)" okText="Apply" cancelText="Cancel" #filter>
       <ion-select-option value="joined">Joined</ion-select-option>
       <ion-select-option selected="true" value="owned">Created</ion-select-option>
       <ion-select-option value="pending">Pending</ion-select-option>

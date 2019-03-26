@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {AlertController, IonList, LoadingController} from '@ionic/angular';
+import {AlertController, IonList, IonSelect, LoadingController} from '@ionic/angular';
 import {AuthServiceProvider} from '../providers/auth-service.provider';
 import {Router} from '@angular/router';
 import * as firebase from 'firebase';
@@ -31,6 +31,7 @@ export class GroupsPage implements OnInit, OnDestroy {
     noControl = false;
 
     @ViewChild('slidingList') slidingList: IonList;
+    @ViewChild('filter') filter: IonSelect;
 
     constructor(
         private membershipService: MembershipServiceProvider,
@@ -68,22 +69,33 @@ export class GroupsPage implements OnInit, OnDestroy {
                     this.subscriptions.push(this.membershipService
                         .getSecondHalf(firebase.auth().currentUser.uid).subscribe( secondHalfMemberships => {
                             this.secondHalfMemberships = secondHalfMemberships;
+                            if (this.filter.value === 'others') {
+                                this.groupsToDisplay = this.getOtherGroups();
+                            }
                             this.groupsReady[2] = true;
                             this.subscriptions.push(this.membershipService
                                 .getJoinedGroups(firebase.auth().currentUser.uid)
                                 .subscribe(joinedMemberships => {
                                     this.joinedMemberships = joinedMemberships;
+                                    if (this.filter.value === 'joined') {
+                                        this.groupsToDisplay = this.getJoinedGroups();
+                                    }
                                     this.groupsReady[3] = true;
                                     this.subscriptions.push(this.membershipService
                                         .getMyGroups(firebase.auth().currentUser.uid)
                                         .subscribe( ownerships => {
                                             this.ownerships = ownerships;
-                                            this.groupsToDisplay = this.getMyGroups();
+                                            if (this.filter.value === 'owned') {
+                                                this.groupsToDisplay = this.getJoinedGroups();
+                                            }
                                             this.groupsReady[4] = true;
                                             this.subscriptions.push(this.membershipService
                                                 .getPendingGroups(firebase.auth().currentUser.uid)
                                                 .subscribe( pendingMemberships => {
                                                     this.pendingMemberships = pendingMemberships;
+                                                    if (this.filter.value === 'pending') {
+                                                        this.groupsToDisplay = this.getPendingGroups();
+                                                    }
                                                     this.groupsReady[5] = true;
                                                     loading.dismiss();
                                                 }, () => {
