@@ -6,4 +6,5 @@ export interface TodoItem {
   image: string;
   latitude?: string;
   longitude?: string;
+  adresse?: string;
 }

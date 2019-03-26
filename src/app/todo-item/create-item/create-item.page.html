@@ -36,15 +36,11 @@
         <ion-icon name="pin"></ion-icon>
       </ion-button>
     </ion-item>
-    <ion-item>
-      <ion-col *ngIf="todoItem.latitude">
-        <ion-label *ngIf="todoItem.latitude">Lat: {{todoItem.latitude}}</ion-label>
-      </ion-col>
-      <ion-col *ngIf="todoItem.longitude">
-        <ion-label *ngIf="todoItem.longitude">Long: {{todoItem.longitude}}</ion-label>
-      </ion-col>
+    <ion-item *ngIf="todoItem.longitude && todoItem.latitude">
+      <ion-label >Addresse</ion-label>
+      <p name="adresse" >{{todoItem.adresse}}</p>
     </ion-item>
-      
+
   </ion-list>
   <ion-grid>
     <ion-row class="centerelements">
