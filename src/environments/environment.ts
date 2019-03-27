@@ -13,7 +13,7 @@ export const environment = {
         messagingSenderId: '256309942188'
     },
     googlePlus: {
-        webClientID: '460159730586-6l007jt8hjij9k0t6jd8aunjnhj45h5g.apps.googleusercontent.com'
+        webClientID: '376336795720-qs2cvpoqnc70ekoeah467s6kualet0f2.apps.googleusercontent.com'
     }
 };
 
