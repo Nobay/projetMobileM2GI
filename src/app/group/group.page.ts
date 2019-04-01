@@ -170,9 +170,13 @@ export class GroupPage implements OnInit, OnDestroy {
                   text: confirmation,
                   handler: () => {
                       this.membershipService.deleteMembership(user.uuid, this.groupId);
-                      const index = this.members.findIndex(member => member.uuid === user.uuid);
+                      let index = this.members.findIndex(member => member.uuid === user.uuid);
                       if (index !== -1) {
                           this.members.splice(index, 1);
+                      }
+                      index = this.pendingMembers.findIndex(member => member.uuid === user.uuid);
+                      if (index !== -1) {
+                          this.pendingMembers.splice(index, 1);
                       }
                       this.removeSharedList(user.uuid);
                   }
@@ -424,13 +428,21 @@ export class GroupPage implements OnInit, OnDestroy {
       if (this.subscription) {
           this.subscription.unsubscribe();
       }
-      this.pendingList.closeSlidingItems();
-      this.currentList.closeSlidingItems();
+      if (this.pendingList) {
+          this.pendingList.closeSlidingItems();
+      }
+      if (this.currentList) {
+          this.currentList.closeSlidingItems();
+      }
   }
 
    ionViewWillLeave() {
-      this.pendingList.closeSlidingItems();
-      this.currentList.closeSlidingItems();
+        if (this.pendingList) {
+            this.pendingList.closeSlidingItems();
+        }
+        if (this.currentList) {
+            this.currentList.closeSlidingItems();
+        }
    }
 
 }
