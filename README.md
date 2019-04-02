@@ -54,7 +54,7 @@ Nous nous sommes servis du service _**Firebase Storage**_ afin de permettre à u
 
 ### - Reconnaissance vocale
 
-Cette fonctionnalité permet aux utilisateurs d'accéder aux différentes fonctionnalités et pages de l'application en utilisant les commandes vocales comme 'Create a list', 'Check profile'...
+Cette fonctionnalité permet aux utilisateurs d'accéder aux différentes fonctionnalités et pages de l'application en utilisant les commandes vocales comme 'Create a list', 'Check profile', 'Sign in', 'Disconnect', 'Log out'...
 
 ### - Monétisation
 
